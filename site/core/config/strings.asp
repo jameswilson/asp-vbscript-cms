@@ -13,7 +13,7 @@
 	
 ' BRANDING AND PROVIDER SETTINGS
 	const PRODUCT_BRANDING = "ASP VBScript CMS"
-	const PRODUCT_VERSION = "0.3.9.0"
+	const PRODUCT_VERSION = "0.4"
 	const PRODUCT_DESCRIPTION = "Powered by <a href=""{PROVIDER_URL}"" title=""{PRODUCT_BRANDING} {PRODUCT_VERSION}"">{PRODUCT_BRANDING}</a>"
 	const PROVIDER_URL = "http://code.google.com/p/asp-vbscript-cms"
 	const PROVIDER_LOGO = "{ADMINURL}/images/cms_logo_transparent.gif"

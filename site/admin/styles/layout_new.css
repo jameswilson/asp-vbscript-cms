@@ -32,10 +32,14 @@ background:#5694F1 url(../images/header_bg.png) repeat-x scroll left top;
 position:absolute;
 right:50px;
 top:-50px;
-height:100px;
+height:1px;
 width:100px;
 background:url(../images/beta.gif) no-repeat 0 0;
 z-index:4;
+padding:99px 0 0;
+text-align:center;
+font:normal 11px "Courier New", courier, monospaced;
+color:#57739E;
 }
 #header a, #footer a {
 color:white;

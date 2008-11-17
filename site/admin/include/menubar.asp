@@ -25,4 +25,5 @@ if user.activeAdminSession() = true then
 	writeln( indent(2) & "<div class=""post clearfix"">&nbsp;</div>" & vbcrlf )
 
 end if
+writeln(indent(1)& "</div><div id=""beta"">&nbsp;")
 %>

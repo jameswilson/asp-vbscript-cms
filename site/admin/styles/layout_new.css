@@ -28,6 +28,15 @@ text-align:left;
 z-index:1;
 background:#5694F1 url(../images/header_bg.png) repeat-x scroll left top;
 }
+#beta {
+position:absolute;
+right:50px;
+top:-50px;
+height:100px;
+width:100px;
+background:url(../images/beta.gif) no-repeat 0 0;
+z-index:4;
+}
 #header a, #footer a {
 color:white;
 font-weight:bold;

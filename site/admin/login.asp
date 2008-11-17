@@ -91,7 +91,7 @@ return true;
 <title><%=page.getTitle()%></title>
 <link rel="stylesheet" href="<%=objLinks.item("ADMINURL")%>/styles/admin.css" type="text/css"/>
 <link rel="stylesheet" href="<%=objLinks.item("ADMINURL")%>/styles/login.css" type="text/css"/>
-<link rel="shortcut icon" href="<%=globals.getItem("PROVIDER_FAVICON")%>"/>
+<link rel="shortcut icon" href="<%=GlobalVarFill("{PROVIDER_FAVICON}")%>"/>
 </head>
 <body onload="placeFocus()">
 <div id="page"> 

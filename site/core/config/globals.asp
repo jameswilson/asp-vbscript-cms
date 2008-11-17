@@ -157,7 +157,7 @@ function initDbSiteSettings()
 	addGlobal "DEFAULT_AREA_CODE", globals.getItem("Default Area Code"),DEFAULT_AREA_CODE
 	addGlobal "GOOGLE_ANALYTICS", globals.getItem("Google Analytics"),GA_ACCOUNT_ID
 	addGlobal "FAVICON", globals.getItem("Bookmark Icon"),PROVIDER_FAVICON
-	addGlobal "PROVIDER_FAVICON", PROVIDER_FAVICON, ""
+	addGlobal "PROVIDER_FAVICON", PROVIDER_FAVICON, "{FAVICON}"
 	
 	'Contact Form Variables
 	addGlobal "SMTPHOST",globals.getItem("SMTP Host"),DEFAULT_SMTPHOST

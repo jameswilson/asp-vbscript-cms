@@ -9,7 +9,7 @@
 <head>
 <title><%=page.getTitle()%></title>
 <link rel="stylesheet" href="<%=objLinks.item("ADMINURL")%>/styles/admin.css" type="text/css"/>
-<link rel="shortcut icon" href="<%=globals.getItem("PROVIDER_FAVICON")%>"/>
+<link rel="shortcut icon" href="<%=GlobalVarFill("{PROVIDER_FAVICON}")%>"/>
 <!--#include file ="../include/preloader.js.inc"-->
 </head>
 <body onLoad="clearPreloadPage();"> 

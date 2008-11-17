@@ -14,7 +14,7 @@ page.setTitle("Dashboard")
 <title><%=page.getTitle()%></title>
 <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
 <link rel="stylesheet" href="<%=objLinks.item("ADMINURL")%>/styles/admin.css" type="text/css"/>
-<link rel="shortcut icon" href="<%=objLinks.item("PROVIDER_FAVICON")%>"/>
+<link rel="shortcut icon" href="<%=globals.getItem("PROVIDER_FAVICON")%>"/>
 <script type="text/javascript">
 	var djConfig = {isDebug: true, debugAtAllCosts: false};
 </script>

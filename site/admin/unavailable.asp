@@ -6,7 +6,7 @@
 <head>
 <title><%=page.getTitle()%></title>
 <link rel="stylesheet" href="<%=objLinks.item("ADMINURL")%>/styles/admin.css" type="text/css"/>
-<link rel="shortcut icon" href="<%=objLinks.item("PROVIDER_FAVICON")%>"/>
+<link rel="shortcut icon" href="<%=globals.getItem("PROVIDER_FAVICON")%>"/>
 </head>
 <body>
 <div id="page"> 

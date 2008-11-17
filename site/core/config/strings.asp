@@ -22,7 +22,7 @@
 	const PROVIDER_SHORTNAME = "ASP VBScript CMS"
 	const PROVIDER_SLOGAN = ""
 	const PROVIDER_LINK = "<a href=""{PROVIDER_URL}"" title=""{PROVIDER_NAME}"">{PROVIDER_SHORTNAME}</a>"
-	const PROVIDER_FAVICON = "/favicon.ico"
+	const PROVIDER_FAVICON = "http://asp-vbscript-cms.googlecode.com/files/favicon.ico"
 	const PROVIDER_SUPPORT_EMAIL = "<a href='mailto:{PROVIDER_EMAIL}'>{PROVIDER_SHORTNAME} Support</a>"
 	
 ' CMS DEFAULTS

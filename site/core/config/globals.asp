@@ -156,11 +156,9 @@ function initDbSiteSettings()
 	addGlobal "DESCRIPTION",globals.getItem("Site Description"),DEFAULT_DESCRIPTION
 	addGlobal "DEFAULT_AREA_CODE", globals.getItem("Default Area Code"),DEFAULT_AREA_CODE
 	addGlobal "GOOGLE_ANALYTICS", globals.getItem("Google Analytics"),GA_ACCOUNT_ID
-	'if fileExists("." & DEFAULT_FAVICON) = true then 
-	'	addGlobal "FAVICON", globals.getItem("Bookmark Icon"),DEFAULT_FAVICON
-	'else 
-		addGlobal "FAVICON", globals.getItem("Bookmark Icon"),PROVIDER_FAVICON
-	'end if
+	addGlobal "FAVICON", globals.getItem("Bookmark Icon"),PROVIDER_FAVICON
+	addGlobal "PROVIDER_FAVICON", PROVIDER_FAVICON, ""
+	
 	'Contact Form Variables
 	addGlobal "SMTPHOST",globals.getItem("SMTP Host"),DEFAULT_SMTPHOST
 	addGlobal "SUBJECTLINE_PREFIX", globals.getItem("Subjectline Prefix"),null

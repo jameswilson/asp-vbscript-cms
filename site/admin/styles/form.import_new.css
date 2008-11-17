@@ -1,0 +1,116 @@
+/* CSS Document */
+form div.required, form div.optional, form div.submit {
+float:left;
+}
+form div.instructions {
+width:100%;
+}
+form fieldset div.notes {
+float right;
+width:25%;
+}
+form fieldset div.wide {
+width:590px;
+}
+form fieldset legend {
+line-height:150%;
+margin-left:2.4em;
+}
+form input, form select, form textarea {
+background-color:#FFFFFF;
+}
+form textarea.expanding {
+overflow-x:auto;
+overflow-y:visible;
+}
+div.optional label:before {
+content:'';
+}
+div.required label:before {
+content:'';
+}
+form div label.labelCheckbox input.inputCheckbox, form div label.labelRadio input.inputRadio, label.labelCheckbox input.inputCheckbox, label.labelRadio input.inputRadio {
+margin: 0px 0px 0px 20px;
+}
+form div fieldset fieldset  {
+border:1px solid #7F9DB9;
+}
+.EditorToolbarDomNode {
+margin:0pt;
+padding:0pt;
+width:98%;
+}
+form div label.compact {
+display:inline;
+margin:0px;
+padding:4px 10px 0px 0px;
+text-indent:0px;
+width:auto;
+}
+form div.wide label {
+text-align:left;
+display:block;
+width:auto;
+float:none;
+}
+form div.wide input.inputText, 
+form div.wide input.inputPassword, 
+form div.wide input.inputFile, 
+form div.wide select, 
+form div.wide textarea,
+form div.wide small {
+margin:0px;
+width:344px;
+border:1px solid #7F9DB9;
+}
+form div.notes p, form div small {
+line-height:125%;
+}
+form div.wide small {
+margin:0px 0px 5px;
+border:none;
+}
+form div.full, form div.full div {
+width:auto;
+margin:0px;
+padding:0px;
+}
+form div iframe {
+min-height:100px;
+}
+div.toolbarContainer {
+border-color:#7F9DB9 rgb(170, 170, 170) -moz-use-text-color;
+border-style:solid solid hidden;
+border-width:1px 1px medium;
+margin:0pt;
+padding:0pt;
+width:auto;
+}
+div.toolbar {
+margin:2pt;
+padding:0pt 2pt;
+}
+form div.RichTextEditable, form div.RichTextEditable div {
+margin:0pt;
+padding:2pt;
+position:relative;
+width:auto;
+float:none;
+}
+form div.RichTextEditable {
+border-color:#7F9DB9;
+border-style:solid;
+border-width:1px 1px 1px;
+}
+form div div.EditorToolbarDomNode {
+padding:0;
+}
+div.wide div.toolbar select {
+width:auto;
+}
+textarea.full {
+width:560px;
+}
+textarea.dojo {
+border:2px ridge #7F9DB9;
+}

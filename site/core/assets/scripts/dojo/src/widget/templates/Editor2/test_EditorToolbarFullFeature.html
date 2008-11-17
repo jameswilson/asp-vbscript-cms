@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Teampatent Manifest Test</title>
+<script>
+	djConfig = { isDebug: true; djConfig.dojoRichTextFrameUrl: 'dojo-src/richtextframe.html' }
+</script>
+<script src="../../../../dojo.js"></script>
+<script>
+	dojo.require("dojo.widget.Editor2");
+	dojo.require("dojo.widget.Editor2Plugin.DialogCommands");
+	dojo.require("dojo.widget.Editor2Plugin.DropDownList");
+	dojo.require("dojo.widget.Editor2Plugin.ColorPicker");
+	dojo.require("dojo.widget.Editor2Plugin.ContextMenu");
+	dojo.require("dojo.widget.Editor2Plugin.FindReplace");
+	dojo.require("dojo.widget.Editor2Plugin.TableOperation");
+</script>
+</head>
+<body>
+<div style="border: 1px solid black;margin:3px;" height="10em" 
+	dojoType="dojo:Editor2"
+	toolbarTemplatePath="src/EditorToolbarFullFeature.html"
+	toolbarTemplateCssPath="src/EditorToolbarFullFeature.css">
+	<p>Thanks to Bruce Webster from <a href='http://interactole.org'>Interact Learning Community
+Environment</a> for contributing this full featured Editor2 toolbar template and corresponding stylesheets/images. This is a sample page to show how to use this new template file. In addition, this page also deploys several Editor2 plugins: 
+		<ul><li>ContextMenu: right click in the editor to see it</li>
+			<li>FindReplace: can be access by find/replace toolbar buttons</li>
+			<li>TableOperation: insert/delete table</li></ul>
+	<p>In this example, default toolbarTemplatePath and toolbarTemplateCssPath in Editor2 are overwritten.</p>
+</div>
+</body>
+</html>

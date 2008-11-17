@@ -1,0 +1,17 @@
+/* CSS Document  for invisible elements*/
+div#nav h1,
+div#nav h2,
+div#nav h3,
+div#nav h4,
+div#nav h5,
+div#nav h6,
+div#nav p,
+div#nav li span,
+div#header h1,
+div#header h2,
+div#header h3,
+div#header h4,
+div#header h5,
+div#header h6,
+div#header p,
+.a11y {display:none;}

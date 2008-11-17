@@ -1,0 +1,121 @@
+/* CSS Document form_new*/
+@import url("form.import_new.css");
+@import url("notes.css");
+@import url("dojo.css");
+form div {
+clear:left;
+display:block;
+margin:5px 0pt 0pt;
+padding:1px 3px;
+}
+form div label {
+display:block;
+float:left;
+margin:0pt 0pt 5px;
+padding:3px 5px;
+text-align:right;
+width:130px;
+}
+form div.required label {
+font-weight:bold;
+}
+form fieldset fieldset {border:1px solid gray;width:344px;}
+form div label.labelCheckbox, form div label.labelRadio {
+display:block;
+float:none;
+margin:0pt 0pt 5px 142px;
+padding:0pt;
+text-align:left;
+clear:both;
+line-height:120%;
+text-indent:-18px;
+width:190px;
+}
+.box input, .box textarea, .box select {
+font-size:0.9em;
+margin:0pt 0pt 0.1em;
+padding:0pt;
+}
+form div div fieldset label.labelCheckbox, form div div fieldset label.labelRadio {
+margin:0 5px 5px 142px;
+}
+form div fieldset fieldset small, form div fieldset fieldset input.inputText, form div fieldset fieldset select{
+width:190px !important;
+}
+form div fieldset fieldset small {
+margin-left:138px;
+font-size:0.88em;
+}
+form div img {
+}
+form div.error {
+background-color:#FFFFE1;
+background-image:url(../../core/assets/i/required_bg.gif);
+background-position:left top;
+background-repeat:no-repeat;
+border:1px solid #FF0000;
+color:#666666;
+padding:0pt;
+}
+form div.error p.error {
+background-color:transparent;
+background-image:url(../../core/assets/i/tango/medium/dialog-error.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/dialog_error.gif);
+background-position:left top;
+border-style:none;
+color:#FF0000;
+font-size:88%;
+font-weight:bold;
+margin:0pt 0pt 0pt 118px;
+width:180px;
+}
+form input, form option, form textarea {
+margin:0pt;
+padding:1px 3px;
+width:200px;
+}
+form input.inputFile, form select.selectOne, form select.selectMultiple {
+width:211px;
+}
+form  input.inputCheckbox, form input.inputRadio, input.inputCheckbox, input.inputRadio {
+background-color:transparent;
+border-width:0pt;
+display:inline;
+height:14px;
+margin:0pt 0pt 0pt 140px;
+padding:0pt;
+width:14px;
+}
+form div.submit {
+padding:0pt 0pt 0pt 146px;
+width:200px;
+}
+form div.submit div {
+display:inline;
+float:left;
+margin:0pt;
+padding:0pt;
+text-align:left;
+width:auto;
+}
+input.button {
+margin-right:5px;
+padding:0pt 0.7em 0.1em;
+width:auto;
+}
+form div div input.button {
+float:right;
+margin:0pt 0pt 0pt 5px;
+}
+form div small {
+display:block;
+font-size:88%;
+margin:0pt 0pt 5px 142px;
+padding:1px 3px;
+width:200px;
+clear:both;
+}
+option.divider {
+border-top:dashed 1px black;
+}
+

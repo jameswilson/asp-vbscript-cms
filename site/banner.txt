@@ -1,0 +1,55 @@
+#  ===============================================================
+#  This file contains a list of banner files to use for this site.
+#  The format for specifying the list items is:
+#
+#         [file];[text];[link];[width]x[height]
+#
+#  "file" is the path to the banner image file, it may be a relative
+#         path (beginning with a slash) or fully qualified URL (begin-
+#         ning with http://).
+#  "text" is an optional parameter that specifies the alternate text
+#         that should appear when you hover over the image. If left
+#         blank, an appropriate title such as the site name will be
+#         used.
+#  "link" is the url to redirect the user if he/she clicks the banner
+#         image.  The url may be relative (beginning with a slash) or
+#         absolute (beginning with http://) If the url is left blank,
+#         the image will not be clickable.
+#  "width" is the width of the file (this is required if the file is a
+#         flash archive).
+#  "height"is the height of the file (this is required if the file is
+#         a flash archive). 
+#   ;(semi-colon)  used to separate the three possible values.
+#   #(numeral) used to signify lines in the file that should not be 
+#         processed, for comments such as this ;)
+#
+#   EXAMPES:
+#
+# A local image file, with no text and no link
+#/images/photo1.jpg
+#
+# A remote image file URL  with no text and no link
+#http://mydomain.com/images/photo1.jpg
+#
+# A local image file, with alternate text and no link
+#/images/photo1.jpg;This is an unclickable banner
+#
+# A local image file, with no alternate text and local URL link
+#/images/photo1.jpg;;/page.html
+#
+# A local image file, with alternate text and fully qualified URL link
+#/images/photo1.jpg ; This is alternate text... ; http://mydomain.com/page.html
+#
+# A local flash file, no alt text, with a specified width and height
+#/images/flash1.swf;;;400x500
+
+                         
+
+
+
+
+/images/banners/banner01.jpg
+/images/banners/banner02.jpg
+/images/banners/banner03.jpg
+/images/banners/banner04.jpg
+/images/banners/banner05.jpg

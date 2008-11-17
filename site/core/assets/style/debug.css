@@ -1,0 +1,6 @@
+/* debugging styles */
+#debug p {padding:0;margin:0.2em 0.2em 0;clear:both; float:left; text-align:left; font:normal 0.9em 'Lucida Console', 'Courier New', monospaced; color:#888; }
+#debug .warning {padding:0;background:none;color:#f93;border:none;}
+#debug .error	{padding:0;background:none;color:#f62b2a;border:none;}
+#debug .info	{padding:0;background:none;color:#5babeb;border:none;}
+#sub #debug , #local #debug {float:left;background:#454545;}

@@ -1,0 +1,32 @@
+/* Notes */
+div.notes {
+ float: right;
+ width: 158px;
+ height: auto;
+ margin: 10px 0 0px 10px;
+ padding: 5px;
+ border: 1px solid #666666;
+ background-color: #ffffe1;
+ color: #666666;
+ font-size: 88%;
+}
+div.notes h4 {
+ background-image: url(../../core/assets/i/tango/medium/dialog_information.png);
+ /*_background-image: url(../../core/assets/i/tango/medium/gif/dialog_information.gif);*/
+ background-repeat: no-repeat;
+ background-position: top left;
+ padding: 3px 0 3px 27px;
+ border-width: 0 0 1px 0;
+ border-style: solid;
+ border-color: #666666;
+ color: #666666;
+ font-size: 110%;
+}
+div.notes p {
+ margin: 0em 0em 1.2em 0em;
+ color: #666666;
+}
+div.notes p.last {
+ margin: 0em;
+}
+

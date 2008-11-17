@@ -1,0 +1,9 @@
+/* IE Rendering Bugfixes */
+<!--[if lt IE 7]>
+.error { background: url(../../core/assets/i/tango/medium/gif/dialog-error.gif) top left no-repeat;}
+.alert { background: url(../../core/assets/i/tango/medium/gif/emblem-important.gif) top left no-repeat;}
+.warning { background: url(../../core/assets/i/tango/medium/gif/dialog-warning.gif) top left no-repeat;}
+.info { background: url(../../core/assets/i/tango/medium/gif/dialog-information.gif) top left no-repeat;}
+.success { background: url(../../core/assets/i/tango/medium/gif/dialog-success.gif) top left no-repeat;}
+<![endif]-->
+<% 'Note all files referenced here must be absolute, apply objLinks.item("SITEURL") to all paths!!! %>

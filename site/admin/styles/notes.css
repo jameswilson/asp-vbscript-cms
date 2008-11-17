@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* Notes */
+div.notes {
+background-color:#FFFEEB;
+border:1px solid #666666;
+color:#666666;
+float:right;
+font-size:88%;
+height:auto;
+margin:10px;
+padding:5px;
+width:158px;
+}
+div.notes h4 {
+background-image:url(../../core/assets/i/tango/medium/dialog-information.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/dialog-information.gif);
+background-position:left top;
+background-repeat:no-repeat;
+border-color:#666666;
+border-style:solid;
+border-width:0pt 0pt 1px;
+color:#666666;
+font-size:110%;
+padding:3px 0pt 3px 27px;
+}
+div.notes p {
+color:#666666;
+margin:0em 0em 1.2em;
+}
+div.notes p.last {
+margin:0em;
+}

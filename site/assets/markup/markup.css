@@ -1,0 +1,17 @@
+@charset "utf-8";
+/* Author: "Andrew Urquhart", File: "sourcecode.css", PreCompressFileDate: "Sat, 11 Mar 2006 19:41:05 UTC", AutoCompressDate: "Sat, 11 Mar 2006 19:41:17 UTC" */
+.sourcecode {color:#000000;background-color:#f2f2f2;padding:4px;border:1px solid #939393;font-family:'courier new', monospace;}
+.sourcecode * {background-color:#f2f2f2;}
+.sourcecode .brkt {color:#ff0000;font-weight:normal;}
+.sourcecode .cmt {color:#006c00;font-style:normal;}
+.sourcecode .str {color:#006d71;font-style:normal;}
+.sourcecode .kywd {color:#000080;font-weight:normal;}
+.sourcecode .obj {color:#0000ff;font-weight:normal;}
+.sourcecode .mrk {color:#000000;font-style:normal;}
+.sourcecode .mrktag {color:#b00000;font-weight:normal;}
+.sourcecode .mrkattr {color:#de5900;font-weight:normal;}
+.sourcecode .mrkcmt {color:#666666;font-style:normal;}
+.sourcecode a:link {color:#0000a0;}
+.sourcecode a:visited {color:#a000a0;}
+.sourcecode a:hover, .sourcecode a:active {color:#000000;background-color:#f4ca4a;}
+

@@ -1,0 +1,17 @@
+/* CSS for the overdiv library */
+/* import this file to your page if you plan to use the overdiv library */
+div#overDiv {
+	text-align:left;
+	border:1px solid #1F8FFF;
+	background:#4e8bf7;
+	color:#333333;
+	font:normal .9em Geneva, Arial, Helvetica, sans-serif;
+	padding:.2em;
+}
+div#overDiv * {
+	border-width:0px;
+	background:transparent;
+	color:inherit;
+	margin:0;
+	padding:0;
+}

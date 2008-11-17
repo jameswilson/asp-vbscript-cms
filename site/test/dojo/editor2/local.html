@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Xdomain Dojo Editor Test</title>
+</head>
+
+<body>
+
+<script type="text/javascript" src="http://localhost/asp_vbscript_cms/core/assets/scripts/display.js"></script>
+<script type="text/javascript" src="http://localhost/asp_vbscript_cms/core/assets/scripts/form_validator.js"></script>
+<script type="text/javascript"> 
+<!--// <![CDATA[
+var djConfig = {
+	debugAtAllCosts: false,
+	dojoRichTextFrameUrl: "src/richtextframe.html" //for xdomain 
+};
+// ]]>-->
+</script>
+
+<script type="text/javascript" src="http://localhost/asp_vbscript_cms/scripts/dojo/dojo.js"></script>
+<script type="text/javascript">
+<!-- // <![CDATA[
+dojo.require("dojo.widget.Editor2");
+dojo.require("dojo.widget.TabContainer");
+// ]]>-->
+</script>
+<div id="mainTabContainer" dojoType="TabContainer" selectedChild="tab1" doLayout="false">
+<form action="?" method="POST" id="test1" class="autocheck" onsubmit="return autocheck(this)" onreset="return confirm('Really reset all form fields?')">
+<div style="display:none"><input type="hidden" name="form_name"  id="form_name" value="test1"/></div>
+<div id="tab1" class="tab clearfix" label="Comments" dojoType="ContentPane" layoutAlign="client" style="overflow: auto;">
+<fieldset class="clearfix">
+ <legend>Comments</legend>
+ <div class="required">
+  <label for="name" class="labelText length(0,30)" accesskey="1">Your Name</label>
+
+  <input  id="name" name="name"  type="text" class="required length(0,30) inputText" value="Joe Tester" size="10" />
+  <small>Enter your name in the field above.</small>
+ </div>
+ <div class="optional">
+  <label for="email" class="labelText email" accesskey="2">Your Email</label>
+  <input  id="email" name="email"  type="text" class="optional email inputText" value="test@example.com" size="10" />
+  <small>Enter your valid email address in the field above.</small>
+
+ </div>
+ <div class="optional">
+  <label for="message" class="labelTextarea length(10,1000)" accesskey="3">Your Message</label>
+  <textarea id="message" name="message" class="optional length(10,1000) inputTextarea" cols="10" style="border: 1px solid grey;" rows="4" dojoType='Editor2'  toolbarTemplatePath="src/EditorToolbarCustom.html"  templateCssPath="src/EditorToolbar.css"><h1>Test Message</h1>
+<p>This is the default message text... feel free to change it.</p></textarea>
+  <small>Enter your message, must be at least 10 and no more than 1000 characters.</small>
+ </div>
+ <div class="button submit ">
+
+  <input type="submit" class="button inputSubmit " value="Submit &raquo;"/>
+  <input type="reset" class="button inputReset " value="Cancel"/>
+ </div>
+</fieldset>
+</div>
+<div id="tab2" class="tab clearfix" label="Extra Info" dojoType="ContentPane" layoutAlign="client" style="overflow: auto;">
+<fieldset class="clearfix">
+ <legend>Extra Info</legend>
+ <div class="optional">
+  <label for="ssn" class="labelText ssn length(0,30)" accesskey="4">Your SSN</label>
+
+  <input  id="ssn" name="ssn"  type="text" class="optional ssn length(0,30) inputText" value="" size="10" />
+  <small>Enter your name in the field above.</small>
+ </div>
+ <div class="optional">
+  <label for="phone" class="labelText phone" accesskey="5">Your Phone</label>
+  <input  id="phone" name="phone"  type="text" class="optional phone inputText" value="" size="10"   onblur="fixPhone(this,'352','-')"/>
+  <small>Enter your valid email address in the field above.</small>
+
+ </div>
+ <div class="optional">
+  <label for="birth" class="labelText date" accesskey="6">Your Birthday</label>
+  <input  id="birth" name="birth"  type="text" class="optional date inputText" value="" dojoType="DropdownDatePicker" dateFormat="%m/%d/%Y" size="10" />
+  <small>Enter your message, must be at least 10 and no more than 1000 characters.</small>
+ </div>
+ <div class="button submit ">
+  <input type="submit" class="button inputSubmit " value="Submit &raquo;"/>
+
+
+  <input type="reset" class="button inputReset " value="Cancel"/>
+ </div>
+</fieldset>
+</div>
+</form>
+</div>
+
+
+</body>
+</html>

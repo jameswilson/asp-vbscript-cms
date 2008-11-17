@@ -1,0 +1,203 @@
+
+div#content {
+padding-top:0px;
+}
+form#list {
+width:auto;
+}
+table.list {
+border:1px solid silver;
+width:100%;
+}
+table.list tr td {
+margin:0.4em 0pt;
+padding:0.4em 0.1em;
+}
+table.list tr th {
+margin:0.4em 0pt;
+padding:0.4em;
+}
+table.list th {
+border-bottom:1px solid silver;
+color:#333333;
+font-weight:600;
+background-color:#B0CEE8;
+}
+/*table.list tr { background-color: white; }
+table.list tr.even {
+background-color:#dfe8f8;
+}
+table.list tr.even td {
+background-color:#dfe8f8;
+}*/
+/* more elegance for browsers that support CSS3 and using sorttable.js (table updates it sort color automagically) */
+table[class~=list] tr.even {background-color:#E9F1F7};
+table[class~=list] tbody:nth-child(even) { background-color: #E9F1F7; }
+
+table.sortable th {
+cursor:pointer;
+text-decoration:underline;
+}
+table.sortable th.sorttable_nosort {
+cursor:auto;
+text-decoration:none;
+}
+tr.yes {
+color:#333333;
+}
+tr.no {
+color:#AAAAAA;
+}
+td.yes span, td.no span, td.folder span,  td.file span, td.parent-folder span{
+display:none;
+}
+td.yes, td.no, td.folder, td.file, td.parent-folder, td.action {
+background-repeat:no-repeat;
+background-position:50%;
+}
+td.yes {
+background-image: url(../../core/assets/i/icon_checkbox-1.gif) !important;
+}
+td.no {
+background-image: url(../../core/assets/i/icon_checkbox-0.gif) !important;
+}
+td.folder {
+background-image: url(../../core/assets/i/tango/small/folder.png) !important;
+}
+td.parent-folder {
+background-image: url(../../core/assets/i/tango/small/user-home.png) !important;
+}
+td.file {
+background-image: url(../../core/assets/i/tango/small/text-x-generic.png) !important;
+}
+tr.file td.image {
+background-image: url(../../core/assets/i/tango/small/image-x-generic.png) !important;
+}
+tr.file td.application {
+background-image: url(../../core/assets/i/tango/small/text-x-script.png) !important;
+}
+tr.file td.zip,tr.file td.x-tar,tr.file td.x-gzip,tr.file td.x-compress {
+background-image: url(../../core/assets/i/tango/small/package-x-generic.png) !important;
+}
+tr.file td.audio,tr.file td.ogg {
+background-image: url(../../core/assets/i/tango/small/audio-x-generic.png) !important;
+}
+tr.file td.asp, tr.file td.aspx, tr.file td.html, tr.file td.css, tr.file td.xml {
+background-image: url(../../core/assets/i/tango/small/text-html.png) !important;
+}
+tr.file td.msword, tr.file td.pdf, tr.file td.msaccess{
+background-image: url(../../core/assets/i/tango/small/x-office-document.png) !important;
+}
+tr.file td.ms-powerpoint{
+background-image: url(../../core/assets/i/tango/small/x-office-presentation.png) !important;
+}
+tr.file td.ms-excel{
+background-image: url(../../core/assets/i/tango/small/x-office-spreadsheet.png) !important;
+}
+tr.file td.video, tr.file td.x-shockwave-flash {
+background-image: url(../../core/assets/i/tango/small/applications-multimedia.png) !important;
+}
+tr.file td.octetstream {
+background-image: url(../../core/assets/i/tango/small/application-x-executable.png) !important;
+}
+
+input.button, a.button, a.button:link, a.button:visited{
+background:#41659B url(../images/header_bg.gif) repeat scroll 0 99%;
+border-color:#EFEFEF rgb(100, 100, 100) rgb(100, 100, 100) rgb(239, 239, 239);
+border-style:solid;
+border-width:2px;
+display:inline;
+font-weight:600;
+padding:0pt 0.4em;
+}
+input.button, a.button, a.button:link, a.button:visited {
+color:#EEEEEE;
+}
+a.button:hover, input.button:hover {
+text-decoration:underline;
+cursor:pointer;
+}
+a.button:active, input.button:active {
+border-color:#646464 rgb(239, 239, 239) rgb(239, 239, 239) rgb(100, 100, 100);
+border-style:solid;
+border-width:2px;
+}
+
+a.action, a.action:link, a.action:visited {
+/*image replacement technique*/
+background: no-repeat 1px 1px;
+display: block;
+height/**/:/**/ 0 !important;
+overflow: hidden;
+/*end image replacement technique*/
+background-color:transparent;
+padding-top: 18px;
+width:18px;
+border:1px solid white;
+}
+tr.even a.action, tr.even a.action:link, tr.even a.action:visited {
+border-color:#DFE8F8;
+}
+* html td.action a {
+height: 18px;
+}
+a.action:hover, tr.even a.action:hover{
+border-color:#5A97F4;
+background-color:transparent;
+}
+table.list td a {color:#1763C4;}
+table.list td a:hover, table.list td a:visited {color:#006BF0;}
+td.action {
+background-position:3px 50%;background-repeat:no-repeat;width:20px;
+}
+td.view, td.view a, a.view, a.view:link, a.view:visited {
+background-image: url(../../core/assets/i/tango/small/gif/text-html.gif);
+}
+tr.folder td.view, tr.folder td.view a, tr.folder a.view, tr.folder a.view:link, tr.folder a.view:visited {
+background-image: url(../../core/assets/i/tango/small/system-search.png);
+}
+td.edit, td.edit a, a.edit, a.edit:link, a.edit:visited {
+background-image: url(../../core/assets/i/tango/small/gif/accessories-text-editor.gif);
+}
+td.download, td.download a,  a.download, a.download:link, a.download:visited {
+background-image: url(../../core/assets/i/tango/small/gif/internet-download.gif);
+}
+td.delete, td.delete a, a.delete, a.delete:link, a.delete:visited {
+background-image: url(../../core/assets/i/tango/small/gif/emblem-unreadable.gif);
+}
+div.buttonbar {
+text-align:right;
+width:100%;
+}
+div.buttonbar ul li {
+display:inline;
+float:left;
+list-style-image:none;
+list-style-position:outside;
+list-style-type:none;
+margin:0pt;
+padding:0pt;
+}
+tr.no td.view, tr.no a.view, .buttonbar a.button {
+background:none;
+border:none;
+}
+td.checkbox, th.checkbox {
+text-align:center;
+}
+tr.no a.view { display:none; }
+div#nav a.site-nav {
+clear:none;
+display:block;
+padding-left:0.7em;
+padding-right:0.7em;
+}
+.buttonbar a.button{
+text-decoration:underline;
+color:#333 !important;
+padding-left:18px;
+}
+.buttonbar a.new{
+background:transparent url(../../core/assets/i/tango/small/gif/list-add.gif) no-repeat 0 50% !important;
+}
+

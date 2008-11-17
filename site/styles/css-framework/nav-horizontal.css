@@ -1,0 +1,190 @@
+/* Horizontal nav-bar */
+div#nav {
+font-size: 0.9em;
+font-weight:bold; 
+text-transform:uppercase; 
+text-decoration: none; 
+}
+* html div#nav {
+/* hide ie/mac \*/
+height:1%
+/* end hide */
+}
+#menu {
+position:static;
+/*CAUTION changing this will override layout-navtop-___.css*/
+text-align:inherit;
+}
+#menu, #menu li, #menu ul, #menu ul li, #menu ul ul, #menu ul ul li{
+list-style: none;
+list-style-image:none;
+list-style-position:outside;
+list-style-type:circle;
+margin:0;
+padding: 0;
+}
+#menu li, #menu li a,#menu li strong {
+display:inline;
+margin:0;
+padding:0;
+margin-top:1px;
+}
+#menu,#menu li,#menu li a,#menu li strong {
+line-height:1em;
+/*button padding...*/
+padding-bottom:0.4em;
+padding-top:1.3em;
+float: none;
+}
+/*ie6 padding hack */
+* html #menu, * html #menu li, * html #menu li strong {padding-bottom:0em;padding-top:0em;}
+* html #menu li a{display:inline-block;}
+/*ie7 padding hack */
+* + html #menu,* + html #menu li,* + html #menu li strong{padding-bottom:0em;padding-top:0em;}
+* + html #menu li a {display:inline-block;}
+/*end padding hack*/
+
+#menu li {
+float: none;
+position:relative; /*do not change, suckerfish dropdowns depend on this!*/
+display: inline;
+list-style: none;
+text-align:center;
+/*separation bars...*/
+border-right:1px solid #444;
+}
+#menu li.last {
+margin-right:0em;
+/*separation bars...
+border-right:none;*/ 
+}
+#menu li p {
+display:inline-block;
+/* hide from ie/mac \*/
+display:block;
+/* end hide */
+text-decoration:none;
+margin-top:.1em;
+}
+#menu li a {
+font-weight:inherit; /* set this value in div#nav*/
+text-transform:inherit; /*set this value in div#nav */
+text-decoration: inherit; /* set this value in div#nav*/
+/*margin-left:15px; set this to the width of the link_button_end / link_button_end_hover image*/
+padding-right:0.8em;
+padding-left:0.8em;
+}
+#menu li {
+background: transparent;
+}
+#menu li a {
+color: lavender !important;
+background: transparent;
+}
+#menu li.current a, #menu li:hover a, #menu li.sfhover a {
+color: white !important;
+background: black;
+text-decoration: underline;
+}
+#menu li:hover, #menu li.sfhover, #menu strong, #menu ul {
+/*subnav has same bg color as main active menu*/
+background-color: #ccc !important;
+}
+/* END NAV */
+
+
+
+/* SUBNAV SETTINGS*/
+#menu ul li a,#menu ul li a:link,#menu ul li a:active,#menu ul li a:visited,#menu ul li p{
+color: black !important;
+background: none !important;
+text-decoration: none;
+text-transform:capitalize;
+}
+#menu ul li a:hover {
+color: white !important;
+background: black;
+text-decoration: none;
+}
+#menu ul strong,#menu ul strong a,#menu ul strong a:link,#menu ul strong a:active,#menu ul strong a:visited,#menu ul strong a:hover {
+color: white !important;
+background:black;
+text-decoration: none;
+} 
+#menu ul,#menu ul ul {
+position: absolute;
+top: 100%;
+_top:2.8em; /*IE hack requires line-height + padding-top + padding-bottom (see line 32)*/
+width: 100%; 
+left: 0%; /*sub-menu alignment with parent button: could be "right: 0%;" for right justified */
+}
+#menu li.last ul {
+right: 0%; 
+}
+#menu ul,#menu ul li,#menu ul li a,#menu ul li strong {
+display:block;/*resets settings defined in main NAV*/
+margin:0;
+padding:0;
+} 
+#menu ul li {
+/*padding between links*/
+padding-top:0.2em;
+}
+#menu ul li a,#menu ul li strong {
+/* link thickness */
+padding-top:0.2em;
+padding-bottom:0.3em;
+}
+#menu ul {
+width:14em;
+padding-bottom:.3em;
+border-top:none;
+border-right: 2px ridge gray;
+border-bottom: 2px ridge gray;
+border-left: 2px groove gray;
+}
+#menu ul li {
+width:100%;
+list-style: none;
+line-height: 1em;
+text-align:left; /*sub-menu text alignment: could be "right" or "centered" */
+border:none;
+background:transparent !important;
+}
+#menu ul li:hover,#menu ul li.sfhover {
+background:transparent !important;
+}
+#menu ul li.last {
+padding-bottom:.3em;
+border-bottom: 2px ridge gray;
+}
+#menu ul li a.site-nav {
+padding-left:0.7em;
+padding-right:0.7em;
+margin:0;
+}
+#menu ul li hr {
+margin:0 auto;
+width:90%;
+height:.1em;
+display:block;
+color:#ddd;
+background:transparent !important;
+}
+/* END SUBNAV SETTINGS*/
+
+/* SUCKERFISH DROPDOWN SETTINGS */
+#menu li:hover ul, 
+#menu li.sfhover ul { 
+display: block;
+clear: left;
+}
+#menu ul { 
+display: none;
+/*font-size: 0.8em;*/
+}
+#content {
+clear: left;
+}
+/* END SUCKERFISH DROPDOWN SETTINGS */
+

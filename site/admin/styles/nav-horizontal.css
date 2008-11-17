@@ -1,0 +1,215 @@
+/* A CSS Framework by Mike Stenhouse of Content with Style */
+div#nav {
+ position:absolute;
+ top:-2em;
+ _top:-2.4em;
+ left: 0;
+ width: 100%;
+ margin:0 auto;
+ z-index:4;
+ font-size:1.44em;	
+ background-color: transparent;
+ color:#eee !important;
+ text-align: left;
+}
+* html div#nav {
+	/* hide ie/mac \*/
+	height: 1%;
+	/* end hide */
+}	
+#nav div {
+	margin:0px auto;
+	padding:0px; 	
+	width:100%;
+	clear:both;
+	text-align:center;
+}
+#nav div.pre {
+	height:0.4em;
+	font-size:1em;
+	background-color: transparent;
+}
+#nav div.post {
+	height:0em;
+	font-size:0em;
+	background-color: transparent;
+}
+div#nav ul {
+	width:98%;
+	margin:0 0 0 65px;
+}
+div#nav ul li {
+	float: left;
+	display: inline;
+	list-style: none;
+	margin:0;
+	margin-right:.5em;
+	padding:0 0 14px;
+	width:auto;
+	line-height:1em;
+	text-align:center;
+}
+div#nav ul li.current,
+div#nav ul li.sfhover,
+div#nav ul li:hover {
+	background:transparent url(../images/nav_li_a_hover.gif) no-repeat scroll 50% 100% !important;
+}
+div#nav li.last {
+}
+div#nav a,
+div#nav a:link,
+div#nav a:active,
+div#nav a:visited {
+	display:inline-block;
+	/* hide from ie/mac \*/
+	display:block;
+	/* end hide */
+	font-weight:normal;
+	text-transform:capitalize;
+	text-decoration: none;
+	margin:0;
+	padding:0.3em 0.7em;
+	color:black;
+	background:transparent !important;
+}
+div#nav a:hover {
+	text-decoration:underline;
+}
+div#nav strong {
+	display:inline-block;
+	/* hide from ie/mac \*/
+	display:block;
+	/* end hide */
+	color:white;
+	background:black;
+}
+div#nav ul li p {
+	display:inline-block;
+	/* hide from ie/mac \*/
+	display:block;
+	/* end hide */
+	text-decoration:none;
+	margin-top:.1em;
+	color:black;
+}
+div#nav a,
+div#nav a:link,
+div#nav a:active,
+div#nav a:visited,
+div#nav ul li p {
+	color: #EFF9FF !important;
+	background-color: transparent !important;
+	text-decoration: none;
+}
+div#nav a:hover {
+	background-color:#555;
+	text-decoration: none;
+}
+div#nav li ul a:hover { background-image:none;}
+div#nav strong,
+div#nav strong a,
+div#nav strong a:link,
+div#nav strong a:active,
+div#nav strong a:visited,
+div#nav strong a:hover {
+	color: #fff !important;
+	text-decoration: none;
+      background-color: transparent !important;
+}
+div#nav li.admintab {
+	float: right;
+	display: inline;
+	list-style: none;
+	border-right: none;
+	margin: 0;
+	padding: 0;
+}
+#nav ul ul li{
+	display:block;
+}
+#nav ul ul a,
+#nav ul ul a:link,
+#nav ul ul a:active,
+#nav ul ul a:visited, 
+#nav ul ul li p{
+	color: #eee !important;
+	background: #41659B !important;
+	text-decoration: none;
+}
+#nav ul ul a:hover {
+	color: #eee !important;
+	background:  #4B6FA5 !important;
+	text-decoration: none;
+}
+#nav ul ul strong,
+#nav ul ul strong a,
+#nav ul ul strong a:link,
+#nav ul ul strong a:active,
+#nav ul ul strong a:visited,
+#nav ul ul strong a:hover {
+	color: #eee !important;
+	background: #4B6FA5 !important;
+	text-decoration: none;
+}
+#nav li {
+	position: relative;
+} 
+#nav ul ul,
+#nav ul ul ul {
+	position: absolute;
+	top: 100%;
+	left: 0%; 
+	width: 100%; 
+	z-index:2070;
+}
+/* SUCKERFISH DROPDOWN SETTINGS */
+div#nav li ul	{
+	width:14em;
+	display: block;
+	margin:0;
+	padding:0 0 0.3em;
+	border-top: 2px groove #5C80B5;
+	border-left: 2px groove #5C80B5;
+	border-right: 2px ridge #5C80B5;
+	border-bottom: 2px ridge #5C80B5;
+	background:#41659B !important;
+}
+div#nav li ul li {
+	margin: 0;
+	padding: 0;
+	width:100%;
+	display: block;
+	list-style: none;
+	line-height: 1em;
+	text-align:left;
+	
+}
+div#nav li ul li,
+div#nav li ul li.sfhover,
+div#nav li ul li:hover {
+background:transparent;
+border:none;
+}
+div#nav li ul li a.site-nav {
+	padding-left:0.7em;
+	padding-right:0.7em;
+}
+div#nav li ul li hr {
+	margin:.2em auto;
+	width:90%;
+	height:.1em;
+	display:block;
+	color:#ddd;
+	background:#41659B !important;
+}
+div#nav li:hover ul, 
+div#nav li.over ul { 
+	display: block;
+	clear: left;
+}
+div#nav li ul { 
+	display: none;
+}
+#content {
+	clear: left;
+}

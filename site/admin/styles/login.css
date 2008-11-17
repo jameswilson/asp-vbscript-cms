@@ -1,0 +1,98 @@
+/* Admin Panel Login page stylesheet */
+
+div.login {
+background-color:#E0E8F5;
+border-color:#5074A9;
+border-style:solid;
+border-width:0px 1px 1px;
+float:none;
+font-size:1.1em;
+margin:2em auto;
+padding:0pt 0pt 1em;
+width:33em;
+-moz-border-radius:8px;
+-webkit-border-radius:8px;
+}
+.login .message {
+background-color: transparent;
+background-position:0.3em 1.3em;
+border:none;
+width:80%;
+margin:0 auto;
+}
+form#login  {
+width:350px;
+margin:0 auto;
+}
+form#login div {
+clear:both;
+display:block;
+margin:5px 0pt 0pt;
+padding:1px 3px;
+width:100%;
+}
+form#login fieldset {
+margin:0 auto;
+border:none;
+}
+
+.login h1 {
+background:#1F8FFF url(../images/header_bg.gif) repeat scroll 0% 50%;
+color:white !important;
+display:block;
+padding:0.3em 0.4em;
+-moz-border-radius:8px;
+-webkit-border-radius:8px;
+height:1%;
+}
+.login .error,
+.login .warning,
+.login .info {
+background-color:transparent;
+border:none;
+color:inherit !important;
+display:block;
+width:auto;
+padding:0.3em 1em 1em 55px;
+}
+.login .error {
+background-image: url(../../core/assets/i/tango/large/dialog-error.png);
+_background-image: url(../../core/assets/i/tango/large/gif/dialog-error.gif);
+}
+.login .warning {
+background-image: url(../../core/assets/i/tango/large/emblem-important.png);
+_background-image: url(../../core/assets/i/tango/large/gif/emblem-important.gif);
+}
+.login .info {
+background-image: url(../../core/assets/i/tango/large/dialog-information.png);
+_background-image: url(../../core/assets/i/tango/large/gif/dialog-information.gif);
+}
+form#login input.inputText{
+float:right;
+padding:0.1em 0.3em;
+line-height:1em;
+font-size:1em;
+text-align:left;
+width:10em;
+margin-right:100px;
+margin-bottom:0.4em;
+}
+form#login label {
+float:left;
+padding:0.2em;
+margin:0.2em auto 0.4em;
+text-align:right;
+width:94px;
+}
+form#login label.labelCheckbox, form#login label.labelRadio {
+margin:0pt 0pt 5px 110px;
+_margin-left:70px;
+text-align:left;
+width:10em
+}
+.login small {
+display:block;
+clear:both;
+margin:1em;
+}
+.login small.options {text-align:right;}

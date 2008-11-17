@@ -1,0 +1,35 @@
+#testimonials .testimonial {
+padding:1em 24px;
+background:url(<%=objLinks("SITEURL")%>/images/quote.gif) no-repeat left top;
+margin:1em 3em;
+}
+#testimonials .comment {
+padding-bottom:0;
+line-height:1.5em;
+}
+#testimonials .author {
+ display:block;
+ text-align:right;
+ margin-right:1em;
+ color:#999;
+}
+#testimonials .name,#testimonials  .location {
+clear:both;
+display:block;
+}
+#testimonials .adminedit {
+display:inline;
+float:none;
+position:relative;
+}
+#testimonials .comment .excerpt{
+margin:1em;
+display:inline; 
+clear:none; 
+width:190px; 
+text-transform:capitalize; 
+text-align:center; 
+font-size:1.1em;
+float:right;
+border:none;
+}

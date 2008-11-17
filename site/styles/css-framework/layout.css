@@ -1,0 +1,46 @@
+/* SITE-SPECIFIC STYLES */
+@import url("../../core/assets/style/invisible.css");
+@import url("../../core/assets/style/standard.css");
+body {
+ margin:0;
+ padding:0;
+ background:white;
+ text-align:center;
+}
+div#page {
+ width:780px;
+ margin:0 auto;
+ padding:0;
+ background:dimgray;
+ text-align:center;
+}
+div#header {
+ position:relative;
+ padding:40px 20px;
+ color: white;
+ background:black;
+ text-align:left;
+}
+div#content {
+ background:gray;
+ margin:20px auto;
+ padding:0;
+ text-align:left;
+}
+div#main div,div#sub div,div#local div {padding:10px;}
+div#main div div,div#sub div div,div#local div div{ padding:0;}
+
+div#main { background-color:#eee; }
+div#sub { background-color:#aaa; }
+div#local { background-color:#ccc; }
+div#footer { color: white; background-color: black;padding:1.4em;}
+
+#footer p {
+ font-size: 0.8em;
+ margin: 0;
+ padding:10px;
+}
+.current{
+font-weight:bold;
+
+}

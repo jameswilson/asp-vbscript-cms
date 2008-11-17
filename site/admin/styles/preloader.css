@@ -1,0 +1,27 @@
+/* CSS Document for Ajax Preloader screen */
+#prepage{
+position: absolute; 
+height: 9000px; 
+width: 100%; 
+top: 2px;
+left:0px;
+z-index: 3000; 
+padding:0;
+text-align:center;
+visibility: visible;
+background: transparent url(../../core/assets/i/trans-gray.png) repeat 0% 50%; 
+_background-image:none;
+_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod='scale', src='/images/trans-gray.png');
+}
+#prepage div {
+margin:1.2em auto 0;
+}
+#content #prepage h1 {
+background:transparent url(../images/ajax-loader4.gif) no-repeat scroll 50% 69%;
+background-color:transparent;
+padding:10pt 10pt 50px;
+display:block;
+color:#C8DAF1;
+width:auto;
+}
+

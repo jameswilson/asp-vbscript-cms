@@ -1,0 +1,137 @@
+/* standard classes */
+#content p {
+ margin:0.4em 0.8em 0.9em 0.8em;
+ line-height:1.5em;
+}
+#content img.floatleft {
+ margin:0.4em;
+}
+#content img.floatright {
+ margin:0.4em;
+}
+p.centered {
+ text-align:center;
+}
+p.right {
+ text-align:right;
+}
+p.more {
+ margin:0;
+ padding:0;
+ text-align:right;
+}
+table tr .even {
+ background:#eee;
+}
+.highlight {
+ background: yellow;
+}
+#content .warning,#content  .alert,#content  .error, #content .info, #content .success {
+ color:inherit;
+ padding-left:3em;
+}
+.error {
+ background: url(../i/tango/medium/dialog-error.png) top left no-repeat;
+ /*_background: url(../i/tango/medium/dialog-error.gif) top left no-repeat;*/
+}
+.alert {
+ background: url(../i/tango/medium/emblem-important.png) top left no-repeat;
+ /*_background: url(../i/tango/medium/gif/emblem-important.gif) top left no-repeat;*/
+}
+.warning {
+ background: url(../i/tango/medium/dialog-warning.png) top left no-repeat;
+ /*_background: url(../i/tango/medium/gif/dialog-warning.gif) top left no-repeat;*/
+}
+.info {
+ color:inherit;
+ background: url(../i/tango/medium/dialog-information.png) top left no-repeat;
+ /*_background: url(../i/tango/medium/gif/dialog-information.gif) top left no-repeat;*/
+ padding-left:3em;
+}
+div.alert{border-color:#ea733c;}
+div.error{border-color:#eb2424;}
+div.warning{border-color: #f2b821;}
+.success {
+ background: url(../i/tango/medium/dialog-success.png) top left no-repeat;
+ /*_background: url(../i/tango/medium/gif/dialog-success.gif) top left no-repeat;*/
+}
+.copyright {
+ display:inline;
+ float:left;
+ text-align:left;
+ width:28%;
+}
+.footer-links {
+ display:inline;
+ float:left;
+ left:37%;
+ position:absolute;
+ text-align:center;
+ width:28%;
+}
+.shameless-plug {
+ display:inline;
+ float:right;
+ text-align:right;
+ width:22%;
+}
+div.adminedit {
+ position:static;
+ float:right;
+ margin:0;
+ padding:0.1em 0.2em;
+ font-size:1.1em;
+ line-height:1.5em;
+}
+div.adminedit a {
+ margin:0;
+ position:relative;
+ padding:0 0 0 18px;
+ background:url(../i/icon_pencil.gif) no-repeat;
+}
+#admin-links {
+position:absolute;
+top:0;
+right:0;
+padding:0;
+margin:0.3em 2em;
+background:transparent;
+}
+#admin-links ul, #admin-links li {
+list-style:none;
+margin:0;
+padding:0;
+}
+#admin-links li {
+text-align:middle;
+display:inline;
+color:#F6F6F6;
+border:0px solid grey;
+border-right:1px solid grey;
+}
+#admin-links li a {
+padding:0 0.3em;
+}
+#admin-links li span {
+display:none;
+}
+#admin-links li.last {
+border-right:none;
+}
+#nav .current, #admin-links .current {
+cursor:default !important;
+}
+#sitemap {
+clear:both !important;
+margin:1em 3em !important;
+}
+#product-version {
+clear:both !important;
+margin:1em auto !important;
+width:35em;
+}
+img.branding {
+background:#87B4F7 url(../../admin/images/header_bg.gif) repeat-x scroll left top;
+padding:1em;
+margin:1em;
+}

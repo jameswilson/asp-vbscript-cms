@@ -1,0 +1,56 @@
+@charset "utf-8";
+/* Messages */
+.message {
+background-color:#FFFFE1;
+background-image:url(../../core/assets/i/tango/medium/dialog-information.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/dialog-information.gif);
+background-position:0.5em 0.4em;
+background-repeat:no-repeat;
+border:1px solid black;
+color:black;
+width:35em;
+padding:1em 0.5em 1em 3.8em;
+margin:1.3em;
+}
+.alert, .error, .warning, .info, .success {background-repeat:no-repeat;background-position:0.5em 0.4em;padding:1em 0.5em 1em 3.8em;margin:1.3em;}
+.alert, .error, .warning {border-color:#EA2323;}
+.error {
+background-image:url(../../core/assets/i/tango/medium/dialog-error.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/dialog-error.gif);
+}
+.warning {
+background-image:url(../../core/assets/i/tango/medium/dialog-warning.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/dialog-warning.gif);
+}
+.alert {
+background-image:url(../../core/assets/i/tango/medium/emblem-important.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/emblem-important.gif);
+border-color:#F57A02;
+}
+.info {
+background-image:url(../../core/assets/i/tango/medium/dialog-information.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/dialog-information.gif);
+border-color:#8CACCE;
+}
+.success {
+background-image:url(../../core/assets/i/tango/medium/dialog-success.png);
+_background-image:url(../../core/assets/i/tango/medium/gif/dialog-success.gif);
+}
+.error small {
+display:block;
+font-size:0.8em;
+margin:1em 0.3em 0;
+padding:0;
+text-align:left;
+}
+.message .alert, .message .error, .message .warning, .message .info {
+width:auto;
+border:none;
+background-image:none;
+padding:0;
+margin:0.4em 0.8em 0.9em;
+}
+.message .warning{color:#F57A02;}
+.message .info {color:#6789E7;}
+.message .alert, .message .error {color:#EA2323}
+.message small {font-size:0.8em;}

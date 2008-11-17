@@ -1,0 +1,27 @@
+/* CSS Document */
+.dojoTabPane fieldset { border-style:hidden;}
+.dojoTabPane fieldset legend {display:none;}
+.dojoTabPane fieldset fieldset {border-width:thin; border-style:solid;}
+.dojoTabPane fieldset fieldset legend {display:inherit;}
+
+div.notes-label {
+background-color:transparent;
+background-image:url(../images/notes-label_bg.gif);
+background-position:left top;
+background-repeat:no-repeat;
+border:0pt solid #666666;
+color:#E3EBE0;
+font-size:1.1em;
+font-weight:bold;
+margin-bottom:0pt;
+padding:3px 22pt 3px 6px;
+width:135px;
+}
+div.notes-content {
+margin-top:0;
+border-top:none;
+background:#FFFEEB;
+}
+div.notes-content h4 {
+display:none;
+}

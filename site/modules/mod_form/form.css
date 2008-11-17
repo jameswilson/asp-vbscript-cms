@@ -1,0 +1,89 @@
+/* form.css from Jeff Howden */
+* {
+margin: 0;
+padding: 0;
+}
+.form-errors li.error, form small.error {
+padding:0;
+}
+.form-errors a, .form-errors a:hover, .form-errors a:visited, .form-errors a:link {color:#EB2424;}
+form small.error, form label.required {
+font-weight:bold;
+}
+form div.error, form small.error, .form-errors li {
+background:none;
+}
+form small.error, .form-errors a {
+color:#EB2424;
+}
+input, select, textarea {
+width: 180px;
+padding:0.2em 3px;
+margin:0 0 0.3em;
+background:transparent url(../../core/assets/i/trans-white.png) repeat top left;
+border:1px solid #ccc;
+}
+label.empty {
+display:none;
+}
+input.inputFile {
+width: 180px;
+}
+input.readonly, select.readonly, textarea.readonly {
+ background:transparent url(../../core/assets/i/trans-gray.png) repeat top left;
+}
+input.inputCheckbox, input.inputRadio {
+  display: inline;
+  height: 14px;
+  width: 14px;
+  background-color: transparent;
+  border-width: 0;
+  padding: 0;
+}
+div.submit {
+  width: auto;
+	display:inline;
+  padding: 0;
+}
+div.submit div {
+  display: inline;
+  float: left;
+  text-align: left;
+  width: auto;
+  padding: 0;
+  margin: 0;
+}
+input.button {
+  color: #111;
+  width: auto;
+	padding: 0 .7em .1em;
+	margin-right:.1em;
+	border:2px outset black;
+	background-color: #eef;
+}
+div.submit div input.button {
+  float: right;
+  margin: 0 0 0 5px;
+}
+form div small {
+  display: block;
+  margin: 5px;
+  padding: 1px 3px;
+  font-size: 88%;
+  height: expression('1%');
+}
+div#content div.mail-success {
+ background:  url(../../core/assets/i/tango/large/mail-sent.png) top left no-repeat;
+ padding-left:3em;
+ min-height:33px;
+ _height:33px;
+}
+label {
+width:10ex;
+padding-right:0.5em;
+display:block;
+float:left;
+text-align:right;
+}
+ small,  input.inputSubmit {margin-left:14ex;}
+ div {margin-bottom:0.5em;}

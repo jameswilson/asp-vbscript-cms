@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /core
+Disallow: /modules
+Disallow: /scripts
+Disallow: /style
+

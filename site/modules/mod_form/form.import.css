@@ -1,0 +1,96 @@
+/* form.import.css */
+
+label img {
+  behavior: url(/behaviors/label_img.htc);
+}
+fieldset legend {
+  line-height: 150%;
+}
+
+input, select, textarea {
+  background-color: #ffffff;
+}
+
+textarea.expanding {
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+div.optional label:before {
+  content: '';
+}
+
+div.required label:before {
+  content: '';
+}
+  
+label.labelCheckbox, label.labelRadio {
+  display: block;
+  width: 190px;
+  height: expression('1%');
+  padding: 4px 0px 0px 18px;
+  text-indent: -18px;
+  line-height: 120%;
+}
+
+label.labelCheckbox input.inputCheckbox, label.labelRadio input.inputRadio {
+  margin: 0px 0px 0px 20px;
+}
+
+input.inputText, input.inputPassword, input.inputFile, textarea.inputTextarea {
+  width: 160px;
+  margin: 0px 0px 0px 18px;
+  margin: expression('0px 0px 0px 0px');
+}
+.RichTextEditable {
+	margin:0;
+	padding:0 0 2em 0;
+	border:1px solid #aaa;
+}
+.EditorToolbarDomNode {
+	width:98%;
+	margin:0;
+	padding:0;
+}
+label.compact {
+  display: inline;
+  width: auto;
+  padding: 4px 10px 0px 0px;
+  text-indent: 0px;
+  margin: 0px 0px 0px 0px;
+}
+
+form div.wide label {
+  float: none;
+  display: block;
+}
+
+form div label.wide {
+  width: 348px;
+}
+
+form div.wide input.inputText, form div.wide input.inputPassword, form div.wide input.inputFile, form div.wide select, form div.wide textarea {
+  width: 344px;
+  margin: 0px;
+}
+
+form div.notes p, form div small {
+  line-height: 125%;
+}
+
+form div.wide small {
+  margin: 0px 0px 5px 0px;
+}
+div.full,
+div.full div,
+div.toolbarContainer,
+div.toolbar {
+	width:580px;
+}
+textarea.full {
+	width:560px;
+}
+textarea.dojo {
+	border:2px ridge #999;
+}

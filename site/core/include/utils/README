@@ -1,0 +1,68 @@
+The basic usage of util files should following these guidelines:
+
+1) FUNCTIONALITY: The construction of util files should be to execute some sort of function
+and add the result to the page in the main content area.  To do this, simply add the content 
+to the Session variable called "CUSTOM_MESSAGE" in the following manner:
+
+	<%	
+  ' the following sample will print out HELLO WORLD as a HTML H1 (Heading 1) in the main 
+  ' content of the page that executes this file.
+  dim strResult : strResult = h1(Ucase("hello world"))
+  session.contents(CUSTOM_MESSAGE) = strResult
+  %>
+
+
+====== ADVANCED =========
+
+   
+If the intended use of the utility page is to include a bit of information 
+in a page that might otherwise have content (eg, from database) then the 
+method of use is the calling page should execute the page. 
+
+However, if the utility provides functionality that stands apart, eg, a "new" page
+with its own content, so to speak, then the calling file must transfer execution to the util.
+
+In which case, the util must include 
+
+1) global.asp at the top to get access to other program obects.
+
+	<!--#include file="../global.asp"-->
+  
+2) template.asp at the bottom of the page to render the page using the site's layout.
+	<!--#include file="../template.asp"-->
+  
+3) and implement the customContent() method that is executed when the page is rendering the 'main' content section.
+
+    
+====== USAGE =========
+
+Files in the util folder can be executed, or transfered to by other parts of the program.
+
+	Execute Example: 
+  	Execute the 404 helper utility when page not found.
+  
+  <%' (excerpt from /404.asp) %>
+  <!--#include file="core/include/global.asp"-->
+  <%
+    if not setFile OR page.exists = false then
+      trace("404.asp: File or DB contents matching '"&myURL&"' does not exist!")
+      server.execute("core/include/utils/error404.asp")
+    else
+  %>
+  <!--#include file="core/include/template.asp"-->
+
+
+  Transfer Example: 
+  	Transfer to the sitemap util page if "?sitemap" or "?sitemap.xml" is requested
+    
+    Note that neither the global.asp or template.asp is included in this example
+    because the transfer makes all execution go to the sitemap.asp, therefore,
+    those includes must be located in the utility file.
+    
+ 
+  <%' (excerpt from 404.asp)
+    if myQueryString = "sitemap" or myQueryString = "sitemap.xml" then 
+      'show sitemap if it is requested by get or post data (in html or xml format)
+      server.transfer("core/include/utils/sitemap.asp") 
+    end if
+  %>

@@ -542,7 +542,9 @@ class AspPage
 			set rs = db.getRecordSet(sql)
 			
 			
-			if rs.state > 0 then
+			if (rs is nothing) then
+				debugError("class.page.getPageDataByFileName: no database content found for page with path '"&strFilePath&"'.")
+			elseif rs.state > 0 then
 				if rs.EOF and rs.BOF then
 					debugError("class.page.getPageDataByFileName: no database content found for page with path '"&strFilePath&"'.")
 					addError("There is no page for path '"&strFilePath&"'.<br/>" & _

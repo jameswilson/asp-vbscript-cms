@@ -1,6 +1,3 @@
-<%@ Language=VBScript %>
-<%Option Explicit%>
-<!--#include file="core/include/global.asp"-->
 <%
 
 '**
@@ -90,4 +87,4 @@ else
 	end if
 end if
 %>
-<!--#include file="core/include/template.asp"-->
+

@@ -290,14 +290,18 @@ class AspPage
 				end if
 			end if
 		end if
-		writeln( link(objLinks.item("SITEURL")&"/styles/"&myStyleSheet&".css","stylesheet","text/css"))
+		writeln(link(objLinks.item("SITEURL")&"/styles/"&myStyleSheet&".css","stylesheet","text/css"))
 		if (isIE60() = true) and (fileExists("/styles/css-framework/ie.css") = true) then
-			response.write "<style type=""text/css"">" &vbcrlf & "<!--"& vbcrlf 
-			%><!--#include file="../../../styles/css-framework/ie.css"--><%
-			response.write "-->" &vbcrlf & "</style>"
+			writeln("<!--[if lt IE 7]>")
+			writeln(link(objLinks.item("SITEURL") & "/styles/css-framework/ie.css","stylesheet","text/css"))
+			writeln("<![endif]-->")
 		end if
-		if isDebugMode() = true then writeln( link(objLinks.item("SITEURL")&"/core/assets/style/debug.css","stylesheet","text/css") )
-		if isIE() = true then writeln( "<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&"/core/assets/scripts/sfhover.js""></script>" )
+		if isDebugMode() = true then 
+			writeln(link(objLinks.item("SITEURL")&"/core/assets/style/debug.css","stylesheet","text/css") )
+		end if
+		if isIE() = true then 
+			writeln("<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&"/core/assets/scripts/sfhover.js""></script>" )
+		end if
 	end function
 	
 	
@@ -732,19 +736,19 @@ class AspPage
 	end function
 		
 	public function getHeader()
-		%><!--#include file="../../../include/header.asp" --><%	
+		%><!--#include file="../../../public/include/header.asp" --><%	
 	end function
 	
 	public function getFooter()
-		%><!--#include file="../../../include/footer.inc" --><%
+		%><!--#include file="../../../public/include/footer.inc" --><%
 	end function
 	
 	public function getNavBar()
-		%><!--#include file="../../../include/menubar.asp"--><%
+		%><!--#include file="../../../public/include/menubar.asp"--><%
 	end function
 	
 	public function getMeta()
-		%><!--#include file="../../../include/meta.inc"--><%
+		%><!--#include file="../../../public/include/meta.inc"--><%
 		writeln(getStyle())
 	end function
 	

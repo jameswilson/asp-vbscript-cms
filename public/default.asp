@@ -1,1 +1,1 @@
-<%server.Execute("404.asp")%>
+<%server.Execute("../core/include/bootstrap.asp")%>

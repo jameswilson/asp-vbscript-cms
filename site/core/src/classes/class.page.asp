@@ -543,7 +543,7 @@ class AspPage
 			
 			
 			if (rs is nothing) then
-				debugError("class.page.getPageDataByFileName: no database content found for page with path '"&strFilePath&"'.")
+				debugError("class.page.getPageDataByFileName: database returned no result for query: " & sql)
 			elseif rs.state > 0 then
 				if rs.EOF and rs.BOF then
 					debugError("class.page.getPageDataByFileName: no database content found for page with path '"&strFilePath&"'.")

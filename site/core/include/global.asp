@@ -1,10 +1,14 @@
 <%
 '**
-'* @file Global bootstrap.
+'* @file 
+'*   Global bootstrap file.
 '*
+'* This file is responsible for including all the required classes and 
+'* functions and initializing the application. 
+'* 
 
 '**
-'* Include standard classes and functions
+'* Include standard classes and functions.
 '*
 %><!--#include file="../src/functions/functions.debug.asp"--><%
 %><!--#include file="../src/functions/functions.error.asp"--><%
@@ -30,12 +34,12 @@
 %><!--#include file="../configuration.asp"--><%
 
 '**
-'* Initialize Global objects available to all pages
+'* Initialize Global objects available to all pages.
 '*
 initializeGlobals()
 
 '**
-'* Check to see that the site is not disabled.
+'* Prevent site from being displayed if site is offline.
 '*
 if objLinks.item("SITE_DISABLED") = "YES" and lcase(page.getName()) <> "unavailable" then
 	if page.isAdminPage() = true then 

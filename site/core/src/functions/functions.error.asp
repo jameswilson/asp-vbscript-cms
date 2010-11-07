@@ -1,12 +1,12 @@
 <%
 '**
-'* @file 
+'* @file
 '*   Application and runtime error handling.
-'* 
+'*
 '* This file should be used during any Database connectivity in order to skip
 '* errors and have them handled in a clean way for the user. Place a call to
 '* trapError() after every database transaction, and a call to processErrors()
-'* at the end of any that includes this file. 
+'* at the end of any that includes this file.
 '*
 on error resume next
 
@@ -55,7 +55,7 @@ function TrapError()
 						dim e
 						for each e in db.Errors
 							with e
-								errString = errString & separator & "Database ERROR [" _ 
+								errString = errString & separator & "Database ERROR [" _
 									& .number & "] (Ox" & Hex(.number) & "): " & vbcrlf _
 									& .description & vbcrlf _
 									& "URL: " & request.ServerVariables("URL") & vbcrlf _
@@ -71,8 +71,8 @@ function TrapError()
 		err.clear
 	end if
 	'
-	' The following boolean logic sets global bolErrors TRUE only if 
-	' foundError is TRUE. If global bolErrors is already TRUE then a value of 
+	' The following boolean logic sets global bolErrors TRUE only if
+	' foundError is TRUE. If global bolErrors is already TRUE then a value of
 	' FALSE will not affect it.
 	'
 	bolErrors = (bolErrors OR foundError)
@@ -81,7 +81,7 @@ end function
 
 '**
 '* Subroutine to handle adding error messages to the runtimeErrors string.
-'* 
+'*
 '* @param String message
 '*   The error message to add
 sub storeRuntimeError(byval message)
@@ -109,8 +109,8 @@ function ProcessErrors()
 	end if
 end function
 
-'** 
-'* Helper identifies if there were errors found in the page. 
+'**
+'* Helper identifies if there were errors found in the page.
 '*
 '* @return bool
 '*   TRUE if error(s) found in page execution
@@ -122,7 +122,7 @@ end function
 '**
 '* Return web-formatted list of runtime errors.
 '*
-'* @return string 
+'* @return string
 '*   The string of runtime error messages, returns empty string if no errors.
 function getRuntimeErrors()
 	dim separator, status

@@ -1,9 +1,15 @@
 <%
-dim startProgram : startProgram = timer
-' DEBUG LEVEL SETTING determines how much junk gets spit out if DebugMode is ON
-dim debugLevel : debugLevel = TRACE_LEVEL
+'**
+'* @file
+'*   Application-level message logging and debugging.
+'*
+'* Due to the non-existence of system logging in ASP, this script is used 
+'* througout the application for debugging and logging purposes.  It should
+'* always be included in any file you write.  There are various log levels, and 
 
-' Preset DEBUG levels
+'**
+'* Application log levels.
+'* 
 const DEBUG_OFF = 0
 const TRACE_LEVEL = 1
 const DEBUG_LEVEL = 2
@@ -11,7 +17,19 @@ const INFO_LEVEL = 3
 const WARN_LEVEL = 4
 const ERROR_LEVEL = 5
 
+'**
+'* Set the global log level to refine how much information is logged.
+'*
+dim debugLevel : debugLevel = TRACE_LEVEL
+
+'**
+'* 
+'*
 dim strDebugHTML : set strDebugHTML = new FastString
+
+'**
+'*
+'*
 function logMessage(strMessage,intLevel)
 	logMessage = false
 	if not (intLevel < debugLevel) then 
@@ -59,7 +77,9 @@ public function isDebugMode()
 	isDebugMode = debugMode()
 end function
 
-'standard debuging functions to present session and cookie information if DEBUG is ON
+'**
+'* Log Cookie information at the debug level.
+'* 
 function debugCookies()
 	if request.cookies().count > 0 then 
 		debug("debugCookies() { ")
@@ -73,6 +93,9 @@ function debugCookies()
 	end if
 end function
 
+'**
+'* Log Session information at the debug level.
+'* 
 function debugSessionContents()
 	if session.contents().count > 0 then 
 		debug("debugSessionContents() { ")
@@ -86,24 +109,40 @@ function debugSessionContents()
 	end if
 end function
 
+'**
+'* Application timer is started as soon as this file gets included.
+'*
+dim startProgram : startProgram = timer
+
+'**
+'* Returns the current amount of time that has passed since the program started.
+'*
 function getProgramTime()
-	dim t,unit 
-	'for t=0 to 100000
-	'	unit = unit&"a"
-	'next	
+	dim t, unit 	
 	t = timer - startProgram
-	if t<1 then
-		t= t*1000
+	if t < 1 then
+		t = t * 1000
 		unit = " milliseconds"
 	else
 		unit = " seconds"
 	end if
-	getProgramTime = round(t,1) & unit
+	getProgramTime = round(t, 1) & unit
 end function
 
-function ExecTimer(byval sExpr)
+'**
+'* Drop-in replacement for ASP Execute() function. Will execute the provided 
+'* expression, and log the time it took to perform.
+'*
+'* @param string expression
+'*   The expression to execute.
+'* @return int
+'*   Returns the time (in seconds) it took to execute expression.
+'*
+function ExecTimer(byval expression)
 	dim t : t = timer
-	Execute(sExpr)
-	debugInfo(left(sExpr,45) & iif(len(sExpr)>45,"...","") & " took "& (timer-t) & " seconds.")
+	Execute(expression)
+	t = timer - t
+	debugInfo(left(expression, 45) & iif(len(expression) > 45, "...", "") & " took " & t & " seconds.")
+	ExecTimer = t
 end function
 %>

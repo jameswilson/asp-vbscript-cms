@@ -1,102 +1,153 @@
-How to install asp-vbscript-cms on development (localhost) and production servers.
+ASP-VBScript-CMS Installation Instructions
+
+  This document is intended to help you get started using the application and 
+  contains instructions for installing and configuring the software on your 
+  local development server as well as on production servers.
 
 
 INTRODUCTION
 
-ASP VBScript CMS is built for rapid configuration AND deployment to enable you to get your client sites up as quickly as possible. There are as little as 3 steps to getting setup on localhost.
+  ASP VBScript CMS is built for rapid configuration AND deployment to enable
+  you to get your client sites up as quickly as possible. There are as little
+  as three steps to getting setup on localhost.
 
-NOTE: We tend towards the lemma of convention over configuration, so if you're cool with that, things will be much quicker to setup. Of course, however, if your dev or production environment is more customized, the cms facilitates easy changes to fit your needs.
+  ASP-VBScript-CMS tends to use more convention over configuration, so if you
+  accept this and go with the flow, things will be much quicker to setup. That 
+  being said, the cms facilitates customization and configuration to fit your 
+  development or production environment. These are the basic steps to setup the
+  software. Each step is explained in further detail below.
 
-   1. Unzip and create a new project.
-   2. Rename the database file.
-   3. Update the SOURCEID in the configuration file.
-   4. Create the virtual directory in IIS. 
+    1. Unzip and create a new project.
+    2. Rename the database file.
+    3. Update the SOURCEID in the configuration file.
+    4. Create the virtual directory in IIS. 
 
-Note that if your only testing out ASP VBScript CMS then you can simply unzip the file and skip to the last step, setting up your virtual directory, name it "asp-vbscript-cms" and it should work "out of the box" at http://localhost/asp-vbscript-cms/
+  Note that if your only testing out ASP VBScript CMS then you can simply unzip
+  the file and skip to the last step, setting up your virtual directory, name
+  it "cms" and it should work out of the box at http://localhost/cms/
 
 
 INSTALLATION
 
 
-1) Unzip and create new project.
+1.a) Download and unzip the source code.
 
-Unzip the downloaded project file (asp-vbscript-cms.zip) to your projects directory. The path to the project can be anything you like:
+  Unzip the downloaded project file (asp-vbscript-cms.zip) to your projects 
+  directory. The path to the project can be anything you like. For example:
 
     * C:\Projects\
     * C:\Documents and Settings\username\My Documents\Projects\ 
 
-Rename the unzipped folder asp-vbscript-cms to the name of the project you are creating. For our purposes, we'll be creating a project "new_project", thus we get:
+1.b) Create a new project
 
-    * C:\path\to\new_project\ to mean the project path
-    * C:\path\to\new_project\site\ to mean the site root 
+  Rename the unzipped folder asp-vbscript-cms to the name of the project you 
+  are creating. For demonstrative purposes, lets create a project called "New
+  Project".
 
-TIP: Creating a Project name, also referred to as the SOURCEID in the code, is best to keep it short and no funny characters. Please use lowercase letters, and employ underscores and dashes only if absolutely necessary.
+    * C:\Projects\new_project\ to mean the project path
+    * C:\Projects\new_project\site\ to mean the site root 
 
-The standard project folder structure looks like this:
+  TIP: Creating a Project name, also referred to as the SOURCEID in the code,
+  is best to keep it short and no funny characters. Please use lowercase 
+  letters only with underscores or dashes to separate words if necessary.
 
-project_name\
-.\db\   <-- database file sits outside the site root
-.\site\ <-- site root
-.\site\core\  <-- all CMS core files
-.\site\admin\ <-- CMS Administration interface 
-.\site\modules\ <-- the modules folder
-.\site\ 
-.\sources\  <-- any source files (information architecture doc, pdfs, psds, etc)
+  The standard project folder structure looks like this:
 
-
-
-
-2) Rename the database file.
-
-The system loader demands that the database must be named the same as the project name.
-
-Rename .\db\asp-vbscript-cms.mdb to: .\db\project_name.mdb
-
-At this time only Microsoft Access MDB files are supported by ASP VBScript CMS.
+    new_project\
+    .\db\   <-- database file sits outside the site root
+    .\site\ <-- web root (aka public_html)
+    .\site\core\  <-- all CMS core files
+    .\site\admin\ <-- CMS Administration interface 
+    .\site\modules\ <-- the modules folder
+    .\site\ 
+    .\sources\  <-- project assets (information architecture, design comps, etc)
 
 
+2) Update SOURCEID in the configuration file to match the Project name.
 
-3) Update the project config file's SOURCEID.
+  Open the file .\site\core\configuration.asp and change the SOURCEID string to
+  match the Project name.
 
-Open the file .\site\core\configuration.asp and change the SOURCEID string to match db name and project name.
+    const SOURCEID = "new_project"
 
+
+3) Update the database filename to match the Project name.
+
+  Again, convention over configuration, the system loader demands that the
+  database must be named the same as the project name.
+
+  Rename .\db\cms.mdb to: .\db\new_project.mdb
+
+  *NOTE: Only Microsoft Access MDB files are supported by ASP VBScript CMS.*
 
 
 
 4) Create the virtual directory.
 
-In IIS Administrator, add a new virtual directory using the SITE folder (ex, C:\path\to\project_name\site\ folder. You must name the virtual directory the same name as the project name, database file name, and SOURCEID in the previous steps.
+  In IIS Administrator, add a new virtual directory using the *site* folder, 
+  NOT the project root folder!
 
-Now your done setting up the CMS on localhost you will be able to access your new site's front end here:
+	* Virtual directory alias:  new_project
+	* Virtual directory folder: C:\Projects\new_project\site\ 
 
-    * http://localhost/project_name/
-    * http://localhost/project_name/admin/
-          o user: admin
-          o pass: admin 
+  NOTE: The virtual directory alias MUST BE THE SAME as the the Project name, 
+  the database file name, and the SOURCEID configured in the previous steps.
+
+  Now your done setting up the CMS on localhost you will be able to access your 
+  new project's front end website here:
+
+    * http://localhost/new_project/
+    * http://localhost/new_project/admin/
+        o user: admin
+        o pass: password
 
 
 
 
 INSTALLING TO PRODUCTION SERVER
 
-If you're not installing ASP VBScript CMS on your local machine (a.k.a localhost), it requires a little bit different configuration to work correctly. Initially the CMS was designed with a dual configuration in mind, so that we could deploy code/files to a production server without the need to maintain different configuration files. The bootstrap knows how to detect if the server is a testing/development server or a live site by looking at the url.
+  Installation on a production webserver requires a different configuration to 
+  work correctly. Initially the CMS was designed with a dual configuration in 
+  mind, so that we could deploy code/files to a production server without the 
+  need to maintain different configuration files. The bootstrap knows how to 
+  detect if the server is a testing/development server or a live site by
+  looking at the url.
 
-There was also the issue of maintaining a legacy folder structure on the production server that doesn't follow the typical development project folder structure. This has yet to be cleaned out of the code. For now suffice it to say that it works like this:
+  There was also the issue of maintaining a legacy folder structure on the 
+  production server that doesn't follow the typical development project folder 
+  structure. This has yet to be cleaned out of the code. For now suffice it to 
+  say that it works like this:
 
-c:\Path\To\My Webhost\wwwroot\
-c:\Path\To\My Webhost\wwwroot\new_project\  <-- configure this folder to be the site root for a specific domain in the web hosting admin panel. 
-c:\Path\To\My Webhost\wwwroot\db\new_project\new_project.mdb
+    c:\Path\To\Webhost\wwwroot\
+    c:\Path\To\Webhost\wwwroot\new_project\  <-- configure this folder to be 
+	                                         the site root for a specific 
+											 domain in the web hosting admin
+											 panel.
+    c:\Path\To\My Webhost\wwwroot\db\new_project\new_project.mdb
 
-Effectively the development folder called 'site' gets uploaded and renamed to the project name, and the database for that project gets added to the db folder (outside the project folder).
+  Effectively the development folder called 'site' gets uploaded and renamed to 
+  the project name, and the database for that project gets added to the db 
+  folder (outside the project folder).
 
-Have a look in .\site\core\configuration.asp and .\site\core\config\globals.asp to get an idea of what kind of variables can be easily manipulated to customize your configuration.
-
+CUSTOMIZATIONS THAT VARY FROM THE CONVENTIONS
+  
+  To get an idea of the variables available to customize your applicaiton,
+  including its installation location and the database locations look at the
+  following files:
+  
+    .\site\core\configuration.asp
+	.\site\core\config\globals.asp
+  
 TROUBLESHOOTING ON LOCALHOST
 
-Getting strange errors creating new pages in the admin?
+  Getting strange errors creating new pages in the admin?
 
-In order to create pages, IIS must be given permission to create files in your project folder. The IUSR_ must have write permissions on the .\site\ folder.
+  In order to create pages from the administration web interface, IIS must be
+  given permission to create files in your project folder. The IUSR_ must have
+  write permissions on the site folder.
 
-This was my solution to getting around not having a url rewrite module available on the production server (1and1.com).
+  This was my solution to getting around not having a url rewrite module
+  available on the production server (1and1.com).
 
-The file created can be placed in subfolders and its contents are simply an include of 404.asp (the file that currently drives everything on the site).
+  The file created can be placed in subfolders and its contents are simply an 
+  include of 404.asp (the file that currently drives everything on the site).

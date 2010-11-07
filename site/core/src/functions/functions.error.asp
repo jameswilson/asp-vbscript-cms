@@ -1,139 +1,134 @@
 <%
-'This file should be used during any Database connectivity in order to
-'skip errors and have them handled in a clean way for the user.
-'developer should put a call to "trapError" after every database transaction
-'developer should put a call to "processErrors" at the end of his asp page 
-'that includes this file. 
+'**
+'* @file 
+'*   Application and runtime error handling.
+'* 
+'* This file should be used during any Database connectivity in order to skip
+'* errors and have them handled in a clean way for the user. Place a call to
+'* trapError() after every database transaction, and a call to processErrors()
+'* at the end of any that includes this file. 
+'*
+on error resume next
 
-'On Error Resume Next
+' Runtime errors are collected in a primitive string type.
+dim runtimeErrors : runtimeErrors = ""
+
+' The runtime errors are distinguished by a separator.
 const ERROR_STRING_SEPARATOR = "::"
-dim strTrappedErrorMessages
-dim bolErrors
 
-'Initialize variables
-strTrappedErrorMessages = ""
-bolErrors = false	
+' Boolean type for tracking page errors.
+' Typically used at the footer
+dim bolErrors : bolErrors = FALSE
 
 '**
-'* call TrapError after any Database or other Object activity prone to throwing errors
+'* This function will catch any runtime errors that may result from various
+'* operations. Place a call to TrapError after any database or other object
+'* prone to throwing runtime errors.
+'*
+'* Currently the application throws errors through the standard Err object
+'* provided by ASP. Application-level errors are denoted with the Err.Number
+'* property set to the null string. If a unique ID number is required to
+'* identify an application-level error, then its number should be included
+'* in the Err.Description property.
 '*
 function TrapError()
-	'trace("TrapError() called...")
-	dim foundError,errString,separator
-	separator = ERROR_STRING_SEPARATOR&vbcrlf
-	foundError = false
-	' Error Handler
+	dim foundError, errString, separator
+	separator = ERROR_STRING_SEPARATOR & vbcrlf
+	foundError = FALSE
 	if err.number <> 0 then
- 		'	Action is sensitive to type of error
  		select case err.number
-			'
-			'	Custom Error Handling  
-			' our custom errors set err.Number property to the null string.
-			' if a number is required to diferentiate uniqueness of an error,
-			' then please include the number in the description field of the error!
-			'
+			' Handle application errors:
 			case ""
-				'trace("TrapError: setting error key to true")
-				foundError = true
-				errString = objLinks.item("PRODUCT_BRANDING") &" ERROR: " & err.description & "  SOURCE: "&err.source
+				foundError = TRUE
+				errString = objLinks.item("PRODUCT_BRANDING") &" ERROR: "& err.description &"  SOURCE: "& Err.source
  			
-			'	
-			' General Error Handling
-			' 
+			' Handle general ASP runtime errors.
 			case else
-				'trace("TrapError: setting error key to true")
-				foundError = true
-				'trace("TrapError: setting error string")
-				errString = "VBScript ERROR [" &  err.number & "] (Ox"& Hex(Err.number) & "): " &vbcrlf _
-						& "DESCRIPTION:" & err.description & vbcrlf _
-						& "URL: "&request.ServerVariables("URL") & vbcrlf _
-						& "SOURCE: "&err.source
-				'trace("TrapError: error string is '"&errString&"'")
+				foundError = TRUE
+				errString = "VBScript ERROR ["& err.number &"] (Ox"& Hex(err.number) &"): "& vbcrlf _
+					& "DESCRIPTION:" & err.description & vbcrlf _
+					& "URL: " & request.ServerVariables("URL") & vbcrlf _
+					& "SOURCE: " & Err.source
 				if isObject(db) then
-					'trace("TrapError: checking for database errors...") 
 					dim errCount : errCount = db.Errors.Count
-					'trace("TrapError: There were '"&errCount&"' db errors." )
-	 				if errCount > 0 then
+					if errCount > 0 then
 						dim e
-						'for i = 0 to errCount - 1
 						for each e in db.Errors
-							with e'db.Errors(i)
-								errString = errString&separator&"Database ERROR [" &  .number & "] (Ox"& Hex(.number) & "): " & vbcrlf _
+							with e
+								errString = errString & separator & "Database ERROR [" _ 
+									& .number & "] (Ox" & Hex(.number) & "): " & vbcrlf _
 									& .description & vbcrlf _
-									& "URL: "&request.ServerVariables("URL") & vbcrlf _
-									& "SOURCE: "&.source & vbcrlf _
-									& "SQL STATE: "&.SQLState & vbcrlf _
-									& "Native Error: "&.NativeError
+									& "URL: " & request.ServerVariables("URL") & vbcrlf _
+									& "SOURCE: " & .source & vbcrlf _
+									& "SQL STATE: " & .SQLState & vbcrlf _
+									& "Native Error: " & .NativeError
 							end with
 						next
  					end if
 				end if
-			end select
-			'trace("TrapError: adding error '"&errString&"'")
-			call addToTrappedErrorList(errString)
-			err.clear
-		else
-			'trace("TrapError: no error found.")
-		end if
-		'
-		'The following boolean logic sets global bolErrors true only if foundErrors is true
-		'If global bolErrors is already true then a false value here will not affect it.
-		'
-		bolErrors = (bolErrors OR foundError)
-		TrapError = foundError 
+		end select
+		call storeRuntimeError(errString)
+		err.clear
+	end if
+	'
+	' The following boolean logic sets global bolErrors TRUE only if 
+	' foundError is TRUE. If global bolErrors is already TRUE then a value of 
+	' FALSE will not affect it.
+	'
+	bolErrors = (bolErrors OR foundError)
+	TrapError = foundError
 end function
-
-sub addToTrappedErrorList(byval strErr)
-	debugError(replace(replace(strErr,ERROR_STRING_SEPARATOR,"<br/><br/>"),vbcrlf,"<br/>"))
-	'response.write(p(strErr))
-	strTrappedErrorMessages = strTrappedErrorMessages & strErr & ", "
-end sub
-
 
 '**
-'* If there are any errors, this function will email tech support
-'* call this sub after all your database activity is complete 
-'* @todo implement actual email send and logging to database!
+'* Subroutine to handle adding error messages to the runtimeErrors string.
+'* 
+'* @param String message
+'*   The error message to add
+sub storeRuntimeError(byval message)
+	debugError(replace(replace(message, ERROR_STRING_SEPARATOR, "<br/><br/>"), vbcrlf, "<br/>"))
+	'response.write(p(message))
+	runtimeErrors = runtimeErrors & message & ", "
+end sub
+
+'**
+'* Process runtime errors by gathering them into a string presentable for web
+'* and clearing the global runtime error cache.
+'*
 function ProcessErrors()
-  if bolErrors = true and strTrappedErrorMessages <> "" then
-		'process all errors up till now, and reset the error chain.
-		bolErrors = false
-		strTrappedErrorMessages = ""
-    'Send the email
-    'Dim objCDO
-    'Set objCDO = Server.CreateObject("CDONTS.NewMail")
-
-    'objCDO.To = "techsupport@mysite.com"
-    'objCDO.From = "techsupport@mysite.com"
-    'objCDO.Subject = "AN ADO ERROR OCCURRED"
-    'objCDO.Body = "At " & Now & " the following errors occurred on " & _
-		'  "the page " & Request.ServerVariables("SCRIPT_NAME") & _
-		'  ": " & _
-    '              chr(10) & chr(10) & strTrappedErrorMessages
-		writeln(p(strTrappedErrorMessages))
-		debug("EMAIL SENT TO ADMIN ABOUT ERROR")
-    'objCDO.Send
-
-    'Set objCDO = Nothing
-
-    'print out something for the client
-		debug("CLIENT INFORMED ABOUT ERROR VIA WEBPAGE")
-    ProcessErrors =  "<p class='alert'>There has been an error during page load. Technical Support " & vbCrLf & _
-                   "has already been notified.  You will be informed when " &  vbCrLf &_
-                   "this issue is resolved.  Thank you for your patience!</p>"
+	ProcessErrors = ""
+	if bolErrors = TRUE and runtimeErrors <> "" then
+		debug("Runtime errors were encountered.")
+		dim status : status = getRuntimeErrors
 		
-  end if
+		' Clear the global errors after processing.
+		bolErrors = FALSE
+		runtimeErrors = ""
+		
+		' Return the status message.
+		ProcessErrors = status
+	end if
 end function
- 
-'return true if error(s) found in page execution
+
+'** 
+'* Helper identifies if there were errors found in the page. 
+'*
+'* @return bool
+'*   TRUE if error(s) found in page execution
+'*
 function pageHasErrors()
 	pageHasErrors = bolErrors
 end function
 
-'return String of errors.
-'return empty string "" if no error(s)
-function getErrors()
-	getErrors = strTrappedErrorMessages
+'**
+'* Return web-formatted list of runtime errors.
+'*
+'* @return string 
+'*   The string of runtime error messages, returns empty string if no errors.
+function getRuntimeErrors()
+	dim separator, status
+	separator = "</li>" & vbCrLf & "<li>"
+	getRuntimeErrors = "<p class='alert'>An Error has occurred during page load.</p>" & vbCrLf _
+		& "<ul><li>" & vbCrLf _
+		& replace(replace(runtimeErrors, ERROR_STRING_SEPARATOR, separator), vbcrlf, "<br/>")
 end function
-
 %>

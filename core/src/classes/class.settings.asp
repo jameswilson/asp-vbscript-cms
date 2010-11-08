@@ -157,42 +157,64 @@ function token_replace(byval str)
 	token_replace = str
 end function
 
-function GlobalVarDecode(byval str, byval varList)
+'**
+'* Convert a tokenized string into a plain-text string. Decoding is done by
+'* removing the token identifiers (TOKEN_PREFIX and TOKEN_SUFFIX) from around
+'* each instance of each variable found in the string.
+'*
+'* @param plaintext (String)
+'*   The plain-text string to decode.
+'* @param variables (String)
+'*   A comma-separated list of variables to decode.
+'* @return 
+'*   The token-encoded string.
+function GlobalVarDecode(byval plaintext, byval variables)
 	on error resume next
-	if (str = "") or (isNull(str)) or (varList = "") or isNull(varList) then
+	if (plaintext = "") or (isNull(plaintext)) or (variables = "") or isNull(variables) then
 		GlobalVarDecode = ""
 		exit function
 	end if
-	trace("class.settings.globalVarDecode: '"& varList &"'")
-	varList = split(varList, ",")
-	trace("class.settings.globalVarDecode: list has "& ubound(varList) &"  items")
-	str = replace(str,server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
-	str = replace(str,server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
+	trace("class.settings.globalVarDecode: '"& variables &"'")
+	variables = split(variables, ",")
+	trace("class.settings.globalVarDecode: list has "& ubound(variables) &"  items")
+	plaintext = replace(plaintext, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
+	plaintext = replace(plaintext, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 	dim i : i = 0
 	do
-		trace("class.settings.globalVarDecode: decoding '"& varList(i) &"'")
-		trace("class.settings.globalVarDecode: replaceing '"& varList(i) &"' with '"& globals(cstr(varList(i))) & "'")
-		str = replace(str, TOKEN_PREFIX & varList(i) & TOKEN_SUFFIX, globals(cstr(varList(i))))
-	loop until i = ubound(varList)
+		trace("class.settings.globalVarDecode: decoding '"& variables(i) &"'")
+		trace("class.settings.globalVarDecode: replaceing '"& variables(i) &"' with '"& globals(cstr(variables(i))) & "'")
+		plaintext = replace(plaintext, TOKEN_PREFIX & variables(i) & TOKEN_SUFFIX, globals(cstr(variables(i))))
+	loop until i = ubound(variables)
 	trapError
-	GlobalVarDecode = str
+	GlobalVarDecode = plaintext
 end function
 
-function GlobalVarEncode(byval str, byval varList)
-	if (str = "") or (isNull(str)) or (varList = "") or isNull(varList) then
+'**
+'* Convert a plain-text string into a tokenized string. Encoding is done by
+'* wrapping token identifiers (TOKEN_PREFIX and TOKEN_SUFFIX) around each 
+'* instance of each variable found in the string.
+'*
+'* @param plaintext (String)
+'*   The plain-text string to encode.
+'* @param variables (String)
+'*   A comma-separated list of variables to encode.
+'* @return 
+'*   The token-encoded string.
+function GlobalVarEncode(byval plaintext, byval variables)
+	if (plaintext = "") or isNull(plaintext) or (variables = "") or isNull(variables) then
 		GlobalVarEncode = ""
 		exit function
 	end if
-	trace("class.settings.GlobalVarEncode: '"& varList &"'")
-	varList = split(varList, ",")
-	trace("class.settings.GlobalVarEncode: list has "& ubound(varList) &"  items")
-	str = replace(str,server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
-	str = replace(str,server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
+	trace("class.settings.GlobalVarEncode: '"& variables &"'")
+	variables = split(variables, ",")
+	trace("class.settings.GlobalVarEncode: list has "& ubound(variables) &"  items")
+	plaintext = replace(plaintext, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
+	plaintext = replace(plaintext, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 	dim i
-	for i = 0 to ubound(varList)
-		str = replace(str, globals(cstr(varList(i))), TOKEN_PREFIX & varList(i) & TOKEN_SUFFIX)
+	for i = 0 to ubound(variables)
+		plaintext = replace(plaintext, globals(cstr(variables(i))), TOKEN_PREFIX & variables(i) & TOKEN_SUFFIX)
 	next
-	GlobalVarEncode = str
+	GlobalVarEncode = plaintext
 end function
 
 %>

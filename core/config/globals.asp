@@ -3,7 +3,7 @@
 '**
 '* @file
 '*   Application-level globals variables and objects.
-'* 
+'*
 '*   You have access to these variabls by including the bootstrap.asp.
 '*
 
@@ -24,12 +24,12 @@ function initializeGlobals()
 	dim start : start = timer
 	trace("config.initGlobals...")
 	initDomainGlobals()
-	initDatabaseGlobals() 
-	initSiteGlobals() 
+	initDatabaseGlobals()
+	initSiteGlobals()
 	initDbSiteSettings()
 	set user = new ClientUser
 	set page = new AspPage
-	debugInfo("config.initGlobals:  initialization completed in "& timer - start &" seconds.") 
+	debugInfo("config.initGlobals:  initialization completed in "& timer - start &" seconds.")
 end function
 
 '**
@@ -46,11 +46,11 @@ function initDomainGlobals()
 	if isLocalServer = true then
 		'LOCALHOST settings where site lives in subfolder
 		addGlobal "SITEROOT", "/{PROJECT_NAME}", null
-			
+
 	elseif Instr(request.ServerVariables("URL"), PROJECT_NAME) > 0 then
 		'TEST DOMAIN settings where site lives in subfolder
 		addGlobal "SITEROOT", "/{PROJECT_NAME}", null
-		
+
 	else
 		'NORMAL Live Site settings for public domain
 		addGlobal "SITEROOT", "", null
@@ -61,7 +61,7 @@ function initDomainGlobals()
 	else
 		addGlobal "DOMAINNAME", request.ServerVariables("SERVER_NAME") & "{SITEROOT}", null
 	end if
-	if request.ServerVariables("HTTPS") = "on" then 
+	if request.ServerVariables("HTTPS") = "on" then
 		addGlobal "SITEURL", "https://{DOMAINNAME}", null
 	else
 		addGlobal "SITEURL", "http://{DOMAINNAME}", null
@@ -76,7 +76,7 @@ function initDomainGlobals()
 	addGlobal "DEVELOPER_EMAIL", DEVELOPER_EMAIL, null
 	addGlobal "PRODUCT_BRANDING", PRODUCT_BRANDING, null
 	addGlobal "DEVELOPER_SUPPORT_LINK", DEVELOPER_SUPPORT_LINK, DEVELOPER_SUPPORT_LINK
-	addGlobal "SITE_OFFLINE", SITE_OFFLINE, null 
+	addGlobal "SITE_OFFLINE", SITE_OFFLINE, null
 	addGlobal "SITE_OFFLINE_MESSAGE", SITE_OFFLINE_MESSAGE, null
 	addGlobal "ADMIN_SITE_OFFLINE_MESSAGE", ADMIN_SITE_OFFLINE_MESSAGE, null
 	addGlobal "UNAVAILABLE_URL", UNAVAILABLE_URL, null
@@ -118,7 +118,7 @@ function initSiteGlobals()
 	addGlobal "GENERIC_ERROR", GENERIC_ERROR, null
 	addGlobal "LOGOUT_SUCCESS", InfoMessage(LOGOUT_SUCCESS), null
 	addGlobal "BAD_PASSWORD", BAD_PASSWORD, null
-	addGlobal "INVALID_USER", INVALID_USER, null 
+	addGlobal "INVALID_USER", INVALID_USER, null
 	addGlobal "ERROR_FEEDBACK", ERROR_FEEDBACK, null
 	addGlobal "BOILERPLATE_WARNING", BOILERPLATE_WARNING, null
 	addGlobal "BOILERPLATE_CONTENT", BOILERPLATE_CONTENT, null
@@ -133,7 +133,7 @@ function initDbSiteSettings()
 	trace("config.initDbSiteSettings...")
 	set settings = new SiteSettings
 	'General Site Constants
-	if DEBUG_OVERRIDE = "1" then 
+	if DEBUG_OVERRIDE = "1" then
 		addGlobal "DEBUG", DEBUG_OVERRIDE, null
 		debugWarning("DEBUG_OVERRIDE is ON!")
 	else
@@ -154,7 +154,7 @@ function initDbSiteSettings()
 	addGlobal "GOOGLE_ANALYTICS", settings.getItem("Google Analytics"), GA_ACCOUNT_ID
 	addGlobal "FAVICON", settings.getItem("Bookmark Icon"), PRODUCT_FAVICON
 	addGlobal "PRODUCT_FAVICON", PRODUCT_FAVICON, "{FAVICON}"
-	
+
 	'Contact Form Variables
 	addGlobal "SMTPHOST", settings.getItem("SMTP Host"), DEFAULT_SMTPHOST
 	addGlobal "SUBJECTLINE_PREFIX", settings.getItem("Subjectline Prefix"), null
@@ -162,7 +162,7 @@ function initDbSiteSettings()
 	addGlobal "INTRO", settings.getItem("Email Intro"), null
 	addGlobal "ADMINEMAIL", settings.getItem("Admin Email"), DEVELOPER_EMAIL
 	addGlobal "CCSENDER", settings.getItem("CC Sender"), null
-	 
+
 	' site-specific email headers and footers for text & html emails
 	addGlobal "EMAIL_HTML_HEADER", EMAIL_HTML_HEADER, null
 	addGlobal "EMAIL_HTML_FOOTER", EMAIL_HTML_FOOTER, null

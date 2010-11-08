@@ -84,7 +84,7 @@ function contentUpdate()
 			strError = "an error was encountered during "& strContent &" data update to database"
 			debug("admin."& strContent &".update: inserting new "& strContent &" into database")
 			dim INSERT : INSERT = "INSERT INTO tblPageContent ("& strKey &", PageContent)" & vbCrLf & _
-				"VALUES ("& myForm.getValue(strKey) & ", '"& replace(GlobalVarEncode(toXHTML(myForm.getValue("PageContent")),variableList),"'","''") & "')"
+				"VALUES ("& myForm.getValue(strKey) & ", '"& replace(token_encode(toXHTML(myForm.getValue("PageContent")),variableList),"'","''") & "')"
 			db.execute(INSERT)
 			
 			

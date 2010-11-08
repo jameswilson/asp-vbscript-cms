@@ -39,7 +39,7 @@ function buildFormContents(id)
 	.endNoteSection()
 	.addFormInput "required", "Page Name", strIdField, "text", "", sdContent(strIdField), DBTEXT, "Limit to one or two words."
 	.addFormInput "required", "Page Title**", "PageTitle", "textarea", "simple length:0,120", sdContent("PageTitle"), " rows=""3""","This single text containing important page keywords helps sumarize the page. See the side note on Page Title."
-	.addFormInput "required full", "Page Content", "PageContent", "textarea", "expanding", GlobalVarDecode(sdContent("PageContent"), variableList), " rows=""15"""& DBMEMO ,"Please enter the text/html that will appear on the "& sdContent(strIdField) &". <br /><strong>Advanced Editing:</strong><br />If you know what you are doing, the "& PCase(strContent) &"  "_
+	.addFormInput "required full", "Page Content", "PageContent", "textarea", "expanding", token_decode(sdContent("PageContent"), variableList), " rows=""15"""& DBMEMO ,"Please enter the text/html that will appear on the "& sdContent(strIdField) &". <br /><strong>Advanced Editing:</strong><br />If you know what you are doing, the "& PCase(strContent) &"  "_
 					&"Content may be formatted with <acronym title=""HyperText "_
 					&"Markup Language"">HTML</acronym>."
 	.addFormSubmission "left", "Submit &raquo;", "", "", ""

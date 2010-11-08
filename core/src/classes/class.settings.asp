@@ -168,25 +168,25 @@ end function
 '*   A comma-separated list of variables to decode.
 '* @return 
 '*   The token-encoded string.
-function GlobalVarDecode(byval plaintext, byval variables)
+function token_decode(byval plaintext, byval variables)
 	on error resume next
 	if (plaintext = "") or (isNull(plaintext)) or (variables = "") or isNull(variables) then
-		GlobalVarDecode = ""
+		token_decode = ""
 		exit function
 	end if
-	trace("class.settings.globalVarDecode: '"& variables &"'")
+	trace("class.settings.token_decode: '"& variables &"'")
 	variables = split(variables, ",")
-	trace("class.settings.globalVarDecode: list has "& ubound(variables) &"  items")
+	trace("class.settings.token_decode: list has "& ubound(variables) &"  items")
 	plaintext = replace(plaintext, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
 	plaintext = replace(plaintext, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 	dim i : i = 0
 	do
-		trace("class.settings.globalVarDecode: decoding '"& variables(i) &"'")
-		trace("class.settings.globalVarDecode: replaceing '"& variables(i) &"' with '"& globals(cstr(variables(i))) & "'")
+		trace("class.settings.token_decode: decoding '"& variables(i) &"'")
+		trace("class.settings.token_decode: replaceing '"& variables(i) &"' with '"& globals(cstr(variables(i))) & "'")
 		plaintext = replace(plaintext, TOKEN_PREFIX & variables(i) & TOKEN_SUFFIX, globals(cstr(variables(i))))
 	loop until i = ubound(variables)
 	trapError
-	GlobalVarDecode = plaintext
+	token_decode = plaintext
 end function
 
 '**
@@ -200,21 +200,21 @@ end function
 '*   A comma-separated list of variables to encode.
 '* @return 
 '*   The token-encoded string.
-function GlobalVarEncode(byval plaintext, byval variables)
+function token_encode(byval plaintext, byval variables)
 	if (plaintext = "") or isNull(plaintext) or (variables = "") or isNull(variables) then
-		GlobalVarEncode = ""
+		token_encode = ""
 		exit function
 	end if
-	trace("class.settings.GlobalVarEncode: '"& variables &"'")
+	trace("class.settings.token_encode: '"& variables &"'")
 	variables = split(variables, ",")
-	trace("class.settings.GlobalVarEncode: list has "& ubound(variables) &"  items")
+	trace("class.settings.token_encode: list has "& ubound(variables) &"  items")
 	plaintext = replace(plaintext, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
 	plaintext = replace(plaintext, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 	dim i
 	for i = 0 to ubound(variables)
 		plaintext = replace(plaintext, globals(cstr(variables(i))), TOKEN_PREFIX & variables(i) & TOKEN_SUFFIX)
 	next
-	GlobalVarEncode = plaintext
+	token_encode = plaintext
 end function
 
 %>

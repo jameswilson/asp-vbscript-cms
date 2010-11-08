@@ -123,7 +123,7 @@ function contentAdd()
 				debug("new "& strContent &" id is '"& id &"'")
 				'STEP 2: add new record into tblPageContent
 				strSQL = "INSERT INTO tblPageContent (PageContent, "& strKey &") " & vbCrLf & _
-				 "VALUES ('"&  replace(GlobalVarEncode(toXHTML(myForm.getValue("PageContent")), variableList), "'", "''") & "'" & ", '"& id & "')"
+				 "VALUES ('"&  replace(token_encode(toXHTML(myForm.getValue("PageContent")), variableList), "'", "''") & "'" & ", '"& id & "')"
 				
 				db.execute(strSQL)
 

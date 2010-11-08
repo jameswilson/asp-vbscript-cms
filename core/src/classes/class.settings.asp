@@ -5,54 +5,54 @@ const KEYWORD_SUFFIX = "}"
 class SiteSettings
 	private sdNamedSettings 'cached scripting dictionary of site settings by name
 	private sdIndexedSettings ' cached scripting dictionary of site settings by id
-	
+
 	private sub class_Initialize()
 		initializeSiteSettings()
 	end sub
-	
+
 	private sub class_Terminate()
 		set sdNamedSettings = nothing
 		set sdIndexedSettings = nothing
 	end sub
-	
-	' returns the string value of the site 
+
+	' returns the string value of the site
 	' setting with the specified id.
 	public function getItemId(id)
 		getItemId = sdIndexedSettings(id)
 	end function
-	
+
 	public function exists(strName)
 		exists = sdNamedSettings.exists(strName)
 	end function
-	
-	' returns the string value of the site 
+
+	' returns the string value of the site
 	' setting with the specified name.
 	public function getItem(strName)
 		getItem = sdNamedSettings(PCase(PrettyText(strName)))
 	end function
-	
+
 	public function addItem(strKey,strVal)
 		addItem = false
-		if not sdNamedSettings.exists(strKey) then 
+		if not sdNamedSettings.exists(strKey) then
 			sdNamedSettings.add strKey, strVal
 			addItem = true
 		end if
 	end function
-	
+
 	public function getIndexedSettings()
 		set getIndexedSettings = sdIndexedSettings
 	end function
-	
+
 	public function updateItem(strKey,strVal)
 			updateItem = false
 			if sdNamedSettings.exists(strKey) then
 				sdNamedSettings.remove(strKey)
 				updateItem = addItem(strKey,strVal)
-			end if			
+			end if
 	end function
-	
+
 	private sub initializeSiteSettings()
-		dim rs, id, key, val, counter, i 
+		dim rs, id, key, val, counter, i
 		set sdNamedSettings = Server.CreateObject("Scripting.Dictionary")
 		set sdIndexedSettings = Server.CreateObject("Scripting.Dictionary")
 		on error resume next
@@ -69,7 +69,7 @@ class SiteSettings
 				id=""&rs("SettingId")
 				key=""&rs("SettingName")
 				val=""&rs("SettingValue")
-				if isEmpty(val) or val ="" then 
+				if isEmpty(val) or val ="" then
 					trace(" [ "&key&" -> UNDEFINED ]")
 				else
 					trace(" [ "&key&" -> "&Server.HTMLEncode(""&val)&" ]")
@@ -94,21 +94,21 @@ end class
 ' Overwritting any current variable if it already
 ' exists.
 function addGlobal(strKey, strVal, strFallBack)
-	strVal = token_replace("" & strVal)
-	if strVal = "" then 
-		if token_replace(strFallBack) <> "" then 
+	strVal = token_replace(cstr(strVal))
+	if strVal = "" then
+		if token_replace(strFallBack) <> "" then
 			strVal = token_replace(strFallBack)
 		end if
 	end if
-	if globals.exists(strKey) then 
+	if globals.exists(strKey) then
 		globals.remove(strKey)
 	end if
 	globals.add strKey, strVal
 end function
 
-' Process the provided string, filling in any 
+' Process the provided string, filling in any
 ' global variables denoted by {}. For example,
-' {SITERURL} would be converted to the real 
+' {SITERURL} would be converted to the real
 ' site's url.
 dim regex_globalVar : set regex_globalVar = new RegExp
 regex_globalVar.pattern = KEYWORD_PREFIX & "([\w_ ]+)" & KEYWORD_SUFFIX
@@ -122,7 +122,7 @@ regex_globalVar.global = true
 '* @param str the string to replace global variables
 '* @return a string with all global variables replaced.
 function token_replace(byval str)
-	if (str <> "") and (not isNull(str)) then 
+	if (str <> "") and (not isNull(str)) then
 	  str = replace(str, server.urlencode(KEYWORD_PREFIX), KEYWORD_PREFIX)
 	  str = replace(str, server.urlencode(KEYWORD_SUFFIX), KEYWORD_SUFFIX)
 		if instr(str, KEYWORD_PREFIX) > 0 then
@@ -132,13 +132,13 @@ function token_replace(byval str)
 				for each expr in matched
 					variableName = Mid(expr.value, 2, len(expr.value)-2)
 					trace("class.settings.token_replace: '" & variableName & "'")
-					if globals.exists("" & variableName) then 
+					if globals.exists("" & variableName) then
 						str = replace(str, expr.value, globals("" & variableName))
 					elseif not settings is nothing then
-							if settings.exists(PrettyText(variableName)) = true then 
+							if settings.exists(PrettyText(variableName)) = true then
 								str = replace(str,expr.value, settings.getItem(PrettyText(variableName)))
 							'else
-							'	if Execute(eval(""&variableName)) then 
+							'	if Execute(eval(""&variableName)) then
 							'	str = eval(""&variableName)
 							'	end if
 							end if
@@ -171,7 +171,6 @@ function GlobalVarDecode(byval str, byval varList)
 	loop until i=ubound(varList)
 	trapError
 	GlobalVarDecode = str
-	
 end function
 
 function GlobalVarEncode(byval str, byval varList)

@@ -1,8 +1,8 @@
 ABOUT THIS SOFTWARE:
 
-  ASP VBScript CMS is Copyright 2007, 2008 by James Wilson and is licensed 
-  under the MIT License. 
-  
+  ASP VBScript CMS is Copyright 2007, 2008 by James Wilson and is licensed
+  under the MIT License.
+
   See LICENSE.txt for details. SUPPORT OPEN SOURCE SOFTWARE.
 
 

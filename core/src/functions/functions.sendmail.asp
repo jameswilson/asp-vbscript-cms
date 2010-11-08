@@ -86,7 +86,7 @@ function createMailMessage()
 		dim emailBody : set emailBody = getEmailBody()
 		
 		objMessage.To = globals("ADMINEMAIL")
-		objMessage.From = """Webmaster"" <" & globals("PROVIDER_EMAIL") &">"
+		objMessage.From = """Webmaster"" <" & globals("DEVELOPER_EMAIL") &">"
 		objMessage.ReplyTo = """"& request.form("contact_name") & """ <" & Request.Form("contact_email")&">"
 		If globals("BCC") = "YES" Then objMessage.BCC = globals("BCCEMAIL")
 		If globals("CCSENDER") = "YES" then objMessage.CC = Request.Form("email")

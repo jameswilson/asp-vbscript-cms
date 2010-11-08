@@ -52,7 +52,7 @@ function sendMail(mail_to,mail_from,mail_subject,mail_Dict,mail_BodyHTML, mail_B
 	'//prepare message sender and recipients
 	if (isNull(mail_to) or len(mail_to)=0) then mail_to ="""{Company Name}"" <{Contact Email}>"
 	if (isNull(mail_from) or len(mail_from)=0) then 
-		mail_from = """{SITENAME} Administrator"" <{PROVIDER_EMAIL}>"
+		mail_from = """{SITENAME} Administrator"" <{DEVELOPER_EMAIL}>"
 	elseif instr(mail_from,"test@")=1 then
 		mail_to = """{SITENAME} Testing (ADMINEMAIL)"" <{ADMINEMAIL}>"
 		bodyText.add token_replace(TEST_MAIL_WARNING)

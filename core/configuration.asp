@@ -69,4 +69,23 @@ const DEFAULT_ENCODING  = "iso-8859-1"
 '**
 '* Breadcrumb dividers.
 const BREADCRUMB_DIVIDER = " &raquo; "
+
+'**
+'* Your development shop's information.
+const DEVELOPER_NAME = "ASP VBScript CMS"
+const DEVELOPER_EMAIL = "asp.vbscript.cms@gmail.com"
+const DEVELOPER_URL = "http://asp-vbscript-cms.googlecode.com"
+const DEVELOPER_SLOGAN = ""
+
+'**
+'* If your company name is too long, you can create a nickname, which is used
+'* in various situations throughout cms interface.
+'* For example: 
+'*   DEVELOPER_NAME      = "MyCompany Web Consulting, LLC"
+'*   DEVELOPER_SHORTNAME = "MyCompany"
+'* 
+'* By default this value is set to inherit the value of DEVELOPER_NAME.
+const DEVELOPER_SHORTNAME = "{DEVELOPER_NAME}"
+const DEVELOPER_LINK = "<a href=""{DEVELOPER_URL}"" title=""{DEVELOPER_NAME}"">{DEVELOPER_SHORTNAME}</a>"
+const DEVELOPER_SUPPORT_LINK = "<a href='mailto:{DEVELOPER_EMAIL}'>{DEVELOPER_SHORTNAME} Support</a>"
 %>

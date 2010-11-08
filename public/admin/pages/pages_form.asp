@@ -48,7 +48,7 @@ function buildFormContents(id)
 	.addFieldset "Display","<strong>Bold</strong> fields are required."
 	.startNoteSection()
 	.addNote "File Name","The file name cannot be modified without taking further "_
-					&"actions on your webserver. Please contact "& globals("PROVIDER_SUPPORT_EMAIL") &" " _
+					&"actions on your webserver. Please contact "& globals("DEVELOPER_SUPPORT_LINK") &" " _
 					&"if you need to modify the file name."
 	.addNote "Display Options","An enabled (checkbox checked) page will be visible "_
 					&"in menus and linkable on the site. Unchecked box here means a "_
@@ -113,8 +113,8 @@ function buildFormContents(id)
 					&"content page you want to view. This information, while not directly visible to the web surfer is " _
 					&"recognized by most search engines. Having quality metadata embeded in the html of each page of your site" _
 					&"can greatly improve your Search Engine Rankings.<br /><br />For more questions about optimizing your website <a "_
-					&"href=""mailto:"& globals("PROVIDER_EMAIL") &"?Request info about Search Engine Optimization"" " _
-					&"title=""Request info about Search Engine Optimization"">contact "& globals("PROVIDER_SHORTNAME") &"</a> "
+					&"href=""mailto:"& globals("DEVELOPER_EMAIL") &"?Request info about Search Engine Optimization"" " _
+					&"title=""Request info about Search Engine Optimization"">contact "& globals("DEVELOPER_SHORTNAME") &"</a> "
 	.addNote "Keywords","Keywords and phrases are specially chosen terms that pertain to and summarize the content on the page. "_
 					&"Keep your most important keywords and phrases within the first 100 characters. Individual words &amp; phrases "_
 					&"separated by commas with no spaces between words, up to 500 characters in length."

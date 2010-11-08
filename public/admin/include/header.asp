@@ -4,13 +4,13 @@
 	writeln( indent(2) & h1(globals("TITLE")) )
 	writeln( indent(1) & "<div class=""provider"">")
 	
-	dim headerImg : headerImg = globals("PROVIDER_LOGO")
+	dim headerImg : headerImg = globals("PRODUCT_LOGO")
 	if fileExists(headerImg) = true then 
 		trace("admin/include/header.asp: adding logo '" & headerImg &"'")
-		headerImg = img(headerImg, globals("PROVIDER_NAME"), globals("PROVIDER_NAME") &": "& globals("PROVIDER_SLOGAN"),"provider")
-		writeln(indent(2) & a(globals("PROVIDER_URL"), headerImg,globals("PROVIDER_NAME"), "logo"))
+		headerImg = img(headerImg, globals("DEVELOPER_NAME"), globals("DEVELOPER_NAME") &": "& globals("DEVELOPER_SLOGAN"),"provider")
+		writeln(indent(2) & a(globals("DEVELOPER_URL"), headerImg,globals("DEVELOPER_NAME"), "logo"))
 	end if
-	writeln(indent(2) & h1(a(globals("PROVIDER_URL"), globals("PRODUCT_BRANDING"),globals("PROVIDER_NAME"), "logo") &": Site Administrator"))
+	writeln(indent(2) & h1(a(globals("DEVELOPER_URL"), globals("PRODUCT_BRANDING"),globals("DEVELOPER_NAME"), "logo") &": Site Administrator"))
 	writeln(indent(1) & "</div>")
 	if user.activeAdminSession() = true then
 		writeln(indent(2) & "<div class=""links"">")

@@ -43,7 +43,7 @@ function getContent()
 	' LIST ALL TABLES
 	if not len(request.QueryString()) > 0 then
 		writeln(h2("Database Browser"))
-		writeln(WarningMessage("The database browser functionality is currently in beta testing.  It is not ready for full time, dependable use, and lacks lots of functionality. For questions or concerns please contact "& globals("PROVIDER_LINK")))
+		writeln(WarningMessage("The database browser functionality is currently in beta testing.  It is not ready for full time, dependable use, and lacks lots of functionality. For questions or concerns please contact "& globals("DEVELOPER_LINK")))
 		writeln("<ul class='list'>")
 		for each tbl in cat.tables
 			if tbl.type = "TABLE" then

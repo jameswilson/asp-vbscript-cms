@@ -14,7 +14,7 @@ page.setTitle("Dashboard")
 <title><%=page.getTitle()%></title>
 <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
 <link rel="stylesheet" href="<%=globals("ADMINURL")%>/styles/admin.css" type="text/css"/>
-<link rel="shortcut icon" href="<%=token_replace("{PROVIDER_FAVICON}")%>"/>
+<link rel="shortcut icon" href="<%=token_replace("{PRODUCT_FAVICON}")%>"/>
 <script type="text/javascript">
 	var djConfig = {isDebug: true, debugAtAllCosts: false};
 </script>
@@ -34,12 +34,12 @@ page.setTitle("Dashboard")
 			<div class="box threequarterswidth floatleft"> 
 				<%=Session.Contents("CustomMessage")%>
 				<%Session.contents("CustomMessage") = ""%>
-        <h1><%=globals("PRODUCT_BRANDING")%> Dashboard</h1>
-        <p>Here you can edit your site, <%=globals("TITLE")%>, via the online 
-				 maintenence system provided by <%=globals("PROVIDER_NAME")%>. Use the 
+				<h1><%=globals("PRODUCT_BRANDING")%> Dashboard</h1>
+				<p>Here you can edit your site, <%=globals("TITLE")%>, via the online 
+				 maintenence system provided by <%=globals("DEVELOPER_LINK")%>. Use the 
 				 navigation bar above to create and modify your site's content.</p>
-				<p>If you need asistance, dont hesitate to contact <%=a("mailto:"& globals("PROVIDER_EMAIL"), globals("PROVIDER_SHORTNAME") &" support", "contact "& globals("PROVIDER_NAME") & " support", null)%>.</p>
-      	<h2>Frequently Asked Questions:</h2>
+				<p>If you need asistance, dont hesitate to contact <%=globals("DEVELOPER_LINK")%>.</p>
+				<h2>Frequently Asked Questions:</h2>
 				<dl><dt>What does CMS mean?</dt><dd><p>CMS is the acronym for <em>Content Management System</em>, and is 
 				a term coined within the web design world to describe an online system for 
 				creating and maintaining content in a dynamic way.  It usually, but not always
@@ -75,16 +75,16 @@ page.setTitle("Dashboard")
 			</div>	
 			<div class="notes floatright" dojoType="TitlePane" label="Server Info" labelNodeClass="notes-label notes floatright" containerNodeClass="notes-content notes floatright"> 
 				<h4>Admin Info:</h4>
-        <dl>
-        	<dt><%=PRODUCT_BRANDING%> Version</dt><dd><%=PRODUCT_VERSION%></dd>
-          <dt>Server Name:</dt><dd> '<%=getMachineName()%>' (<%=Request.ServerVariables("SERVER_NAME")%>)</dd> 
-          <dt>Server Technology:</dt><dd> <%=Request.ServerVariables("SERVER_SOFTWARE")%></dd>
-          <dt>Scripting:</dt><dd> <%=ScriptEngine%>  <%=ScriptEngineMajorVersion%>.<%=ScriptEngineMinorVersion%></dd>
-          <dt>Server IP:</dt><dd> <%=Request.ServerVariables("LOCAL_ADDR")%></dd>
-          <dt>Your IP:</dt><dd> <%=Request.ServerVariables("REMOTE_ADDR")%></dd>
-          <dt>CurrentDate:</dt><dd> <%=Date()%></dd>
-          <dt>CurrentTime:</dt><dd> <%=Time()%></dd>
-       	</dl>
+				<dl>
+					<dt><%=PRODUCT_BRANDING%> Version</dt><dd><%=PRODUCT_VERSION%></dd>
+					<dt>Server Name:</dt><dd> '<%=getMachineName()%>' (<%=Request.ServerVariables("SERVER_NAME")%>)</dd> 
+					<dt>Server Technology:</dt><dd> <%=Request.ServerVariables("SERVER_SOFTWARE")%></dd>
+					<dt>Scripting:</dt><dd> <%=ScriptEngine%>  <%=ScriptEngineMajorVersion%>.<%=ScriptEngineMinorVersion%></dd>
+					<dt>Server IP:</dt><dd> <%=Request.ServerVariables("LOCAL_ADDR")%></dd>
+					<dt>Your IP:</dt><dd> <%=Request.ServerVariables("REMOTE_ADDR")%></dd>
+					<dt>CurrentDate:</dt><dd> <%=Date()%></dd>
+					<dt>CurrentTime:</dt><dd> <%=Time()%></dd>
+				</dl>
 			</div>
     </div>
     <div id="nav"> 

@@ -4,7 +4,7 @@
 <head>
 <title><%=page.getTitle()%></title>
 <link rel="stylesheet" href="<%=globals("ADMINURL")%>/styles/admin.css" type="text/css"/>
-<link rel="shortcut icon" href="<%=token_replace("{PROVIDER_FAVICON}")%>"/>
+<link rel="shortcut icon" href="<%=token_replace("{PRODUCT_FAVICON}")%>"/>
 <!--#include file ="../../public/admin/include/preloader.js.inc"-->
 </head>
 <body onLoad="clearPreloadPage()"> 

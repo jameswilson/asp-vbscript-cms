@@ -67,15 +67,15 @@ function initDomainGlobals()
 		addGlobal "SITEURL", "http://{DOMAINNAME}", null
 	end if
 	addGlobal "ADMINURL", "{SITEURL}/{ADMIN_DIR}", null
-	addGlobal "PROVIDER_URL", PROVIDER_URL, null
-	addGlobal "PROVIDER_LOGO", PROVIDER_LOGO, null
-	addGlobal "PROVIDER_NAME", PROVIDER_NAME, null
-	addGlobal "PROVIDER_SHORTNAME", PROVIDER_SHORTNAME, null
-	addGlobal "PROVIDER_LINK", PROVIDER_LINK, null
-	addGlobal "PROVIDER_SLOGAN", PROVIDER_SLOGAN, null
-	addGlobal "PROVIDER_EMAIL", PROVIDER_EMAIL, null
+	addGlobal "DEVELOPER_URL", DEVELOPER_URL, null
+	addGlobal "PRODUCT_LOGO", PRODUCT_LOGO, null
+	addGlobal "DEVELOPER_NAME", DEVELOPER_NAME, null
+	addGlobal "DEVELOPER_SHORTNAME", DEVELOPER_SHORTNAME, null
+	addGlobal "DEVELOPER_LINK", DEVELOPER_LINK, null
+	addGlobal "DEVELOPER_SLOGAN", DEVELOPER_SLOGAN, null
+	addGlobal "DEVELOPER_EMAIL", DEVELOPER_EMAIL, null
 	addGlobal "PRODUCT_BRANDING", PRODUCT_BRANDING, null
-	addGlobal "PROVIDER_SUPPORT_EMAIL", PROVIDER_SUPPORT_EMAIL, PROVIDER_SUPPORT_EMAIL
+	addGlobal "DEVELOPER_SUPPORT_LINK", DEVELOPER_SUPPORT_LINK, DEVELOPER_SUPPORT_LINK
 	addGlobal "SITE_OFFLINE", SITE_OFFLINE, null 
 	addGlobal "SITE_OFFLINE_MESSAGE", SITE_OFFLINE_MESSAGE, null
 	addGlobal "ADMIN_SITE_OFFLINE_MESSAGE", ADMIN_SITE_OFFLINE_MESSAGE, null
@@ -152,15 +152,15 @@ function initDbSiteSettings()
 	addGlobal "DESCRIPTION", settings.getItem("Site Description"), DEFAULT_DESCRIPTION
 	addGlobal "DEFAULT_AREA_CODE", settings.getItem("Default Area Code"), DEFAULT_AREA_CODE
 	addGlobal "GOOGLE_ANALYTICS", settings.getItem("Google Analytics"), GA_ACCOUNT_ID
-	addGlobal "FAVICON", settings.getItem("Bookmark Icon"), PROVIDER_FAVICON
-	addGlobal "PROVIDER_FAVICON", PROVIDER_FAVICON, "{FAVICON}"
+	addGlobal "FAVICON", settings.getItem("Bookmark Icon"), PRODUCT_FAVICON
+	addGlobal "PRODUCT_FAVICON", PRODUCT_FAVICON, "{FAVICON}"
 	
 	'Contact Form Variables
 	addGlobal "SMTPHOST", settings.getItem("SMTP Host"), DEFAULT_SMTPHOST
 	addGlobal "SUBJECTLINE_PREFIX", settings.getItem("Subjectline Prefix"), null
 	addGlobal "EMAIL_HEADER_IMG", settings.getItem("Email Header Image"), null
 	addGlobal "INTRO", settings.getItem("Email Intro"), null
-	addGlobal "ADMINEMAIL", settings.getItem("Admin Email"), PROVIDER_EMAIL
+	addGlobal "ADMINEMAIL", settings.getItem("Admin Email"), DEVELOPER_EMAIL
 	addGlobal "CCSENDER", settings.getItem("CC Sender"), null
 	 
 	' site-specific email headers and footers for text & html emails

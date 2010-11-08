@@ -43,7 +43,7 @@ function buildFormContents(sPath)
 	pageContent.add "<div class=""context-help"">"& vbCrLf
 	pageContent.add  h3("Bulk Uploads?")
 	pageContent.add  p("Do you have many files to upload at once? Are your uploads taking too long?")
-	pageContent.add  p(token_replace("Contact {PROVIDER_SUPPORT_EMAIL} to set you up with a dedicated <acronym " _
+	pageContent.add  p(token_replace("Contact {DEVELOPER_SUPPORT_LINK} to set you up with a dedicated <acronym " _
 	&"title=""File Transfer Protocol: a fast & easy way to upload files to your site."">FTP</acronym> account."))
 	pageContent.add "</div>"& vbCrLf
 end function

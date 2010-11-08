@@ -13,7 +13,7 @@ will store a cookie on the current computer from which you are browsing.
 The cookie contains a verification 
 id consisting of a string of encrypted characters which proves this machine 
 is qualified to view the admin panel without login every time. Contact
-<%=globals("PROVIDER_SHORTNAME")%> for more details about our methods 
+<%=globals("DEVELOPER_SHORTNAME")%> for more details about our methods 
 to keep your information safe.</p>
 </body>
 </html>

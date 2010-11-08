@@ -3,8 +3,8 @@
 <meta name="description" content="<%=page.getDescription()%>" />
 <meta name="keywords" content="<%=page.getKeywords()%>" />
 <meta name="copyright" content="Copyright <%=Year(Date())&" "&globals("COMPANY")%>"/>
-<meta name="copyright" content="SITE DESIGN Copyright <%=Year(Date())&" "&globals("PROVIDER_NAME")%>"/>
-<meta name="author" content="<%=globals("PROVIDER_NAME")%>"/>
+<meta name="copyright" content="SITE DESIGN Copyright <%=Year(Date())&" "&globals("DEVELOPER_NAME")%>"/>
+<meta name="author" content="<%=globals("DEVELOPER_NAME")%>"/>
 <meta name="author" content="James Wilson"/>
 <meta name="ROBOTS" content="INDEX, FOLLOW"/>
 <meta name="robots" content="All"/>

@@ -65,9 +65,9 @@ const BAD_PASSWORD = "The username or password provided was incorrect."
 '**
 '* Email message tokens.
 '* These tokens are used in email messages from the site.
-const EMAIL_HTML_HEADER = "<p><img src=""{EMAIL_HEADER_IMG}"" alt=""{COMPANY}: {SLOGAN}""><br/>"
+const EMAIL_HTML_HEADER = "<p><img src=""{EMAIL_HEADER_IMG}"" alt=""{COMPANY_NAME}: {SLOGAN}""><br/>"
 const EMAIL_HTML_FOOTER = ""
-dim EMAIL_TEXT_HEADER : EMAIL_TEXT_HEADER = "{COMPANY}" & vbCrLf & "{SLOGAN}" & vbCrLf & "============================="& vbCrLf
+dim EMAIL_TEXT_HEADER : EMAIL_TEXT_HEADER = "{COMPANY_NAME}" & vbCrLf & "{SLOGAN}" & vbCrLf & "============================="& vbCrLf
 const EMAIL_TEXT_FOOTER = ""
 
 '**

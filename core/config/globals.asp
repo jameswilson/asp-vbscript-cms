@@ -29,7 +29,7 @@ function initializeGlobals()
 	initDbSiteSettings()
 	set user = new ClientUser
 	set page = new AspPage
-	debugInfo("config.initGlobals:  initialization completed in "&timer - start&" seconds.") 
+	debugInfo("config.initGlobals:  initialization completed in "& timer - start &" seconds.") 
 end function
 
 '**
@@ -140,7 +140,7 @@ function initDbSiteSettings()
 		addGlobal "DEBUG", settings.getItem("Debug"), DEBUG_OVERRIDE
 	end if
 	addGlobal "SITENAME", settings.getItem("Site Name"), DEFAULT_SITENAME
-	addGlobal "COMPANY", settings.getItem("Company Name"), "{SITENAME}"
+	addGlobal "COMPANY_NAME", settings.getItem("Company Name"), "{SITENAME}"
 	addGlobal "TITLE", settings.getItem("Site Title"), "{SITENAME}"
 	addGlobal "TITLE_DIVIDER", settings.getItem("Title Tag Divider"), DEFAULT_TITLE_DIVIDER
 	addGlobal "SHORTNAME", settings.getItem("Site Shortname"), CamelCase(token_replace("{SITENAME}"))

@@ -105,12 +105,12 @@ end function
 function GetEmailBody()
 	dim logoImg : logoImg = globals("EMAIL_HEADER_IMG")
 	dim introTxt : introTxt = globals("INTRO")
-	dim companyTxt : companyTxt = globals("COMPANY")
+	dim companyTxt : companyTxt = globals("COMPANY_NAME")
 	dim sloganTxt : sloganTxt = globals("SLOGAN")
 	dim bodyHTML : set bodyHTML = New FastString
 	dim bodyText : set bodyText = New FastString
 	
-	bodyHTML.add "<p><img src=""" & logoImg & """ alt="""&companyTxt&"""><br/>" & vbCrLf
+	bodyHTML.add "<p><img src=""" & logoImg & """ alt="""& companyTxt &"""><br/>" & vbCrLf
 	bodyHTML.add introTxt & "</p>" & vbCrLf
 	bodyHTML.add "<table border=""0"" cellpadding=""4"" cellspacing=""0"">" & vbCrLf
 	bodyText.add companyTxt & vbCrLf

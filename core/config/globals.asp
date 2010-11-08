@@ -41,8 +41,8 @@ function initDomainGlobals()
 	trace("config.initDomainGlobals...")
 	globals.add "PROJECT_NAME", PROJECT_NAME
 	addGlobal "ENVIRONMENT", ENVIRONMENT, null
-	addGlobal "HOME", HOMEPAGE, null 
-	addGlobal "ADMIN_DIR", ADMINDIR, null  
+	addGlobal "HOME", HOMEPAGE, null
+	addGlobal "ADMIN_DIR", ADMINDIR, null
 	if isLocalServer = true then
 		'LOCALHOST settings where site lives in subfolder
 		addGlobal "SITEROOT", "/{PROJECT_NAME}", null

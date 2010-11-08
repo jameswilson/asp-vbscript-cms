@@ -8,7 +8,7 @@
 '* trapError() after every database transaction, and a call to processErrors()
 '* at the end of any that includes this file.
 '*
-on error resume next
+'on error resume next
 
 ' Runtime errors are collected in a primitive string type.
 dim runtimeErrors : runtimeErrors = ""
@@ -33,21 +33,21 @@ dim bolErrors : bolErrors = FALSE
 '*
 function TrapError()
 	dim foundError, errString, separator
-	separator = ERROR_STRING_SEPARATOR & vbcrlf
+	separator = ERROR_STRING_SEPARATOR & vbCrLf
 	foundError = FALSE
 	if err.number <> 0 then
  		select case err.number
 			' Handle application errors:
 			case ""
 				foundError = TRUE
-				errString = objLinks.item("PRODUCT_BRANDING") &" ERROR: "& err.description &"  SOURCE: "& Err.source
+				errString = globals("PRODUCT_BRANDING") &" ERROR: "& err.description &"  SOURCE: "& Err.source
  			
 			' Handle general ASP runtime errors.
 			case else
 				foundError = TRUE
-				errString = "VBScript ERROR ["& err.number &"] (Ox"& Hex(err.number) &"): "& vbcrlf _
-					& "DESCRIPTION:" & err.description & vbcrlf _
-					& "URL: " & request.ServerVariables("URL") & vbcrlf _
+				errString = "VBScript ERROR ["& err.number &"] (Ox"& Hex(err.number) &"): "& vbCrLf _
+					& "DESCRIPTION:" & err.description & vbCrLf _
+					& "URL: " & request.ServerVariables("URL") & vbCrLf _
 					& "SOURCE: " & Err.source
 				if isObject(db) then
 					dim errCount : errCount = db.Errors.Count
@@ -56,11 +56,11 @@ function TrapError()
 						for each e in db.Errors
 							with e
 								errString = errString & separator & "Database ERROR [" _
-									& .number & "] (Ox" & Hex(.number) & "): " & vbcrlf _
-									& .description & vbcrlf _
-									& "URL: " & request.ServerVariables("URL") & vbcrlf _
-									& "SOURCE: " & .source & vbcrlf _
-									& "SQL STATE: " & .SQLState & vbcrlf _
+									& .number & "] (Ox" & Hex(.number) & "): " & vbCrLf _
+									& .description & vbCrLf _
+									& "URL: " & request.ServerVariables("URL") & vbCrLf _
+									& "SOURCE: " & .source & vbCrLf _
+									& "SQL STATE: " & .SQLState & vbCrLf _
 									& "Native Error: " & .NativeError
 							end with
 						next
@@ -85,7 +85,7 @@ end function
 '* @param String message
 '*   The error message to add
 sub storeRuntimeError(byval message)
-	debugError(replace(replace(message, ERROR_STRING_SEPARATOR, "<br/><br/>"), vbcrlf, "<br/>"))
+	debugError(replace(replace(message, ERROR_STRING_SEPARATOR, "<br/><br/>"), vbCrLf, "<br/>"))
 	'response.write(p(message))
 	runtimeErrors = runtimeErrors & message & ", "
 end sub
@@ -129,6 +129,6 @@ function getRuntimeErrors()
 	separator = "</li>" & vbCrLf & "<li>"
 	getRuntimeErrors = "<p class='alert'>An Error has occurred during page load.</p>" & vbCrLf _
 		& "<ul><li>" & vbCrLf _
-		& replace(replace(runtimeErrors, ERROR_STRING_SEPARATOR, separator), vbcrlf, "<br/>")
+		& replace(replace(runtimeErrors, ERROR_STRING_SEPARATOR, separator), vbCrLf, "<br/>")
 end function
 %>

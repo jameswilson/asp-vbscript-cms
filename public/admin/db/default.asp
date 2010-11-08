@@ -1,8 +1,8 @@
 <%@ Language=VBScript %>
 <%Option Explicit%>
-<!--#include file="../../core/include/global.asp"-->
+<!--#include file="../../../core/include/bootstrap.asp"-->
 <%page.setSecurityLevel(USER_ADMINISTRATOR)%>
-<!--#include file = "../../core/include/secure.asp"-->
+<!--#include file = "../../../core/include/secure.asp"-->
 <%
 
 dim dbPath, tableName, tableExists, cat, conn, dbCreate
@@ -10,7 +10,7 @@ dim tbl, col, pkey, grp, rs, i, j, k
 dim tblName : tblName = request.querystring("tbl")
 dim sortBy : sortBy = request.querystring("sort_by")
 page.setName("Database Browser")
-if len(tblName)>0 then page.setName("Database Browser &raquo; "&tblName)
+if len(tblName)>0 then page.setName("Database Browser &raquo; "& tblName)
 
 
 '==============================================================
@@ -24,8 +24,8 @@ if len(tblName)>0 then page.setName("Database Browser &raquo; "&tblName)
 function getContent()
 	set cat = server.createObject("ADOX.Catalog")
 	set conn = server.createObject("ADODB.Connection")
-	dbPath = globalVarFill("{DB_LOCATION}\{SOURCEID}.mdb")
-	debugInfo("db path: "&dbPath)
+	dbPath = token_replace("{DB_LOCATION}\{PROJECT_NAME}.mdb")
+	debugInfo("db path: "& dbPath)
 	dbCreate = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" &dbPath
 	'tableName = "tblProducts"
 	
@@ -33,8 +33,8 @@ function getContent()
 	conn.open dbCreate 
 	cat.activeConnection = conn
 	if err.number <> 0 then
-		debugError("there was an error in opening the connection to "&dbCreate)
-		debugError("error in "&Err.source&" error code "&err.number&": "&err.description)
+		debugError("there was an error in opening the connection to "& dbCreate)
+		debugError("error in "& Err.source &" error code "& err.number &": "& err.description)
 		err.clear
 	end if
 			
@@ -43,15 +43,15 @@ function getContent()
 	' LIST ALL TABLES
 	if not len(request.QueryString()) > 0 then
 		writeln(h2("Database Browser"))
-		writeln(WarningMessage("The database browser functionality is currently in beta testing.  It is not ready for full time, dependable use, and lacks lots of functionality. For questions or concerns please contact "&objLinks.item("PROVIDER_LINK")))
+		writeln(WarningMessage("The database browser functionality is currently in beta testing.  It is not ready for full time, dependable use, and lacks lots of functionality. For questions or concerns please contact "& globals("PROVIDER_LINK")))
 		writeln("<ul class='list'>")
 		for each tbl in cat.tables
 			if tbl.type = "TABLE" then
-				writeln("<li>"&strong(tbl.name)&": "&anchor("?tbl="&tbl.name,"View",null,"button")&" "&anchor("export.asp?tbl="&tbl.name,"Export",null,"button"))
+				writeln("<li>"& strong(tbl.name) &": "& anchor("?tbl="& tbl.name,"View", null,"button") &" "& anchor("export.asp?tbl="& tbl.name,"Export", null,"button"))
 				'dim prop
 				'writeln("<ul>")
 				'for each prop in tbl.properties
-				'	writeln("<li>"&prop.name&"["&prop.type&"]: '"&prop.value&"'</li>")
+				'	writeln("<li>"& prop.name &"["& prop.type &"]: '"& prop.value &"'</li>")
 				'next	
 				'writeln("</ul>")
 				writeln("</li>")
@@ -63,11 +63,11 @@ function getContent()
 	'==================================
 	' TABLE CONTENTS LISTING
 	elseif len(tblName) > 0 then
-		writeln(h2(anchor(objLinks.item("ADMINURL")&"/db/","Database Browser",null,null)&" &raquo; "&tblName))
+		writeln(h2(anchor(globals("ADMINURL") &"/db/","Database Browser", null, null) &" &raquo; "& tblName))
 		dim table, column, content, strCondition, strEven
 		set table = db.Init(tblName)
-		page.setName("Database Browser: "&tblName)
-		if len(sortBy)> 0 then strCondition = " ORDER BY "&sortBy
+		page.setName("Database Browser: "& tblName)
+		if len(sortBy)> 0 then strCondition = " ORDER BY "& sortBy
 		response.write(table.count&" columns in this table")
 		writeln("<table class='list' width=""100%"" cellspacing=""0"" cellpadding=""3"" border=""0"">")
 		writeln("<tr>")
@@ -75,7 +75,7 @@ function getContent()
 		for each column in table.keys
 			if column <> "tablename" then
 				if column = "" then column = i
-				writeln("<th><a href=""?tbl="&tblName&"&sort_by="&column&""">"&PrettyText(column)&"</a></th>")
+				writeln("<th><a href=""?tbl="& tblName &"& sort_by="& column &""">"& PrettyText(column) &"</a></th>")
 			end if
 			i=i+1
 		next
@@ -83,9 +83,9 @@ function getContent()
 		for i=0 to db.BuildList(content, tblName, strCondition)-1
 			strEven = ""
 			if (i MOD 2 = 0) = true then strEven = "even"			
-			writeln("<tr class="""&strEven&""">")
+			writeln("<tr class="""& strEven &""">")
 			for each column in table.keys
-				if column <> "tablename" then	writeln("<td> "&content(i)(column)&" </td>")
+				if column <> "tablename" then	writeln("<td> "& content(i)(column) &" </td>")
 			next
 			writeln("</tr>")		
 		next

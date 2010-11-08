@@ -22,7 +22,7 @@
 	
 		
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Creator"
+	myForm.Name = Pcase(strContent) &"Creator"
 	myForm.isForNewContent = false
 	myForm.uploadPath = strUploadPath
 

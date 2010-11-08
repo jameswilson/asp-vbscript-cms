@@ -1,7 +1,7 @@
 <%	
 function contentAdd()
 	if user.getRole() < USER_ADMINISTRATOR then 
-		strError = "You do not have sufficient priviledges to create new "&strContentPL&"."
+		strError = "You do not have sufficient priviledges to create new "& strContentPL &"."
 		exit function
 	end if
 	if myForm.wasSubmitted() = true then
@@ -11,7 +11,7 @@ function contentAdd()
 		contentAdd = buildFormContents(null)
 		set formErrors = myForm.getFormErrors()
 		if formErrors.count > 0 then
-			strError = "The new "&strContent&" has errors in the form"
+			strError = "The new "& strContent &" has errors in the form"
 			debugError(strError)
 		else
 			dim pName : pName = replace(myForm.getValue(strIdField),"'","''")
@@ -31,73 +31,73 @@ function contentAdd()
 			if len(myForm.getValue("MenuIndex")) > 0 then pIndex = myForm.getValue("MenuIndex")
 			if len(myForm.getValue("ParentPage")) > 0 then pParent = myForm.getValue("ParentPage")
 			page.setName(pName)
-			page.setTitle("New "&PCase(strContent)&": "&pName)
+			page.setTitle("New "& PCase(strContent) &": "& pName)
 			
 			
 			' Step 1:  Get File name.
 			if pFileName = "" then 
 				pFileName = lcase(pName)
-				pFileName = replace(pFileName,"\","/")
-				pFileName = replace(pFileName," /","/")
-				pFileName = replace(pFileName,"/ ","/")
-				pFileName = replace(pFileName," ","-")
-				pFileName = replace(pFileName,":","-")
-				pFileName = replace(pFileName,"}","-")
-				pFileName = replace(pFileName,"{","-")
-				pFileName = replace(pFileName,"[","-")
-				pFileName = replace(pFileName,"]","-")
-				pFileName = replace(pFileName,"=","-")
-				pFileName = replace(pFileName,"*","-")
-				pFileName = replace(pFileName,"&amp;","-")
-				pFileName = replace(pFileName,",","")
-				pFileName = replace(pFileName,"""","")
-				pFileName = replace(pFileName,"'","")
-				pFileName = replace(pFileName,"?","")
-				pFileName = replace(pFileName,"$","")
-				pFileName = replace(pFileName,":","")
-				pFileName = replace(pFileName,"%","")
-				pFileName = replace(pFileName,"^","")
-				pFileName = replace(pFileName,"#","")
-				pFileName = replace(pFileName,"@","")
-				pFileName = replace(pFileName,"!","")
+				pFileName = replace(pFileName, "\", "/")
+				pFileName = replace(pFileName, " /", "/")
+				pFileName = replace(pFileName, "/ ", "/")
+				pFileName = replace(pFileName, " ", "-")
+				pFileName = replace(pFileName, ":", "-")
+				pFileName = replace(pFileName, "}", "-")
+				pFileName = replace(pFileName, "{", "-")
+				pFileName = replace(pFileName, "[", "-")
+				pFileName = replace(pFileName, "]", "-")
+				pFileName = replace(pFileName, "=", "-")
+				pFileName = replace(pFileName, "*", "-")
+				pFileName = replace(pFileName, "&amp;", "-")
+				pFileName = replace(pFileName, ",", "")
+				pFileName = replace(pFileName, """", "")
+				pFileName = replace(pFileName, "'", "")
+				pFileName = replace(pFileName, "?", "")
+				pFileName = replace(pFileName, "$", "")
+				pFileName = replace(pFileName, ":", "")
+				pFileName = replace(pFileName, "%", "")
+				pFileName = replace(pFileName, "^", "")
+				pFileName = replace(pFileName, "#", "")
+				pFileName = replace(pFileName, "@", "")
+				pFileName = replace(pFileName, "!", "")
 				pFileName = trim(pFileName)
 			end if
-			dim f,path,max,i,path_write,tfile,cfolder,content,destination,urlfile, separator,sitepath,obFile
-			path=split(pFileName,"/")
-			max=ubound(path)
-			path_write=""
-			cfolder=""
-			separator=""
-			sitepath=objLinks("SITE_PATH")&"\"
-			for i=0 to max-1
-				if len(path(i))>0 then
-					path_write = path_write&separator&path(i)
+			dim f, path, max, i, path_write, tfile, cfolder, content, destination, urlfile,  separator, sitepath, obFile
+			path = split(pFileName, "/")
+			max = ubound(path)
+			path_write = ""
+			cfolder = ""
+			separator = ""
+			sitepath = globals("SITE_PATH") & "\"
+			for i = 0 to max - 1
+				if len(path(i)) > 0 then
+					path_write = path_write & separator & path(i)
 					separator="\"
-					if fs.FolderExists(sitepath&path_write)=false then
-						debugInfo("folder '"&sitepath&path_write&"' created.")
-						set f=fs.CreateFolder(sitepath&path_write)
-						set f=nothing
+					if fs.FolderExists(sitepath & path_write) = FALSE then
+						debugInfo("folder '"& sitepath & path_write & "' created.")
+						set f = fs.CreateFolder(sitepath & path_write)
+						set f = nothing
 					else
-						trace("folder '"&sitepath&path_write&"' exists.")
+						trace("folder '"& sitepath & path_write&"' exists.")
 					end if
-					cfolder=cfolder&"../"				
-					debugInfo(sitepath&path_write& "<br>")
+					cfolder = cfolder & "../"				
+					debugInfo(sitepath & path_write & "<br>")
 				end if
 			next
 			
-			destination=(sitepath&path_write&separator&path(max))
-			content=("<"&"%server.Execute("""&cfolder&"404.asp"")%"&">")
-			urlfile=""
-			urlfile=replace(path_write&separator&path(max),"\","/")
-			set ObFile= new SiteFile
-			if ObFile.write_file(destination,content,adFileIgnore)=false then
-				strError="An error was encountered creating filename '"&pFileName&"'"
-				strError=strError&ObFile.GetErrors()
+			destination = (sitepath & path_write & separator & path(max))
+			content = ("<"&"%server.Execute("""& cfolder &"404.asp"")%"&">")
+			urlfile = ""
+			urlfile = replace(path_write & separator & path(max), "\", "/")
+			set ObFile = new SiteFile
+			if ObFile.write_file(destination, content, adFileIgnore) = FALSE then
+				strError = "An error was encountered creating filename '"& pFileName &"'"
+				strError = strError & ObFile.GetErrors()
 				exit function
 			end if
 			
 			'STEP 2:  add new record into tblPages  
-			strSQL = "INSERT INTO "&strTableName&" (PageName, PageTitle, PageFileName, PageLinkHoverText, PageDescription, PageKeywords, Style, MenuIndex, ParentPage, MainMenu, Active) " & vbcrlf & _
+			strSQL = "INSERT INTO "& strTableName &" (PageName, PageTitle, PageFileName, PageLinkHoverText, PageDescription, PageKeywords, Style, MenuIndex, ParentPage, MainMenu, Active) " & vbCrLf & _
 				 "VALUES ('"& pName & "'" &  _
 				 ", '"& pTitle & "'" &  _
 				 ", '"& urlfile & "'" &  _
@@ -118,19 +118,19 @@ function contentAdd()
 			
 			if id = "" then 
 				debugError("There was an error creating ")
-				strError = "Your new "&strContent&" creation had the following error:<br/>There was an error creating a new file with name '"&pName& "'<br/>"&strError&"<br/> It appears that no ID was asigned for '"& page.getName()&"'.  Unable to complete the creation request!"
+				strError = "Your new "& strContent &" creation had the following error:<br/>There was an error creating a new file with name '"& pName & "'<br/>"& strError &"<br/> It appears that no ID was asigned for '"& page.getName() &"'.  Unable to complete the creation request!"
 			else 
-				debug("new "&strContent&" id is '"&id&"'")
+				debug("new "& strContent &" id is '"& id &"'")
 				'STEP 2: add new record into tblPageContent
-				strSQL = "INSERT INTO tblPageContent (PageContent, "&strKey&") " & vbcrlf & _
-				 "VALUES ('"&  replace(GlobalVarEncode(toXHTML(myForm.getValue("PageContent")),variableList),"'","''") & "'" & ", '"& id & "')"
+				strSQL = "INSERT INTO tblPageContent (PageContent, "& strKey &") " & vbCrLf & _
+				 "VALUES ('"&  replace(GlobalVarEncode(toXHTML(myForm.getValue("PageContent")), variableList), "'", "''") & "'" & ", '"& id & "')"
 				
 				db.execute(strSQL)
 
 				contentAdd = ""
 				strError = ""
-				strSuccess = "The "&strContent&" '"&myForm.getValue(strIdField)&"' was added. <br/>" & vbcrlf & _
-					"Would you like to  <a href='?view'>view the list</a> of current "&strContentPL&"" & vbcrlf & _
+				strSuccess = "The "& strContent &" '"& myForm.getValue(strIdField) &"' was added. <br/>" & vbCrLf & _
+					"Would you like to  <a href='?view'>view the list</a> of current "& strContentPL &"" & vbCrLf & _
 					"or <a href='?create'>create a new one</a>?"
 			end if
 		end if

@@ -1,5 +1,5 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
-<!--#include file="core/include/global.asp" -->
+<!--#include file="core/include/bootstrap.asp" -->
 <% Response.Expires = 0 
    if request.ServerVariables("REQUEST_METHOD") = "POST" then 
 		 ' define variables and COM objects

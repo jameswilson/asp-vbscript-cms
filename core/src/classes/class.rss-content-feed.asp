@@ -7,78 +7,78 @@
 '| download and display RSS XML feeds.         |
 '+---------------------------------------------+
   
-Class RSSContentFeed
+class RSSContentFeed
 
 '+---------------------------------------------+
 
 'declare class variables
 
 'strings
-Private classname
-Private xml_URL  
-Private xml_data   
-Private StrResultsXML 
-Private StrCachePath
-Private Strchannel
-Private Strtitle
-Private Strlink
-Private Strdescription
-Private StrRSSVersion  
-Private imgTitle 
-Private imgUrl 
-Private imgLink 
+private classname
+private xml_URL  
+private xml_data   
+private StrResultsXML 
+private StrCachePath
+private Strchannel
+private Strtitle
+private Strlink
+private Strdescription
+private StrRSSVersion  
+private imgTitle 
+private imgUrl 
+private imgLink 
 
 'ebay 
-Private eBayAPIURL
-Private eBayAPISandboxURL
-Private imgBuyItNow  
+private eBayAPIURL
+private eBayAPISandboxURL
+private imgBuyItNow  
  
-Public eBayTime 'date  
+public eBayTime 'date  
 
 'int
-Private iTotalResults
-Private icacheDays
-Private iMaxResults
-Private imgWidth
-Private imgHeight 
+private iTotalResults
+private icacheDays
+private iMaxResults
+private imgWidth
+private imgHeight 
   
 'bool
-Private bFromcache
+private bFromcache
   
 'dict
-Private Headers
+private Headers
 
 'arrays
-Public Results()
-Public Links()
-Public Titles()
-Public Descriptions()  
-Public PubDates()
-Public Images()
-Public Ids()
+public Results()
+public Links()
+public Titles()
+public Descriptions()  
+public PubDates()
+public Images()
+public Ids()
   
 '+---------------------------------------------+
-'Class Functions
+'Class functions
 
 'Class_Initialize
-Private Sub Class_Initialize
+private sub Class_Initialize
   Initialize
-End Sub
+end sub
            
 'Class_Terminate
-Private Sub Class_Terminate  
+private sub Class_Terminate  
   'empty the cache
   DeleteCache()
 
   'empty the dict
-  If IsObject(Headers) Then
+  if IsObject(Headers) then
     Headers.RemoveAll
-    Set Headers = Nothing
-  End If
+    set Headers = nothing
+  end if
   
-End Sub
+end sub
 
-Public Sub Initialize 
+public sub Initialize 
   'set constant values 
   classname = "RSSContentFeed"
 
@@ -94,17 +94,17 @@ Public Sub Initialize
   iMaxResults = 10
   
   'clear result vars
-  Set Headers = Createobject("Scripting.Dictionary")
+  set Headers = Createobject("Scripting.Dictionary")
   Clear()
-End Sub
+end sub
 
 '+---------------------------------------------+
 
-Public Sub Clear 
+public sub Clear 
 
   'Clear search variables
   iTotalResults =0  
-  bFromcache = false  
+  bFromcache = FALSE  
   Strlink = ""
   Strtitle = ""
   Strdescription = ""
@@ -118,199 +118,199 @@ Public Sub Clear
     
   eBayTime = ""
   
-  ReDim Results(1)
-  ReDim Links(1)
-  ReDim Titles(1)
-  ReDim Descriptions(1)  
-  ReDim PubDates(1)
-  ReDim Images(1)
-  ReDim Ids(1)
-End Sub
+  redim Results(1)
+  redim Links(1)
+  redim Titles(1)
+  redim Descriptions(1)  
+  redim PubDates(1)
+  redim Images(1)
+  redim Ids(1)
+end sub
 
 '+---------------------------------------------+
-'Public Properties - Readonly
+'public Properties - Readonly
 
 'show the copyright info
-Public Property Get Version
-  Version = "XML RSS Content Feed VBScript Class Version 1.0 " & VbCrLf & _
+public property get Version
+  Version = "XML RSS Content Feed VBScript Class Version 1.0 " & vbCrLf & _
             "© 2004 www.tele-pro.co.uk"
-End Property
+end property
 
-Public Property Get TotalResults
+public property get TotalResults
   TotalResults = iTotalResults
-End Property
-Public Property Get CacheCount
+end property
+public property get CacheCount
   CacheCount = CacheContentCount(StrCachePath)
-End Property
-Public Property Get Fromcache
-  Fromcache= (bFromcache = true)
-End Property
-Public Property Get ChannelLink
+end property
+public property get Fromcache
+  Fromcache= (bFromcache = TRUE)
+end property
+public property get ChannelLink
   ChannelLink= Trim(Strlink)
-End Property
-Public Property Get ChannelTitle
+end property
+public property get ChannelTitle
   ChannelTitle= Trim(Strtitle)
-End Property
-Public Property Get ChannelDescription
+end property
+public property get ChannelDescription
   ChannelDescription = Trim(Strdescription)
-End Property  
-Public Property Get ChannelImgURL
+end property  
+public property get ChannelImgURL
   ChannelImgURL = Trim(imgURL)
-End Property  
-Public Property Get ChannelImgTitle
+end property  
+public property get ChannelImgTitle
   ChannelImgTitle = Trim(imgTitle)
-End Property  
-Public Property Get ChannelImgLink
+end property  
+public property get ChannelImgLink
   ChannelImgLink = Trim(imgLink)
-End Property  
-Public Property Get ChannelImgWidth
-  ChannelImgWidth = CLNG(imgWidth)
-End Property
-Public Property Get ChannelImgHeight
-  ChannelImgHeight = CLNG(imgHeight)
-End Property
-Public Property Get ResultsXML
+end property  
+public property get ChannelImgWidth
+  ChannelImgWidth = clng(imgWidth)
+end property
+public property get ChannelImgHeight
+  ChannelImgHeight = clng(imgHeight)
+end property
+public property get ResultsXML
   ResultsXML = Trim(strResultsXML)
-End Property
-Public Property Get RSSVersion
+end property
+public property get RSSVersion
   RSSVersion = Trim(strRSSVersion)
-End Property
+end property
 
 '+---------------------------------------------+
-'Public Properties - settable
+'public Properties - settable
 
 'show the xml_URL 
-Public Property Get ContentURL
+public property get ContentURL
   ContentURL = Trim(xml_URL)
-End Property
+end property
 'set the xml_URL 
-Public Property Let ContentURL(ByVal vContentURL)
+public property let ContentURL(ByVal vContentURL)
   vContentURL = Trim(vContentURL)
   'add protocol if necessary
-  If inStr(LCASE(vContentURL), "http://")=0 Then
+  if inStr(LCASE(vContentURL), "http://")=0 then
     vContentURL = "http://" & vContentURL
-  End if
+  end if
   xml_URL = Trim(vContentURL)
-End Property
+end property
 
-Public Property Get PostData
+public property get PostData
   PostData = Trim(xml_data)
-End Property
-Public Property Let PostData(sxml_data)
+end property
+public property let PostData(sxml_data)
   xml_data = Trim(sxml_data)
-End Property 
+end property 
 
-Public Property Get Cache
+public property get Cache
   Cache = Trim(StrCachePath)
-End Property
-Public Property Let Cache(ByVal sCache)
+end property
+public property let Cache(ByVal sCache)
   StrCachePath = ""
-  If Trim(sCache)<>"" Then
+  if Trim(sCache)<>"" then
   
-    If Not DExists(sCache) Then 
+    if Not DExists(sCache) then 
       ErrRaise "SetCache" , "Cache folder does not exist " 
     Else
       'rem last slash
-      If (Mid(sCache, LEN(sCache), 1) = "\") Then
+      if (Mid(sCache, LEN(sCache), 1) = "\") then
         sCache = Mid(sCache, 1, LEN(sCache)-1)
-      End If 
+      end if 
       'add slash 
       StrCachePath = Trim(sCache) & "\"      
-    End If    
-  End If
-End Property
+    end if    
+  end if
+end property
 
-Public Property Get CacheDays
-  CacheDays = CLNG(iCacheDays)
-End Property
-Public Property Let CacheDays(iDays)
-  iCacheDays = CLNG(iDays)
-End Property
+public property get CacheDays
+  CacheDays = clng(iCacheDays)
+end property
+public property let CacheDays(iDays)
+  iCacheDays = clng(iDays)
+end property
 
-Public Property Get MaxResults
-  MaxResults = CLNG(iMaxResults)
-End Property
-Public Property Let MaxResults(vMaxResults)
-  iMaxResults = CLNG(vMaxResults)
-End Property
+public property get MaxResults
+  MaxResults = clng(iMaxResults)
+end property
+public property let MaxResults(vMaxResults)
+  iMaxResults = clng(vMaxResults)
+end property
 
 '+---------------------------------------------+
-'Public Functions
+'public functions
 
 'Delete items in Cache
-Public FUNCTION DeleteCache()
-  If (Trim(StrCachePath)<>"") Then
+public function DeleteCache()
+  if (Trim(StrCachePath)<>"") then
     DeleteCache = DeleteCacheContent(StrCachePath, icacheDays)
-  End If
-End FUNCTION
+  end if
+end function
 
 'add header for http request
-Public FUNCTION AddHeader(str_hdr, str_val)
+public function AddHeader(str_hdr, str_val)
   'add header to dict for http request
-  If Not (Headers.Exists(Trim(str_hdr))) Then 
+  if Not (Headers.Exists(Trim(str_hdr))) then 
     Headers.Add Trim(str_hdr), Trim(str_val)
   Else
     Headers(str_hdr) = Trim(str_val)
-  End If
-End FUNCTION
+  end if
+end function
 
 'transform xml with xsl
-Public FUNCTION Transform(str_xslt)
-  If Trim(StrResultsXML)="" Then Exit Function
-  If Trim(str_xslt)="" Then Exit Function
+public function Transform(str_xslt)
+  if Trim(StrResultsXML)="" then exit function
+  if Trim(str_xslt)="" then exit function
   
   'Load XML
-  Dim x
+  dim x
   set x = CreateObject("MSXML2.DOMDocument")  
-  x.async = false  
-  x.setProperty "ServerHTTPRequest", True  
+  x.async = FALSE  
+  x.setProperty "ServerHTTPRequest", TRUE  
 
   'path or url?
-  If (inStr(str_xslt, "http")=1) Then 'url
-      Dim tmpStr
+  if (inStr(str_xslt, "http")=1) then 'url
+      dim tmpStr
       tmpStr = getResults(str_xslt)
       x.LoadXML(tmpStr)        
   Else
-    If (inStr(str_xslt, "\")=0) Then 'needs mapping
+    if (inStr(str_xslt, "\")=0) then 'needs mapping
       str_xslt = Server.MapPath(str_xslt) 
       x.Load(str_xslt) 
-    End if  
-  End if  
-  x.resolveExternals = False
+    end if  
+  end if  
+  x.resolveExternals = FALSE
   
-  If (x.parseError.errorCode <> 0) Then
+  if (x.parseError.errorCode <> 0) then
     ErrRaise "Transform", "XML error: " & x.parseError.reason 
-    EXIT FUNCTION        
-  End If 
+    exit function        
+  end if 
   str_xslt = x.xml
 
   Transform = TransformXML(StrResultsXML, str_xslt)  
-End FUNCTION
+end function
 
 'retrieve the value of a node
-Public FUNCTION XMLValue(str_node)
-  If Trim(StrResultsXML)="" Then Exit Function
+public function XMLValue(str_node)
+  if Trim(StrResultsXML)="" then exit function
   XMLValue = GetNodeText(str_node, StrResultsXML)
-End FUNCTION
+end function
 
 'construct amazon rss url and call getrss function
-Public Function GetAmazonRSS(t, devt, kwd, mode, bcm)
+public function GetAmazonRSS(t, devt, kwd, mode, bcm)
 'check 
-If Trim(t) = "" Then
+If Trim(t) = "" then
   ErrRaise "GetAmazonRSS", "Associate tag must be set"
-  Exit Function
-End if
-If Trim(devt) = "" Then
+  exit function
+end if
+If Trim(devt) = "" then
   ErrRaise "GetAmazonRSS", "Developer token must be set"
-  Exit Function
-End if
-If Trim(kwd) = "" Then
+  exit function
+end if
+If Trim(kwd) = "" then
   ErrRaise "GetAmazonRSS", "KeywordSearch token must be set"
-  Exit Function
-End if
-If Trim(mode) = "" Then
+  exit function
+end if
+If Trim(mode) = "" then
   mode = "books"
-End if
+end if
   
 'set amazon vals
 xml_url = "http://xml-na.amznxslt.com/onca/xml3" & _
@@ -327,126 +327,126 @@ xml_url = "http://xml-na.amznxslt.com/onca/xml3" & _
     '"&f=http://xml.amazon.com/xsl/xml-rss091.xsl"
          
   GetAmazonRSS = GetRSS()
-End Function
+end function
 
 '+---------------------------------------------+
 'main function
 
-Public Function GetRSS()
+public function GetRSS()
 
   'clear search
   Clear()
   
   'check xml_URL
-  If Trim(xml_URL) = "" Then
+  if Trim(xml_URL) = "" then
     ErrRaise "GetRSS", "ContentURL must be set"
-  End if
+  end if
     
   'get results from web or cache 
-  Dim soapResults, soapResultsStd  
+  dim soapResults, soapResultsStd  
   soapResults = getResults(xml_URL)  
   
   'Dump the results into an XML document.
-  Dim Res
-  Set Res = CreateObject("MSXML2.DOMDocument")  
-  Res.async = false 
+  dim Res
+  set Res = CreateObject("MSXML2.DOMDocument")  
+  Res.async = FALSE 
    
   'set the global xml string
   StrResultsXML = Trim(soapResults) 
   soapResultsStd = DeSensitize(soapResults)
     
-  Res.setProperty "ServerHTTPRequest", True
+  Res.setProperty "ServerHTTPRequest", TRUE
   Res.loadXML soapResultsStd
-  Res.resolveExternals = False    
+  Res.resolveExternals = FALSE    
   
-  If (Res.parseError.errorCode <> 0) Then
+  if (Res.parseError.errorCode <> 0) then
     ErrRaise "GetRSS", "XML error: " & Res.parseError.reason 
-    EXIT FUNCTION        
-  End If    
+    exit function        
+  end if    
   
   'set the global xml string to the xml formatted string
-  If Trim(soapResultsStd) = Trim(soapResults) Then 
+  if Trim(soapResultsStd) = Trim(soapResults) then 
     StrResultsXML = Trim(Res.XML)  
-  End If
+  end if
   
-  Dim Node, Nodes   
+  dim Node, Nodes   
 
   '---------------------------------------------------------
   'get RSS  Version
   
   StrRSSVersion = ""
-  Set Nodes = Res.selectNodes("//rss")
-  For Each Node In Nodes          
+  set Nodes = Res.selectNodes("//rss")
+  for each Node in Nodes          
     on error resume next 
     strRSSVersion = Node.getAttribute("version")
-    on error Goto 0              
-  Next  
+    on error goto 0              
+  next  
   
-  if (Trim(strRSSVersion)="") Then 
-    Set Nodes = Res.selectNodes("//eBay")
-    For Each Node In Nodes  
+  if (Trim(strRSSVersion)="") then 
+    set Nodes = Res.selectNodes("//eBay")
+    for each Node in Nodes  
       strRSSVersion = "eBay"       
-    Next     
+    next     
   end if
       
-  if (Trim(strRSSVersion)="") Then
-    Set Nodes = Res.selectNodes("//rdf:RDF")
-    For Each Node In Nodes          
+  if (Trim(strRSSVersion)="") then
+    set Nodes = Res.selectNodes("//rdf:RDF")
+    for each Node in Nodes          
       on error resume next 
       strRSSVersion = Node.getAttribute("xmlns") 
-      If Trim(strRSSVersion) = "http://purl.org/rss/1.0/" Then 
+      if Trim(strRSSVersion) = "http://purl.org/rss/1.0/" then 
         strRSSVersion = "1.0"
-      End If
+      end if
       on error Goto 0              
-    Next            
+    next            
   end if
   
-  if (Trim(strRSSVersion)="eBay") Then 
-    Set Nodes = Res.selectNodes("//eBayTime")
-    For Each Node In Nodes  
+  if (Trim(strRSSVersion)="eBay") then 
+    set Nodes = Res.selectNodes("//eBayTime")
+    for each Node in Nodes  
       eBayTime = Node.Text      
-    Next     
+    next     
   end if
   
   '---------------------------------------------------------
   
   'set the size of arrays to the max results
-  Dim c
+  dim c
   c=0  
   
   'get the size
-  Set Nodes = Res.selectNodes("//item")  
-  For Each Node In Nodes
-    If (c<iMaxResults) Then
+  set Nodes = Res.selectNodes("//item")  
+  for each Node in Nodes
+    if (c<iMaxResults) then
       c = c + 1
-    End If
-  Next
+    end if
+  next
   
   'set the size
-  ReDim Results(c-1)
-  ReDim Links(c-1)
-  ReDim Titles(c-1)
-  ReDim Descriptions(c-1)
-  ReDim PubDates(c-1)
-  ReDim Images(c-1)
-  ReDim Ids(c-1)
+  redim Results(c-1)
+  redim Links(c-1)
+  redim Titles(c-1)
+  redim Descriptions(c-1)
+  redim PubDates(c-1)
+  redim Images(c-1)
+  redim Ids(c-1)
     
   'get item content   
   'declare results strings
-  Dim res_URL
-  Dim res_title
-  Dim res_desc
-  Dim res_date
-  Dim res_img
-  Dim res_id
+  dim res_URL
+  dim res_title
+  dim res_desc
+  dim res_date
+  dim res_img
+  dim res_id
 
   'ebay
-  Dim CurrencyId, CurrentPrice, BidCount
+  dim CurrencyId, CurrentPrice, BidCount
       
   'Parse the XML document.
   c=0 
-  For Each Node In Nodes
-  If (c<iMaxResults) Then
+  for each Node in Nodes
+  if (c<iMaxResults) then
   
     'clear the strings
     res_URL = ""
@@ -470,18 +470,18 @@ Public Function GetRSS()
     on error goto 0
         
     'or it might be a dc:description tag
-    If (Trim(res_desc)="") Then    
+    if (Trim(res_desc)="") then    
       on error resume next
       res_desc = Trim(Node.selectSingleNode("dc:description").XML)
       on error goto 0
-    End If 
+    end if 
     
     res_desc = Replace(res_desc, "<description>", "")
     res_desc = Replace(res_desc, "</description>", "")
     
     'or it might be ebay
-    If (strRSSVersion = "eBay") Then
-    If (Trim(res_desc)="") Then
+    if (strRSSVersion = "eBay") then
+    if (Trim(res_desc)="") then
       
       'get ebay data
       on error resume next        
@@ -495,17 +495,17 @@ Public Function GetRSS()
       res_desc = res_desc & "<b>"
       res_desc = res_desc & eBayCurrencySymbolFromID(CurrencyId)
       res_desc = res_desc & Trim(CurrentPrice) & "</b> ("
-      res_desc = res_desc & Trim(BidCount) & " bids) " & VbCrLf
+      res_desc = res_desc & Trim(BidCount) & " bids) " & vbCrLf
       
       'construct description
       on error resume next	  
-      If Trim(Node.selectSingleNode("ItemProperties//BuyItNow").Text)="1" Then        
+      if Trim(Node.selectSingleNode("ItemProperties//BuyItNow").Text)="1" then        
         res_desc = res_desc & " &nbsp;<a href="""
         res_desc = res_desc & res_URL
         res_desc = res_desc & """><img align=""absmiddle"" border=""0"" src="""  
         res_desc = res_desc & imgBuyItNow
-        res_desc = res_desc & """ alt=""Buy It Now""></a>" & VbCrLf        
-      End If   
+        res_desc = res_desc & """ alt=""Buy It Now""></a>" & vbCrLf        
+      end if   
       on error goto 0    
       
       'ItemProperties//Featured
@@ -514,16 +514,16 @@ Public Function GetRSS()
       'ItemProperties//Gift
       'ItemProperties//CharityItem      
         
-    End If 
-    End If '(strRSSVersion = "eBay") 
+    end if 
+    end if '(strRSSVersion = "eBay") 
 
     'optional tags
     on error resume next
     res_date = Node.selectSingleNode("pubDate").Text  
     'ebay
-    If (Trim(res_date)="") Then
+    if (Trim(res_date)="") then
       res_date = Node.selectSingleNode("EndTime").Text 
-    End If           
+    end if           
     on error goto 0
     
     if Trim(res_URL)<>"" Or _ 
@@ -540,25 +540,25 @@ Public Function GetRSS()
         Ids(c) = res_id 
         
         c=c+1 'inc counter            
-    End If                     
-  End If                     
-  Next    
+    end if                     
+  end if                     
+  next    
   
   '---------------------------------------------------------
  
   'get channel content 
-  Set Nodes = Res.selectNodes("//channel")
-  For Each Node In Nodes      
+  set Nodes = Res.selectNodes("//channel")
+  for each Node in Nodes      
     on error resume next
     Strlink = Node.selectSingleNode("link").Text
     Strtitle = Node.selectSingleNode("title").Text
     Strdescription = Node.selectSingleNode("description").Text
     on error Goto 0              
-  Next
+  next
  
   'get image
-  Set Nodes = Res.selectNodes("//image")
-  For Each Node In Nodes   
+  set Nodes = Res.selectNodes("//image")
+  for each Node in Nodes   
     on error resume next
     imgTitle = Node.selectSingleNode("title").Text
     imgUrl = Node.selectSingleNode("url").Text
@@ -566,19 +566,19 @@ Public Function GetRSS()
     imgWidth = Node.selectSingleNode("width").Text
     imgHeight = Node.selectSingleNode("height").Text
     on error Goto 0              
-  Next
+  next
     
   'release objects
-  Set Nodes  = Nothing  
-  Set Res = Nothing
+  set Nodes  = nothing  
+  set Res = nothing
   
   'return count
   iTotalResults = c
   GetRSS = c    
-End Function
+end function
 
-Private Function DeSensitize(Istr)
-  Dim str
+private function DeSensitize(Istr)
+  dim str
   str = Istr
   str = Replace(str, "<Item>", "<item>", 1, -1, 1)
   str = Replace(str, "<Link>", "<link>", 1, -1, 1)
@@ -587,19 +587,19 @@ Private Function DeSensitize(Istr)
   str = Replace(str, "</Link>", "</link>", 1, -1, 1)
   str = Replace(str, "</Title>", "</title>", 1, -1, 1) 
   DeSensitize = str
-End Function
+end function
 
-Public Function ItemHTML(iNumber)
-  Dim r_URL, r_title, r_description, r_pubdate
+public function ItemHTML(iNumber)
+  dim r_URL, r_title, r_description, r_pubdate
   
-  If (iTotalResults=0) Then
+  if (iTotalResults=0) then
     ErrRaise "ItemHTML", "There are no items"
-    Exit Function
-  End If
-  If (iNumber>=iTotalResults) Then
+    exit function
+  end if
+  if (iNumber>=iTotalResults) then
     ErrRaise "ItemHTML", "Item index out of bounds"
-    Exit Function
-  End If
+    exit function
+  end if
   
   r_URL = Links(iNumber)
   r_title= Titles(iNumber)
@@ -607,132 +607,132 @@ Public Function ItemHTML(iNumber)
   r_pubdate = PubDates(iNumber)
   
   ItemHTML = Trim(FormatResult(r_URL, r_title, r_description, r_pubdate))
-End Function
+end function
   
-Private Function FormatResult(h, t, d, p)
-  Dim str
+private function FormatResult(h, t, d, p)
+  dim str
   str = ""
-  str = str & "<b><a href=""" & h & """>" & t & "</a></b> <br/> " & VbCrLF
-  If (Trim(d) <> "") Then str = str & Shorten(d, 25, "...") & "<br/>" & VbCrLF
-  str = str & "<a href=""" & h & """>" & h & "</a>" & VbCrLF
-  If (Trim(p) <> "") Then str = str & "<br/>" & p & VbCrLF  
+  str = str & "<b><a href=""" & h & """>" & t & "</a></b> <br/> " & vbCrLf
+  if (Trim(d) <> "") then str = str & Shorten(d, 25, "...") & "<br/>" & vbCrLf
+  str = str & "<a href=""" & h & """>" & h & "</a>" & vbCrLf
+  if (Trim(p) <> "") then str = str & "<br/>" & p & vbCrLf  
   FormatResult= Trim(str)
-End Function
+end function
 
 '+---------------------------------------------+
-'Private Functions
+'private functions
 
-Private Function ErrRaise(f, e)
+private function ErrRaise(f, e)
   Err.Raise vbObjectError+1001, classname, f & ": " & e
   Response.End  
-End Function 
+end function
 
-Private Function GetXMLResults(q)
+private function GetXMLResults(q)
   GetXMLResults = XmlHttp( (q), xml_data, Headers)  
   'Server.URLEncode
-End Function
+end function
 
 'get results from cache or from web    
-Private FUNCTION qCheckSum(d)
+private function qCheckSum(d)
     'quick checksum
-    Dim chks
+    dim chks
     chks = 0
-    Dim x
-    For x = 1 To LEN(d)
-      chks = chks + ( (ASC(Mid(d, x, 1))) * (x Mod 255) )
-    Next
-    qCheckSum = CLNG(chks)
-End Function
+    dim x
+    for x = 1 to LEN(d)
+      chks = chks + ( (ASC(mid(d, x, 1))) * (x mod 255) )
+    next
+    qCheckSum = clng(chks)
+end function
 
 'get results from cache or from web    
-Private FUNCTION getResults(q)
-  Dim res, a
+private function getResults(q)
+  dim res, a
   a = CacheFileName(q & xml_data)
   res = ""
   
-  If (Trim(StrCachePath)<>"") Then res = ReadFile(a)   
-  If (Trim(res) = "") Then
+  if (Trim(StrCachePath)<>"") then res = ReadFile(a)   
+  if (Trim(res) = "") then
     res = getXMLResults(q) 
        
     'after many problems passing string straight back
     'writing and reading back solved the problem     
-    Dim b
-    b = objLinks("SITE_PATH")&"\core\cache\_class_rss-content-feed.cache" 
+    dim b
+    b = globals("SITE_PATH")&"\core\cache\_class_rss-content-feed.cache" 
 		debug("class.rss-content-feed.getResults: cache='"&b&"'") 
     Call DelFile(b)    
     Call Write2File(b, res)
     res = ReadFile(b)  
     Call DelFile(b)    
         
-    If (Trim(StrCachePath)<>"") Then Call Write2File(a, res)     
-    bFromcache = False  
-  Else
-    bFromcache = True  
-  End if
+    if (Trim(StrCachePath)<>"") then Call Write2File(a, res)     
+    bFromcache = FALSE  
+  else
+    bFromcache = TRUE  
+  end if
   
   getResults = res
-END FUNCTION
+end function
 
-Private FUNCTION CacheFileName(n)
+private function CacheFileName(n)
 
-  Dim cn
-  Dim cd
+  dim cn
+  dim cd
   cn = qCheckSum(n) 
   cd = DomainFromUrl(n)
   cn = StrCachePath & cd & "~" & cn & ".xml"
   CacheFileName = cn
-End FUNCTION
+end function
 
-Private Function DomainFromUrl(sText)
-  Dim nIndex
-  If (LCase(Left(sText, 7))) = "http://" Then sText = Mid(sText, 8)
-  If LCase(Left(sText, 8 )) = "https://" Then sText = Mid(sText, 9)
+private function DomainFromUrl(sText)
+  dim nIndex
+  if (LCase(Left(sText, 7))) = "http://" then sText = Mid(sText, 8)
+  if LCase(Left(sText, 8 )) = "https://" then sText = Mid(sText, 9)
   nIndex = InStr(sText, "/")
-  If (nIndex > 0) Then sText = Left(sText, nIndex - 1)
+  if (nIndex > 0) then sText = Left(sText, nIndex - 1)
   DomainFromUrl = sText
-End Function
+end function
 
-Private FUNCTION CacheContentCount(cache)
+private function CacheContentCount(cache)
   CacheContentCount = 0
-  If Trim(cache)="" Then Exit FUNCTION 
-  If Not DExists(cache) Then Exit FUNCTION   
-  CacheContentCount = CLNG(FolderCount(cache))
-End FUNCTION
+  if Trim(cache)="" then exit function 
+  if Not DExists(cache) then exit function   
+  CacheContentCount = clng(FolderCount(cache))
+end function
 
-Private FUNCTION DeleteCacheContent(cache, age)
-  If Trim(cache)="" Then Exit FUNCTION
-  If Not DExists(cache) Then Exit FUNCTION
+private function DeleteCacheContent(cache, age)
+  if Trim(cache)="" then exit function
+  if Not DExists(cache) then exit function
   
   'count cache
-  Dim a
+  dim a
   a = CacheContentCount(cache)
   
-  Dim fs
-  Set fs = Createobject("Scripting.FileSystemobject") 
-  Dim oFolder
-  Set oFolder = fs.GetFolder(cache)
-  Dim oFile
-  For Each oFile in oFolder.Files  
-    If (age <= (Int(Now() - oFile.DateLastModified))) Then
-      oFile.Delete True 
-    End If
-  Next  
-  Set fs = Nothing
-  Set oFolder = Nothing  
+  dim fs
+  set fs = Createobject("Scripting.FileSystemobject") 
+  dim oFolder
+  set oFolder = fs.GetFolder(cache)
+  dim oFile
+  for each oFile in oFolder.Files  
+    if (age <= (Int(Now() - oFile.DateLastModified))) then
+      oFile.Delete TRUE 
+    end if
+  next  
+  set fs = nothing
+  set oFolder = nothing  
 
   'count cache
-  a = (CLNG(a) - CLNG(CacheContentCount(cache)))
+  a = (clng(a) - clng(CacheContentCount(cache)))
   
-  DeleteCacheContent = CLNG(a)
-END FUNCTION
+  DeleteCacheContent = clng(a)
+end function
 
 '+---------------------------------------------+
 'Generic
 
 'Retrieve response and return HTML response body
-Public Function XmlHttp(xAction, data, hdrs)
-  Dim HTTP, Raw
-  Set Http = CreateObject("MSXML2.ServerXMLHTTP")
+public function XmlHttp(xAction, data, hdrs)
+  dim HTTP, Raw
+  set Http = CreateObject("MSXML2.ServerXMLHTTP")
   'MSXML2.XMLHTTP
   
   if (Trim(data) <> "") then
@@ -751,187 +751,187 @@ Public Function XmlHttp(xAction, data, hdrs)
   end if
 
   'get headers from the dict
-  If IsObject(hdrs) Then
-    Dim hdr
-    For Each hdr in hdrs
+  if IsObject(hdrs) then
+    dim hdr
+    for each hdr in hdrs
       Http.setRequestHeader Trim(hdr), Trim(hdrs(hdr))
-    Next
-  End If
+    next
+  end if
 
   Http.send (data)
   Raw = http.responseText
-  Set Http = Nothing
+  set Http = nothing
   XmlHttp = Raw
-End Function
+end function
 
-Private Function DExists(d) 'true if file exists
-  Dim fso
-  Set fso = CreateObject("Scripting.FileSystemObject")
+private function DExists(d) 'TRUE if file exists
+  dim fso
+  set fso = CreateObject("Scripting.FileSystemObject")
   DExists = fso.FolderExists(d)
-  Set fso = Nothing
-End Function
+  set fso = nothing
+end function
   
-Private Function FExists(d) 'true if file exists
-  Dim fso
-  Set fso = CreateObject("Scripting.FileSystemObject")
+private function FExists(d) 'TRUE if file exists
+  dim fso
+  set fso = CreateObject("Scripting.FileSystemObject")
   FExists = fso.FileExists(d)
-  Set fso = Nothing
-End Function
+  set fso = nothing
+end function
   
-Private Function DelFile(f)
-  If Trim(f)="" Then Exit FUNCTION  
-  Dim fso
-  Set fso = CreateObject("Scripting.FileSystemObject")
+private function DelFile(f)
+  if Trim(f)="" then exit function  
+  dim fso
+  set fso = CreateObject("Scripting.FileSystemObject")
   if FExists(f) then fso.DeleteFile(f)
-  Set fso = Nothing
-End Function
+  set fso = nothing
+end function
 
-Private FUNCTION FolderCount(dir)
-  If Trim(dir)="" Then Exit FUNCTION  
-  Dim fs
-  Set fs = Createobject("Scripting.FileSystemobject") 
-  Dim oFolder
-  Set oFolder = fs.GetFolder(dir)
+private function FolderCount(dir)
+  if Trim(dir)="" then exit function  
+  dim fs
+  set fs = Createobject("Scripting.FileSystemobject") 
+  dim oFolder
+  set oFolder = fs.GetFolder(dir)
   FolderCount = oFolder.Files.Count  
-  Set fs = Nothing
-  Set oFolder = Nothing  
-END FUNCTION
+  set fs = nothing
+  set oFolder = nothing  
+end function
 
-Private Function Write2File(afile,bstr)
-  Dim wObj, wText
-  if afile="" Then EXIT FUNCTION
-  Set wObj = CreateObject("Scripting.FileSystemObject")
-  Set wtext = wObj.OpenTextFile(afile, 8, True)
+private function Write2File(afile,bstr)
+  dim wObj, wText
+  if afile="" then exit function
+  set wObj = CreateObject("Scripting.FileSystemObject")
+  set wtext = wObj.OpenTextFile(afile, 8, TRUE)
 
-  Dim nCharPos, sChar
-  For nCharPos = 1 To Len(bstr)
-    sChar = Mid(bstr, nCharPos, 1)
-    On Error resume next  '<-- **** Error handing starts ****
+  dim nCharPos, sChar
+  for nCharPos = 1 to Len(bstr)
+    sChar = mid(bstr, nCharPos, 1)
+    on error resume next  '<-- **** Error handing starts ****
     wtext.Write sChar
-    On Error Goto 0       '<-- ***** Error handing ends *****
-  Next
+    on error goto 0       '<-- ***** Error handing ends *****
+  next
 
   wtext.Close()
-  Set wtext = Nothing
-  Set wObj = Nothing
-End Function
+  set wtext = nothing
+  set wObj = nothing
+end function
 
-Private Function ReadFile(fpath)
-  Dim fObj, ftext, fileStr  
-  Set fObj = CreateObject("Scripting.FileSystemObject")
-  If fObj.FileExists(fpath) Then
-    Set ftext = fObj.OpenTextFile(fpath, 1, FALSE)
+private function ReadFile(fpath)
+  dim fObj, ftext, fileStr  
+  set fObj = CreateObject("Scripting.FileSystemObject")
+  if fObj.FileExists(fpath) then
+    set ftext = fObj.OpenTextFile(fpath, 1, FALSE)
     fileStr =""
-    WHILE NOT ftext.AtEndOfStream
+    while not ftext.AtEndOfStream
       fileStr  = fileStr  & ftext.ReadLine & chr(13)
-    WEND
+    wend
     ftext.Close
   else
     fileStr = ""
-  End if
+  end if
   ReadFile= fileStr
-End Function
+end function
 
-Public Function Shorten(sentence, wds, addifShortened)
-  Dim ret
+public function Shorten(sentence, wds, addifShortened)
+  dim ret
   ret = Trim(sentence)
-  Dim ar
-  ReDim ar(1)
+  dim ar
+  redim ar(1)
   ar = Split(ret)
 
   ret = ""
-  Dim c 
-  For c = 0 To UBOUND(ar)
-  If c < wds Then
+  dim c 
+  for c = 0 to UBOUND(ar)
+  if c < wds then
     ret = ret & " " & ar(c)
-  End If 
-  Next
+  end if 
+  next
   ret = Trim(ret)
-  If Trim(ret) <> Trim(sentence) Then
+  if Trim(ret) <> Trim(sentence) then
     ret = ret & addifShortened
-  End If 
+  end if 
 
   Shorten = ret
-End Function 
+end function
   
-Private FUNCTION GetNodeText(str_node, str_xml)
-  Dim tmpString
+private function GetNodeText(str_node, str_xml)
+  dim tmpString
   tmpString = Trim(str_xml)
 
   'declare an xml object to work with
   dim xmldoc
   set xmldoc = CreateObject("MSXML2.DOMDocument")
-  xmldoc.async = False
-  xmldoc.setProperty "ServerHTTPRequest", True
+  xmldoc.async = FALSE
+  xmldoc.setProperty "ServerHTTPRequest", TRUE
   
   'attempt to load from str
   xmldoc.LoadXML(tmpString)
-  xmldoc.resolveExternals = False
+  xmldoc.resolveExternals = FALSE
   
-  If (xmldoc is Nothing) Or (Len(xmldoc.text) = 0) then
+  if (xmldoc is nothing) Or (Len(xmldoc.text) = 0) then
     'error        
-    EXIT FUNCTION
-  End If
+    exit function
+  end if
   'attempt to get Node Text
-  Dim currNode
+  dim currNode
   tmpString = ""  
-  Set currNode = xmlDoc.documentElement.selectSingleNode(str_node) 
-  On Error Resume next
+  set currNode = xmlDoc.documentElement.selectSingleNode(str_node) 
+  on error resume next
   tmpString = Trim(currNode.Text)
-  On Error Goto 0  
-  Set currNode = Nothing
+  on error goto 0  
+  set currNode = nothing
   
   GetNodeText = Trim(tmpString)
-END FUNCTION
+end function
 
 'Transform XML with XSL string
-Private FUNCTION TransformXML(xml, xslt)
+private function TransformXML(xml, xslt)
   'Load XML
-  Dim x
+  dim x
   set x = CreateObject("MSXML2.DOMDocument")  
-  x.async = false
-  x.setProperty "ServerHTTPRequest", True
+  x.async = FALSE
+  x.setProperty "ServerHTTPRequest", TRUE
     
   x.LoadXML(xml)
-  x.resolveExternals = False
+  x.resolveExternals = FALSE
 
-  If (x.parseError.errorCode <> 0) Then
+  if (x.parseError.errorCode <> 0) then
       ErrRaise "TransformXML", "XML Parse error: " & x.parseError.reason 
-      EXIT FUNCTION        
-  End If 
+      exit function        
+  end if 
   'Load XSL
-  Dim xsl
+  dim xsl
   set xsl = CreateObject("MSXML2.DOMDocument")  
-  xsl.async = false
+  xsl.async = FALSE
   xsl.LoadXML(xslt)
-  If (xsl.parseError.errorCode <> 0) Then
+  if (xsl.parseError.errorCode <> 0) then
       ErrRaise "TransformXML", "XSL Parse error: " & xsl.parseError.reason 
-      EXIT FUNCTION        
-  End If 
+      exit function        
+  end if 
   'Transform file
   TransformXML = (x.transformNode(xsl))
-END FUNCTION
+end function
 
 'get the ebay xml api response
-Public FUNCTION GeteBayRSS(eBayVerb, eBayToken, eBayParam1, ebaySiteId, bProduction)
+public function GeteBayRSS(eBayVerb, eBayToken, eBayParam1, ebaySiteId, bProduction)
 ' eBayVerb: GetSearchResults | GetSellerList | GetCategoryListings
 ' eBayToken: http://developer.ebay.com/tokentool/Credentials.aspx
 ' eBayParam1: Search query, Seller Id or Category Id
 ' ebaySiteId: ebay SiteId
 ' bProduction: Production or Sandbox
 
-  If Trim(eBayVerb) = "" Then
+  if Trim(eBayVerb) = "" then
     ErrRaise "GeteBayRSS", "eBayVerb must be set"
-    Exit Function
-  End if
-  If Trim(eBayToken) = "" Then
+    exit function
+  end if
+  if Trim(eBayToken) = "" then
     ErrRaise "GeteBayRSS", "eBayToken must be set"
-    Exit Function
-  End if
-  If Trim(ebaySiteId) = "" Then
+    exit function
+  end if
+  if Trim(ebaySiteId) = "" then
     ebaySiteId = "0"
-  End if
-  bProduction = (bProduction=True)
+  end if
+  bProduction = (bProduction=TRUE)
               
   Headers.RemoveAll()  
   Headers.Add "X-EBAY-API-COMPATIBILITY-LEVEL", "305"
@@ -939,72 +939,72 @@ Public FUNCTION GeteBayRSS(eBayVerb, eBayToken, eBayParam1, ebaySiteId, bProduct
   Headers.Add "X-EBAY-API-CALL-NAME", eBayVerb
   Headers.Add "X-EBAY-API-SITEID", ebaySiteId 
   
-  If (bProduction) then    
+  if (bProduction) then    
     xml_URL = eBayAPIURL    
   Else
     xml_URL = eBayAPISandboxURL
-  End If      
+  end if      
   xml_data = eBayCreateRequestXML(eBayVerb, eBayToken, eBayParam1, ebaySiteId, iMaxResults)
   
   GeteBayRSS = GetRSS()
-END FUNCTION 
+end function
 
 'construct the ebay soap request xml
-Private FUNCTION eBayCreateRequestXML(UserVerb, UserToken, qry, SiteId, UserMaxResults)
-  Dim xml
+private function eBayCreateRequestXML(UserVerb, UserToken, qry, SiteId, UserMaxResults)
+  dim xml
   xml = ""
-  xml = xml & "<?xml version=""1.0"" encoding=""iso-8859-1""?>" & VbCrLf
+  xml = xml & "<?xml version=""1.0"" encoding=""iso-8859-1""?>" & vbCrLf
   xml = xml & "<request xmlns=""urn:eBayAPIschema"">" 
-  xml = xml & "<RequestToken>" & UserToken & "</RequestToken>" & VbCrLf
-  xml = xml & "<SiteId>" & SiteId & "</SiteId>" & VbCrLf
-  xml = xml & "<DetailLevel>0</DetailLevel>" & VbCrLf
-  xml = xml & "<ErrorLevel>1</ErrorLevel>" & VbCrLf
-  xml = xml & "<MaxResults>" & UserMaxResults & "</MaxResults>" & VbCrLf
+  xml = xml & "<RequestToken>" & UserToken & "</RequestToken>" & vbCrLf
+  xml = xml & "<SiteId>" & SiteId & "</SiteId>" & vbCrLf
+  xml = xml & "<DetailLevel>0</DetailLevel>" & vbCrLf
+  xml = xml & "<ErrorLevel>1</ErrorLevel>" & vbCrLf
+  xml = xml & "<MaxResults>" & UserMaxResults & "</MaxResults>" & vbCrLf
 
-  xml = xml & "<Verb>" & UserVerb & "</Verb>" & VbCrLf
+  xml = xml & "<Verb>" & UserVerb & "</Verb>" & vbCrLf
   SELECT Case LCASE(UserVerb)
     Case "getsearchresults":
-      xml = xml & "<Query>" & qry & "</Query>" & VbCrLf
+      xml = xml & "<Query>" & qry & "</Query>" & vbCrLf
     Case "getsellerlist":
-      xml = xml & "<UserId>" & qry & "</UserId>" & VbCrLf
-      xml = xml & "<ItemsPerPage>" & UserMaxResults & "</ItemsPerPage>" & VbCrLf
-      xml = xml & "<PageNumber>1</PageNumber>" & VbCrLf
-      xml = xml & "<EndTimeFrom>2002-01-01 00:00:01</EndTimeFrom>" & VbCrLf
-      xml = xml & "<EndTimeTo>2020-01-01 00:00:01</EndTimeTo>" & VbCrLf
+      xml = xml & "<UserId>" & qry & "</UserId>" & vbCrLf
+      xml = xml & "<ItemsPerPage>" & UserMaxResults & "</ItemsPerPage>" & vbCrLf
+      xml = xml & "<PageNumber>1</PageNumber>" & vbCrLf
+      xml = xml & "<EndTimeFrom>2002-01-01 00:00:01</EndTimeFrom>" & vbCrLf
+      xml = xml & "<EndTimeTo>2020-01-01 00:00:01</EndTimeTo>" & vbCrLf
     Case "getcategorylistings":
-      xml = xml & "<CategoryId>" & qry & "</CategoryId>" & VbCrLf      
+      xml = xml & "<CategoryId>" & qry & "</CategoryId>" & vbCrLf      
   END SELECT 
-  xml = xml & "</request>" & VbCrLf
+  xml = xml & "</request>" & vbCrLf
   eBayCreateRequestXML = Trim(xml)
-END FUNCTION
+end function
 
-Public FUNCTION eBayTimeLeft(eBayEndTime)
-  Dim eBayOfficialTime  
+public function eBayTimeLeft(eBayEndTime)
+  dim eBayOfficialTime  
   eBayOfficialTime = eBayTime
-  If eBayOfficialTime="" Then Exit Function  
+  if eBayOfficialTime="" then exit function  
   eBayOfficialTime = Replace(eBayOfficialTime, "GMT", "")  
   eBayEndTime = Replace(eBayEndTime, "GMT", "") 
-  Dim TimeLeft, TimeLeftD, TimeLeftH, TimeLeftM
+  dim TimeLeft, TimeLeftD, TimeLeftH, TimeLeftM
   TimeLeft = DateDiff("n", eBayOfficialTime, eBayEndTime)  
-  If TimeLeft<0 Then 
+  if TimeLeft<0 then 
     eBayTimeLeft = "Ended " 
   Else
-    TimeLeftD = Int(TimeLeft/( 60 * 24))
+    TimeLeftD = Int(TimeLeft / (60 * 24))
     TimeLeftH = Int((TimeLeft - (TimeLeftD * 60 * 24)) / 60)
     TimeLeftM = Int(TimeLeft - (TimeLeftD * 60 * 24) - (TimeLeftH * 60) )     
     eBayTimeLeft = TimeLeftD & "d " & TimeLeftH & "h " & TimeLeftM & "m " 
-  End If 
-END FUNCTION
+  end if 
+end function
 
-Private FUNCTION eBayCurrencySymbolFromID(sym)
-  Dim res, s
+private function eBayCurrencySymbolFromID(sym)
+  dim res, s
   res= ""
   s = trim(Sym)
-  If (s= "") Then Exit FUNCTION
-  If Not IsNumeric(s) Then Exit FUNCTION
-  s = CLNG(s)
+  if (s= "") then exit function
+  if Not IsNumeric(s) then exit function
+  s = clng(s)
     
-  SELECT CASE (S)
+  select case (S)
     case 1: res="$"
     case 2: res="C $"
     case 3: res="GBP"
@@ -1014,10 +1014,10 @@ Private FUNCTION eBayCurrencySymbolFromID(sym)
     case 31: res="NLG"
     case 13: res="CHF"
     case 41: res="NT $"
-  END SELECT
+  end select
   eBayCurrencySymbolFromID = Trim(res)
-END FUNCTION 
+end function
 
-End Class
+end class
 
 %>

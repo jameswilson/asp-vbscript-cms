@@ -113,7 +113,7 @@ class SiteModules
 	'*
 	public function getModuleByType(byval modType)
 		dim rs, sd, key, val, counter, i, sql
-		if isnull(modType) or modType = "" then
+		if isNull(modType) or modType = "" then
 			debugError("class.modules.getModuleByType: cannot execute getModuleByType('"&modType&"'). The provided module type must be non-null.")
 			exit function
 		end if
@@ -202,10 +202,10 @@ class SiteModules
 							if len(rsPageModules("StyleClass")) > 0 then attrib.add " class="""&trim(sClass.value)&""""
 							if len(rsPageModules("StyleInline")) > 0 then attrib.add " style="""&trim(rsPageModules("StyleInline"))&""""
 								
-							writeln(vbcrlf&"<div"&attrib.value&"><div><div class=""wrapper"">"&vbcrlf)
+							writeln(vbCrLf&"<div"&attrib.value&"><div><div class=""wrapper"">"& vbCrLf)
 							debug("class.modules.display('"&strLocation&"'): executing '"&rsPageModules("ModHandler")&"/display.asp' with custom settings '"&server.HTMLEncode(""&rsPageModules("CustomSettings"))&"'")
 							executeMod ""&rsPageModules("ModHandler")&"/display.asp",""&rsPageModules("CustomSettings")
-							writeln(vbcrlf&"</div></div></div>"&vbcrlf)
+							writeln(vbCrLf&"</div></div></div>"& vbCrLf)
 							tracker = tracker + 1
 						end if
 						rsPageModules.moveNext
@@ -221,7 +221,7 @@ class SiteModules
 	dim rs, sd, key, val, counter, i, sql
 		set sd = Server.CreateObject("Scripting.Dictionary")
 		debug("class.module.getModuleById:  getting page data for id '"&id&"'...")
-		if isnull(id) or id = "" then 
+		if isNull(id) or id = "" then 
 			debugWarning("class.module.getModuleById: non-null id required")
 		else 
 			sql = "SELECT * FROM tblModules INNER JOIN tblModuleTypes ON tblModules.Type=tblModuleTypes.ModID WHERE tblModules.ID="&id
@@ -267,7 +267,7 @@ class SiteModules
 	public sub executeMod(strHandler, strCustomSettings)
 		debug("class.modules.executeMod: executing module '"&strHandler&"'")
 		session("ModuleCustomSettings") = ""
-		if isnull(strCustomSettings) or strCustomSettings = "" then 
+		if isNull(strCustomSettings) or strCustomSettings = "" then 
 			debug("class.modules.executeMod: no custom settings for this module")
 		else
 			debug("class.modules.executeMod: adding custom setting string to session '"&server.HTMLEncode(strCustomSettings)&"'")

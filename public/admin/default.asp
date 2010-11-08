@@ -1,5 +1,5 @@
 <%@ Language=VBScript %>
-<!--#include file = "../core/include/global.asp"-->
+<!--#include file = "../../core/include/bootstrap.asp"-->
 <%
 'redirect to admin home if logged in
 if len(session(CUSTOM_MESSAGE)) > 0 then 

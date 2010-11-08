@@ -23,7 +23,7 @@ strCon = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="&server.mappath("sampleD
 objConn.connectionstring = strCon
 objConn.Open
 Set objRS = Server.CreateObject("ADODB.Recordset")
-ON ERROR RESUME NEXT
+on error resume next
 
 ' Set the SQL Statement to get the information from the database
 strSQL="SELECT * FROM TBLCompany"

@@ -1,13 +1,12 @@
-<%@ Language=VBScript %>
-<%Option Explicit%>
 <%
 '**
 '* @file 
-'*   Global bootstrap file.
+'*   Application bootstrap file.
 '*
 '* This file is responsible for including all the required classes and 
-'* functions and initializing the application. 
-'* 
+'* functions and initializing the application's global variables. It is also
+'* responsible for blocking requests to pages if the site is disabled.
+'*
 
 '**
 '* Include standard classes and functions.
@@ -36,33 +35,21 @@
 %><!--#include file="../configuration.asp"--><%
 
 '**
-'* Initialize Global objects available to all pages.
+'* Initialize Global constants and objects.
 '*
 initializeGlobals()
 
 '**
-'* Prevent site from being displayed if site is offline.
+'* Prevent content from being displayed if site is offline.
 '*
-if objLinks.item("SITE_DISABLED") = "YES" and lcase(page.getName()) <> "unavailable" then
+if globals("SITE_OFFLINE") = "YES" and lcase(page.getName()) <> "unavailable" then
 	if page.isAdminPage() = true then 
-		writeln(objLinks.item("ADMIN_UNAVAILABLE"))
-		'server.transfer(objLinks.item("ADMIN_UNAVAILABLE"))
+		'writeln(globals("ADMIN_UNAVAILABLE_URL"))
+		server.transfer(globals("ADMIN_UNAVAILABLE_URL"))
 	else
-		writeln(objLinks.item("UNAVAILABLE"))
-		'server.transfer(objLinks.item("UNAVAILABLE"))
+		'writeln(globals("UNAVAILABLE_URL"))
+		server.transfer(globals("UNAVAILABLE_URL"))
 	end if
 	response.end
 end if
-
-'**
-'* Include router file.
-'* 
-%><!--#include file="router.asp"--><%
-
-'**
-'* Include router file.
-'* 
-%><!--#include file="template.asp"--><%
-
-
 %>

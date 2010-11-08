@@ -98,7 +98,7 @@ class WebForm
 			debugWarning("class.form.init: form upload functionality is disabled (SoftArtisans.FileUp module not found)")
 			set m_Request = request
 			m_encryptionType = ""
-			m_isUploadEnabled = false
+			m_isUploadEnabled = FALSE
 		else
 			'
 			' Setup the required SoftArtisans custom propeties here...
@@ -130,9 +130,9 @@ class WebForm
 		currentSelectGroup = ""
 		m_Name = ""
 		m_Method = "POST" ' post by default
-		isGrouped = false
-		isSubmissionChecked = false
-		isSessionChecked = false
+		isGrouped = FALSE
+		isSubmissionChecked = FALSE
+		isSessionChecked = FALSE
 		m_tabIndex=0
 		m_accessKeyIndex= 0
 		m_errorAccessKeyIndex=65
@@ -155,9 +155,9 @@ class WebForm
 	'* as defined in the Admin > Settings > "Enrich Form Widgets"
 	'*
 	private sub initializeAdvancedWidgets()
-		setAdvancedFormWidgets( globals.getItem("Enrich Form Widgets") = "1" )
-		m_hasTextarea = false
-		m_hasDatePicker = false
+		setAdvancedFormWidgets( settings.getItem("Enrich Form Widgets") = "1" )
+		m_hasTextarea = FALSE
+		m_hasDatePicker = FALSE
 	end sub
 	
 	'*
@@ -168,7 +168,7 @@ class WebForm
 		currentFilePath = left(currentFilePath,inStrRev(currentFilePath,"/"))
 		trace("class.form.getDefaultPath: '"&currentFilePath&"'")
 		getDefaultPath = currentFilePath
-	end function 
+	end function
 
 	'*
 	'* Apply advanced form widget functionality (using the Dojo Toolkit)
@@ -206,7 +206,7 @@ class WebForm
 	'* @param strName a string Name for the form; spaces will be converted to underscores!
 	'*
 	public function setName(byval strName)
-		setName = false
+		setName = FALSE
 		if isEmpty(strName) or isNull(strName) or strName="" then
 			debugWarning("class.form.setName: '"&strName&"'")
 			exit function
@@ -371,63 +371,63 @@ class WebForm
 	'* @return -1 if the specified form item is not grouped
 	public function getContents()
 		dim result : set result = New FastString
-		result.add "<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&"/core/assets/scripts/display.js""></script>" & vbcrlf
-		result.add "<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&"/core/assets/scripts/form_validator.js""></script>"& vbcrlf
+		result.add "<script type=""text/javascript"" src="""& globals("SITEURL") &"/core/assets/scripts/display.js""></script>" & vbCrLf
+		result.add "<script type=""text/javascript"" src="""& globals("SITEURL") &"/core/assets/scripts/form_validator.js""></script>"& vbCrLf
 		if m_hasFieldCounter = true then 
-			result.add "<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&"/core/assets/scripts/form_field_count.js""></script>" & vbcrlf
+			result.add "<script type=""text/javascript"" src="""& globals("SITEURL") &"/core/assets/scripts/form_field_count.js""></script>" & vbCrLf
 		end if
-		dim separator : separator = ","&vbcrlf&vbtab
+		dim separator : separator = ","& vbCrLf & vbTab
 		if m_Dijitize then 
-			result.add "<script type=""text/javascript""> " & vbcrlf
-			result.add "<!--// <![CDATA["  & vbcrlf
-			result.add "var djConfig = {"&vbcrlf&vbtab&"debugAtAllCosts: false"
+			result.add "<script type=""text/javascript""> " & vbCrLf
+			result.add "<!--// <![CDATA["  & vbCrLf
+			result.add "var djConfig = {"& vbCrLf & vbTab&"debugAtAllCosts: FALSE"
 			if debugMode() = true then 
 				result.add separator&"isDebug: true"
 			end if
-			result.add separator& "baseRelativePath: """&objLinks("SITEURL")&DOJO_PATH&""""
+			result.add separator& "baseRelativePath: """&globals("SITEURL")&DOJO_PATH&""""
 			dim txtFrame : set txtFrame = new SiteFile
 			txtFrame.Path = DOJO_PATH&DOJO_RICH_TEXT_FRAME
 			result.add separator& "dojoRichTextFrameUrl: """&txtFrame.URL&""" //for xdomain "
-			result.add vbcrlf&"};"& vbcrlf
-			result.add "// ]]>-->" & vbcrlf
-			result.add "</script>" & vbcrlf
+			result.add vbCrLf&"};"& vbCrLf
+			result.add "// ]]>-->" & vbCrLf
+			result.add "</script>" & vbCrLf
 			
 			if fileExists(DOJO_PATH&DOJO_SCRIPT_NAME) then
-				result.add "<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&DOJO_PATH&DOJO_SCRIPT_NAME&"""></script>" & vbcrlf
+				result.add "<script type=""text/javascript"" src="""&globals("SITEURL")&DOJO_PATH&DOJO_SCRIPT_NAME&"""></script>" & vbCrLf
 			elseif fileExists("/../dojo/"&DOJO_SCRIPT_NAME) then
 				dim dojoPath : set dojoPath = new SiteFile
 				dojoPath.Path = "/../dojo/"&DOJO_SCRIPT_NAME
-				result.add "<script type=""text/javascript"" src="""&dojoPath.URL&"""></script>" & vbcrlf
+				result.add "<script type=""text/javascript"" src="""&dojoPath.URL&"""></script>" & vbCrLf
 			elseif request.ServerVariables("SERVER_NAME") = "localhost" then 
-				result.add "<script type=""text/javascript"" src=""http://localhost/dojo/dojo.js""></script>" & vbcrlf
+				result.add "<script type=""text/javascript"" src=""http://localhost/dojo/dojo.js""></script>" & vbCrLf
 			end if
 				
-			result.add "<script type=""text/javascript"">" & vbcrlf
-			result.add "<!-- // <![CDATA["  & vbcrlf
-			if m_hasTextarea = true then result.add "dojo.require(""dojo.widget."&m_Editor&""");" & vbcrlf
-			if m_hasDatePicker = true then result.add "dojo.require(""dojo.widget.DropdownDatePicker"");" & vbcrlf
-			result.add "dojo.require(""dojo.widget.TabContainer"");"& vbcrlf
-			'result.add "dojo.require(""dojo.widget.LinkPane"");"& vbcrlf
-			'result.add "dojo.require(""dojo.widget.ContentPane"");"& vbcrlf
-			'result.add "dojo.require(""dojo.widget.LayoutContainer"");"& vbcrlf
-			'result.add "dojo.require(""dojo.widget.Checkbox"");"& vbcrlf
-			result.add "// ]]>-->" & vbcrlf
-			result.add "</script>" & vbcrlf
+			result.add "<script type=""text/javascript"">" & vbCrLf
+			result.add "<!-- // <![CDATA["  & vbCrLf
+			if m_hasTextarea = true then result.add "dojo.require(""dojo.widget."&m_Editor&""");" & vbCrLf
+			if m_hasDatePicker = true then result.add "dojo.require(""dojo.widget.DropdownDatePicker"");" & vbCrLf
+			result.add "dojo.require(""dojo.widget.TabContainer"");"& vbCrLf
+			'result.add "dojo.require(""dojo.widget.LinkPane"");"& vbCrLf
+			'result.add "dojo.require(""dojo.widget.ContentPane"");"& vbCrLf
+			'result.add "dojo.require(""dojo.widget.LayoutContainer"");"& vbCrLf
+			'result.add "dojo.require(""dojo.widget.Checkbox"");"& vbCrLf
+			result.add "// ]]>-->" & vbCrLf
+			result.add "</script>" & vbCrLf
 		end if
 		result.add "<div"
 		if m_Dijitize then result.add DOJO_TAB_CONTAINER
-		result.add ">"& vbcrlf
+		result.add ">"& vbCrLf
 		if isNull(m_Name) or m_Name = "" then
 			Randomize()
 			dim rand : rand = int(10000000*rnd)+1
 			setName("form"&rand)
 			debug("class.form.getContents: a name for this form was never specified, applying a random name '"&m_Name&"'")
 		end if
-		result.add "<form action="""&m_Action&""" method="""&m_Method&""" id="""&m_Name&""""&m_encryptionType&" class=""autocheck"" onsubmit=""return autocheck(this)"" onreset=""return confirm('Really reset all form fields?')"">" & vbcrlf
-		result.add  "<div style=""display:none""><input type=""hidden"" name=""form_name""  id=""form_name"" value="""&m_Name&"""/></div>" & vbcrlf
+		result.add "<form action="""&m_Action&""" method="""&m_Method&""" id="""&m_Name&""""&m_encryptionType&" class=""autocheck"" onsubmit=""return autocheck(this)"" onreset=""return confirm('Really reset all form fields?')"">" & vbCrLf
+		result.add  "<div style=""display:none""><input type=""hidden"" name=""form_name""  id=""form_name"" value="""&m_Name&"""/></div>" & vbCrLf
 		result.add   m_contents.value
-		result.add "</form>" & vbcrlf
-		result.add "</div>"& vbcrlf
+		result.add "</form>" & vbCrLf
+		result.add "</div>"& vbCrLf
 		getContents = result.value
 		set result = nothing	
 	end function
@@ -457,23 +457,23 @@ class WebForm
 		m_tabIndex = m_tabIndex + 1
 		m_contents.add "<div id=""tab"&m_tabIndex&""" class=""tab clearfix"""
 		if m_Dijitize then m_contents.add " label="""&sLegendName&""""& DOJO_CONTENT_PANE 
-		m_contents.add ">"& vbcrlf
-		m_contents.add "<fieldset class=""clearfix"">" & vbcrlf
-		if len(sLegendName) > 0 then m_contents.add  indent(1) & "<legend>" & sLegendName & "</legend>" & vbcrlf
-		if len(sInstructions) > 0 then m_contents.add  indent(1) & "<div class=""instructions"">" & vbcrlf & indent(1) & "<p>" & sInstructions & "</p>"& vbcrlf & indent(1) & "</div>" & vbcrlf
+		m_contents.add ">"& vbCrLf
+		m_contents.add "<fieldset class=""clearfix"">" & vbCrLf
+		if len(sLegendName) > 0 then m_contents.add  indent(1) & "<legend>" & sLegendName & "</legend>" & vbCrLf
+		if len(sInstructions) > 0 then m_contents.add  indent(1) & "<div class=""instructions"">" & vbCrLf & indent(1) & "<p>" & sInstructions & "</p>"& vbCrLf & indent(1) & "</div>" & vbCrLf
 	end function
   
 	'* Close an open fieldset
 	function endFieldset()
-		m_contents.add "</fieldset>" & vbcrlf
-		m_contents.add "</div>" & vbcrlf
+		m_contents.add "</fieldset>" & vbCrLf
+		m_contents.add "</div>" & vbCrLf
 	end function
 	
 	'* Start a Note section. Notes are descriptive named paragraphs that 
 	'* describe actions in the form. 
 	function startNoteSection()
 		set m_dictNotes = Server.CreateObject("Scripting.Dictionary")
-		m_contents.add indent(1) &"<div class=""notes"">" & vbcrlf
+		m_contents.add indent(1) &"<div class=""notes"">" & vbCrLf
 	end function
 	
 	'* Add a note to an open Note section
@@ -492,43 +492,43 @@ class WebForm
 		debug("class.form.endNoteSection: There are "& m_dictNotes.count & " notes.")
 		for i=0 to m_dictNotes.count-1
 			debug("FORM NOTE "&i+1&": '"&m_dictNotes.keys()(i)&"' '"&m_dictNotes.items()(i)&"'")
-			m_contents.add  indent(2) & "<h4>"&m_dictNotes.keys()(i)&"</h4>" & vbcrlf 
+			m_contents.add  indent(2) & "<h4>"&m_dictNotes.keys()(i)&"</h4>" & vbCrLf 
 			m_contents.add  indent(2) & "<p"
 			if (i = m_dictNotes.count-1)then 
 				m_contents.add  " class=""last"""
 			end if	
-			m_contents.add  ">"&m_dictNotes.items()(i)&"</p>" & vbcrlf
+			m_contents.add  ">"&m_dictNotes.items()(i)&"</p>" & vbCrLf
 		next
-		m_contents.add  indent(1) & "</div>" & vbcrlf
+		m_contents.add  indent(1) & "</div>" & vbCrLf
 	end function
 	
 	function addFormSubmission(sAlignment,sSubmitText, sResetText, sClass, sDescriptionText)
 		debug("FORM SUBMIT BUTTON: text='"&sSubmitText&"' reset='"&sResetText&"' description='"&sDescriptionText&"'")  
-		m_contents.add  indent(1) & "<div class=""button submit "&sClass&""">" & vbcrlf
-		if sAlignment = "right" then	m_contents.add  indent(1) & "<div>" & vbcrlf
-		if (len(sSubmitText)>0) then m_contents.add  indent(2) & "<input type=""submit"" class=""button inputSubmit "&sClass&""" value="""&sSubmitText&"""/>" & vbcrlf
-		if (len(sResetText)>0) then m_contents.add  indent(2) & "<input type=""reset"" class=""button inputReset "&sClass&""" value="""&sResetText&"""/>" & vbcrlf
-		if sAlignment = "right" then	m_contents.add  indent(1) & "</div>" & vbcrlf
-		m_contents.add  indent(1) & "</div>" & vbcrlf
+		m_contents.add  indent(1) & "<div class=""button submit "&sClass&""">" & vbCrLf
+		if sAlignment = "right" then	m_contents.add  indent(1) & "<div>" & vbCrLf
+		if (len(sSubmitText)>0) then m_contents.add  indent(2) & "<input type=""submit"" class=""button inputSubmit "&sClass&""" value="""&sSubmitText&"""/>" & vbCrLf
+		if (len(sResetText)>0) then m_contents.add  indent(2) & "<input type=""reset"" class=""button inputReset "&sClass&""" value="""&sResetText&"""/>" & vbCrLf
+		if sAlignment = "right" then	m_contents.add  indent(1) & "</div>" & vbCrLf
+		m_contents.add  indent(1) & "</div>" & vbCrLf
 		if (sDescriptionText <> "") then 
-			m_contents.add  indent(1) & "<div class=""disclaimer"">" & vbcrlf
-			m_contents.add  indent(2) & "<small>"&sDescriptionText&"</small>" & vbcrlf
-			m_contents.add  indent(1) & "</div>" & vbcrlf
+			m_contents.add  indent(1) & "<div class=""disclaimer"">" & vbCrLf
+			m_contents.add  indent(2) & "<small>"&sDescriptionText&"</small>" & vbCrLf
+			m_contents.add  indent(1) & "</div>" & vbCrLf
 		end if
 	end function
 	
 	function addFormButton(sType,sButtonText,sClass,sCustomTags,sDescriptionText)
 		sClass = sClass & " input"&Pcase(sType)
 		debug("FORM BUTTON: text='"&sButtonText&"' description='"&sDescriptionText&"'")  
-		m_contents.add  indent(1) & "<div class=""button "&sClass&""">" & vbcrlf
-		if sAlignment = "right" then	m_contents.add  indent(1) & "<div>" & vbcrlf
-		if (len(sButtonText)>0) then m_contents.add  indent(2) & "<input type="""&sType&""" class=""button "&sClass&""" value="""&sSubmitText&""" "&sCustomTags&"/>" & vbcrlf
-		if sAlignment = "right" then	m_contents.add  indent(1) & "</div>" & vbcrlf
-		m_contents.add  indent(1) & "</div>" & vbcrlf
+		m_contents.add  indent(1) & "<div class=""button "&sClass&""">" & vbCrLf
+		if sAlignment = "right" then	m_contents.add  indent(1) & "<div>" & vbCrLf
+		if (len(sButtonText)>0) then m_contents.add  indent(2) & "<input type="""&sType&""" class=""button "&sClass&""" value="""&sSubmitText&""" "&sCustomTags&"/>" & vbCrLf
+		if sAlignment = "right" then	m_contents.add  indent(1) & "</div>" & vbCrLf
+		m_contents.add  indent(1) & "</div>" & vbCrLf
 		if (sDescriptionText <> "") then 
-			m_contents.add  indent(1) & "<div class=""disclaimer"">" & vbcrlf
-			m_contents.add  indent(2) & "<small>"&sDescriptionText&"</small>" & vbcrlf
-			m_contents.add  indent(1) & "</div>" & vbcrlf
+			m_contents.add  indent(1) & "<div class=""disclaimer"">" & vbCrLf
+			m_contents.add  indent(2) & "<small>"&sDescriptionText&"</small>" & vbCrLf
+			m_contents.add  indent(1) & "</div>" & vbCrLf
 		end if
 	end function
 	
@@ -565,7 +565,7 @@ class WebForm
 				end if
 				if (max>0) then 
 					sCustomTags = sCustomTags & " onKeyDown=""textCounter(this,"&max&");"" onKeyUp=""textCounter(this,"&max&");"""
-					sExtraContent = "<small>(<span id="""&sId&"_count"">"&max-len(sDefaultVal)&"</span> characters left)</small>" & vbcrlf
+					sExtraContent = "<small>(<span id="""&sId&"_count"">"&max-len(sDefaultVal)&"</span> characters left)</small>" & vbCrLf
 					m_hasFieldCounter = true
 				end if
 			end if
@@ -579,45 +579,45 @@ class WebForm
 					sError = " error"
 					sAccess = nextErrorAccessKey()
 				end if
-				if not isGrouped then m_contents.add  indent(1) & "<div class="""&sDivClass& sRequired & sError&""">" & VbCrLf
+				if not isGrouped then m_contents.add  indent(1) & "<div class="""&sDivClass& sRequired & sError&""">" & vbCrLf
 				m_contents.add  indent(2) & "<label for="""&sId&""" class="""&sLabelClass&""" accesskey="""&sAccess&""">"
-				m_contents.add  sName&"</label>" & VbCrLf
+				m_contents.add  sName&"</label>" & vbCrLf
 				if ((instr(sClass, "date")) and (m_Dijitize = true)) then sCustomTags = sCustomTags & m_DatePicker '& " cssClass="""&sClass&"""" 
 				if ((instr(sCustomTags, "size"))=0) then  sCustomTags = sCustomTags & " size=""10"" "
 				'if instr(sClass,"date") then sCustomTags = sCustomTags & " onblur=""fixDate(this)"""
 				'if instr(sClass,"int") then sCustomTags = sCustomTags & " onblur=""fixInt(this,',')"""
 				'if instr(sClass,"money") then sCustomTags = sCustomTags & " onblur=""fixMoney(this,',')"""
-				if instr(sClass,"phone") then sCustomTags = sCustomTags & "  onblur=""fixPhone(this,'"&objLinks.item("DEFAULT_AREA_CODE")&"','-')"""
-				m_contents.add  indent(2) & "<input  id="""&sId&""" name="""& sId&"""  type="""&sFieldType&""" class="""&sClass&""" "&valueFill(sFieldType,sid,sDefaultVal,"") & sCustomTags &"/>" & VbCrLf
-				if sFieldType = "file" and m_isUploadEnabled = false then m_contents.add  indent(2) & "<small class=""warn"">"&FILE_UP_DISABLED_WARNING&"</small>"
+				if instr(sClass,"phone") then sCustomTags = sCustomTags & "  onblur=""fixPhone(this,'"&globals("DEFAULT_AREA_CODE")&"','-')"""
+				m_contents.add  indent(2) & "<input  id="""&sId&""" name="""& sId&"""  type="""&sFieldType&""" class="""&sClass&""" "&valueFill(sFieldType,sid,sDefaultVal,"") & sCustomTags &"/>" & vbCrLf
+				if sFieldType = "file" and m_isUploadEnabled = FALSE then m_contents.add  indent(2) & "<small class=""warn"">"&FILE_UP_DISABLED_WARNING&"</small>"
 				if (not isGrouped) then 
-					if (not isNull(sMessage)) and (sMessage <> "") then	m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbcrlf
+					if (not isNull(sMessage)) and (sMessage <> "") then	m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbCrLf
 					'if (max>0) then	m_contents.add indent(2) & sExtraContent
-					if m_dictErrors.exists(""&sid) then 	m_contents.add  indent(2) & "<small class=""error"">"&replace(m_dictErrors(""&sid)," | ","</small>"&vbcrlf&"<small class=""error"">")&"</small>" & vbcrlf
-					m_contents.add  indent(1) & "</div>" & vbcrlf
+					if m_dictErrors.exists(""&sid) then 	m_contents.add  indent(2) & "<small class=""error"">"&replace(m_dictErrors(""&sid)," | ","</small>"& vbCrLf &"<small class=""error"">")&"</small>" & vbCrLf
+					m_contents.add  indent(1) & "</div>" & vbCrLf
 				end if
 			case "hidden"
-				m_contents.add  indent(1) & "<div class=""hidden "&sDivClass &sRequired & sError&""">" & VbCrLf
-				m_contents.add  indent(2) & "<input  id="""&sId&""" name="""& sId&"""  type="""&sFieldType&""" class="""&sClass&""" "&valueFill(sFieldType,sid,sDefaultVal,"") & " size=""10"" " &sCustomTags&"/>" & VbCrLf
-				m_contents.add  indent(1) & "</div>" & vbcrlf
+				m_contents.add  indent(1) & "<div class=""hidden "&sDivClass &sRequired & sError&""">" & vbCrLf
+				m_contents.add  indent(2) & "<input  id="""&sId&""" name="""& sId&"""  type="""&sFieldType&""" class="""&sClass&""" "&valueFill(sFieldType,sid,sDefaultVal,"") & " size=""10"" " &sCustomTags&"/>" & vbCrLf
+				m_contents.add  indent(1) & "</div>" & vbCrLf
 			case "textarea"
 				m_hasTextarea = true
 				if not (validateFormField(sRequired, sName, sId, sFieldType, sClass)) then	
 					sError = " error"
 					sAccess = nextErrorAccessKey()
 				end if
-				if not isGrouped then m_contents.add  indent(1) & "<div class="""&sDivClass&sRequired & sError&""">" & VbCrLf
+				if not isGrouped then m_contents.add  indent(1) & "<div class="""&sDivClass&sRequired & sError&""">" & vbCrLf
 				if instr(sCustomTags,"rows=""")=0 then sCustomTags = sCustomTags & " rows=""4"""
 				m_contents.add  indent(2) & "<label for="""&sId&""" class="""&sLabelClass&""" accesskey="""&sAccess&""">"
-				m_contents.add  sName&"</label>" & VbCrLf
+				m_contents.add  sName&"</label>" & vbCrLf
 				if instr(sClass, "simple")=0 then sCustomTags = sCustomTags & m_EditorConfig
-				sCustomTags = globalVarFill(sCustomTags)
-				m_contents.add  indent(2) & "<textarea id="""&sId&""" name="""& sId&""" class="""&sClass&""" cols=""10"" "&sCustomTags&">"&valueFill(sFieldType,sid,sDefaultVal,"") & "</textarea>"& VbCrLf
+				sCustomTags = token_replace(sCustomTags)
+				m_contents.add  indent(2) & "<textarea id="""&sId&""" name="""& sId&""" class="""&sClass&""" cols=""10"" "&sCustomTags&">"&valueFill(sFieldType,sid,sDefaultVal,"") & "</textarea>"& vbCrLf
 				if (not isGrouped) then 
-					if (not isNull(sMessage)) and (sMessage <> "") then	m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbcrlf
+					if (not isNull(sMessage)) and (sMessage <> "") then	m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbCrLf
 					if (max>0) then	m_contents.add indent(2) & sExtraContent
-					if m_dictErrors.exists(""&sid) then 	m_contents.add  indent(2) & "<small class=""error"">"&replace(m_dictErrors(""&sid)," | ","</small>"&vbcrlf&"<small class=""error"">")&"</small>" & vbcrlf
-					m_contents.add  indent(1) & "</div>" & vbcrlf
+					if m_dictErrors.exists(""&sid) then 	m_contents.add  indent(2) & "<small class=""error"">"&replace(m_dictErrors(""&sid)," | ","</small>"& vbCrLf &"<small class=""error"">")&"</small>" & vbCrLf
+					m_contents.add  indent(1) & "</div>" & vbCrLf
 				end if
 			case "checkbox","radio"
 				if (not isGrouped) then 
@@ -628,17 +628,17 @@ class WebForm
 				end if
 				m_contents.add  indent(3) &"<label"
 				if (not isGrouped) then m_contents.add  " for="""&sid&""""
-				m_contents.add  " class="""&sLabelClass&""" accesskey="""&sAccess&""">" & vbcrlf
+				m_contents.add  " class="""&sLabelClass&""" accesskey="""&sAccess&""">" & vbCrLf
 				trace("is this button grouped? "&isGrouped)
 				trace(sFieldType&" is selected by default? "&isChecked)
 				if (isChecked) or (""&sDefaultVal = ""&true) or (lcase(""&sClass) = "yes") then sChecked = "checked"
 				m_contents.add  indent(3) &"<input type="""&sFieldType&""" name="""&sGroup&""""
 				if (not isGrouped) then m_contents.add  " id="""&sid&""""
-				m_contents.add  " class="""&sClass&""" "&valueFill(sFieldType,sGroup,sDefaultVal,sChecked)&" "&sCustomTags&"/>" & vbcrlf 
-				m_contents.add  indent(3) & sName&"</label>" & vbcrlf
+				m_contents.add  " class="""&sClass&""" "&valueFill(sFieldType,sGroup,sDefaultVal,sChecked)&" "&sCustomTags&"/>" & vbCrLf 
+				m_contents.add  indent(3) & sName&"</label>" & vbCrLf
 				if (not isGrouped) then 
-					if (not isNull(sMessage)) and (sMessage <> "") then	m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbcrlf
-					if m_dictErrors.exists(""&sid) then 	m_contents.add  indent(2) & "<small class=""error"">"&replace(m_dictErrors(""&sid)," | ","</small>"&vbcrlf&"<small class=""error"">")&"</small>" & vbcrlf
+					if (not isNull(sMessage)) and (sMessage <> "") then	m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbCrLf
+					if m_dictErrors.exists(""&sid) then 	m_contents.add  indent(2) & "<small class=""error"">"&replace(m_dictErrors(""&sid)," | ","</small>"& vbCrLf &"<small class=""error"">")&"</small>" & vbCrLf
 				end if
 			case "image"
 				debugError("class.form.addFormInput: Please do not use form inputs with type='image' because they are not accessible.")
@@ -679,10 +679,10 @@ class WebForm
 			sError = " error"
 			sAccess = nextErrorAccessKey()
 		end if
-		m_contents.add  indent(1) &"<div class="""& sDivClass& sRequired & sError &""">" & vbcrlf
-		m_contents.add  indent(2) & "<label for="""&sId&""" class="""&sLabelClass&""" accesskey="""&sAccess&""">" & sName & "</label>" & vbcrlf
-		m_contents.add  indent(2) & "<select id="""&sId&""" name="""&sId&""" class="""&sRequired&" "&sClass&""" "&sCustomTags&">" & vbcrlf
-	end function 
+		m_contents.add  indent(1) &"<div class="""& sDivClass& sRequired & sError &""">" & vbCrLf
+		m_contents.add  indent(2) & "<label for="""&sId&""" class="""&sLabelClass&""" accesskey="""&sAccess&""">" & sName & "</label>" & vbCrLf
+		m_contents.add  indent(2) & "<select id="""&sId&""" name="""&sId&""" class="""&sRequired&" "&sClass&""" "&sCustomTags&">" & vbCrLf
+	end function
 	
 	function addFormOption(selectId, sValue, sDisplay, sSelected)
 		'dim valChoice : valChoice = selectId&":"&sValue
@@ -701,12 +701,12 @@ class WebForm
 			
 			trace("class.form.addFormOption: OPTION FOR SELECT GROUP("&currentSelectGroup&"): '"&sSelected&"' value='"&sValue&"' groupId='"&currentSelectGroup&"' display='"&sDisplay&".")
 			'if instr(sSelected,"selected") then valChoice = valChoice&":selected"
-			m_contents.add  indent(3) & "<option "&sName&valueFill("option",selectId,sValue,sSelected) & " class="""&sDivider& """>" & sDisplay &"</option>" & vbcrlf
+			m_contents.add  indent(3) & "<option "&sName&valueFill("option",selectId,sValue,sSelected) & " class="""&sDivider& """>" & sDisplay &"</option>" & vbCrLf
 		else
 			debugError("class.form.addFormOption: there is currently no Select Group for which to add this option!")
 			debugError("class.form.addFormOption: use addFormSelect() to initialize a select group first")
 		end if
-	end function 
+	end function
 	
 	function endFormSelect(byval sMessage)
 		debug("class.form.endFormSelect: '"&currentSelectGroup&"'")
@@ -714,13 +714,13 @@ class WebForm
 			debugError("there is no Select Group to close")
 			debugError("Please use addFormSelect() to initialize a select group")
 		else
-			m_contents.add  indent(2) & "</select>" & vbcrlf 
-			if sMessage <> "" and not isNull(sMessage) then m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbcrlf
+			m_contents.add  indent(2) & "</select>" & vbCrLf 
+			if sMessage <> "" and not isNull(sMessage) then m_contents.add indent(2) & "<small>"&sMessage&"</small>" & vbCrLf
 			if m_dictErrors.exists(""&currentSelectGroup) then 
 				trace("errors were found in this Select Group")
-				m_contents.add indent(2) & "<small class=""error"">"&m_dictErrors(""&currentSelectGroup)&"</small>" & vbcrlf
+				m_contents.add indent(2) & "<small class=""error"">"&m_dictErrors(""&currentSelectGroup)&"</small>" & vbCrLf
 			end if
-			m_contents.add  indent(1) & "</div>"& vbcrlf
+			m_contents.add  indent(1) & "</div>"& vbCrLf
 		end if
 		currentSelectGroup = ""
 	end function
@@ -742,7 +742,7 @@ class WebForm
 		if isNull(sid) or sid = "" then
 			'do not assign group id
 			'do not check validity of group (because the units in the group are not bound to this group id)
-			isGrouped = false
+			isGrouped = FALSE
 		else
 			fieldsetName = " name="""&sid&""""
 			currentGroupId = sid
@@ -751,22 +751,22 @@ class WebForm
 			sAccess = nextErrorAccessKey()
 			end if
 		end if
-		m_contents.add  indent(1) & "<div class="""&sRequired & sError&""">" & vbcrlf & vbtab 
-		m_contents.add  indent(1) & "<fieldset"&fieldsetName&">"  & vbcrlf
-		if len(sDisplayName) > 0 then m_contents.add  indent(3) & "<legend accesskey="""&sAccess&""">" & sDisplayName & "</legend>" & vbcrlf
+		m_contents.add  indent(1) & "<div class="""&sRequired & sError&""">" & vbCrLf & vbtab 
+		m_contents.add  indent(1) & "<fieldset"&fieldsetName&">"  & vbCrLf
+		if len(sDisplayName) > 0 then m_contents.add  indent(3) & "<legend accesskey="""&sAccess&""">" & sDisplayName & "</legend>" & vbCrLf
 		trace("class.form.addFormGroup: '"&currentGroupId&"'")
 	end function
 	
 	
 	function endFormGroup()
-		m_contents.add  indent(2) & "</fieldset>"  & vbcrlf
+		m_contents.add  indent(2) & "</fieldset>"  & vbCrLf
 		if m_dictErrors.exists(""&currentGroupId) then 	
 			debuginfo("class.form.endFormGroup: '"&currentGroupId&"' had errors")
-			m_contents.add  indent(2) & "<small class=""error"">"&m_dictErrors(""&currentGroupId)&"</small>" & vbcrlf
+			m_contents.add  indent(2) & "<small class=""error"">"&m_dictErrors(""&currentGroupId)&"</small>" & vbCrLf
 		end if
-		m_contents.add  indent(1) & "</div>"  & vbcrlf
+		m_contents.add  indent(1) & "</div>"  & vbCrLf
 		currentGroupId = ""
-		isGrouped = false
+		isGrouped = FALSE
 	end function
 	
 	function addFormRadioButton(sid, sValue, sLabel, sClass, sChecked)
@@ -781,10 +781,10 @@ class WebForm
 		trace("class.form.addFormRadioButton: group='"&sGroup&"' id='"&sid&"' value='"&sValue&"'  class='"&sClass&"' checked='"&sChecked&"'.")
 		if instr(sChecked,"checked") or instr(sChecked,"selected") then valChoice = valChoice&":checked"
 		dim a : set a = New FastString
-		m_contents.add indent(3) & "<label for="""&sid&""" class=""labelRadio "&sClass&""">" & vbcrlf
-		m_contents.add indent(3) &	"<input type=""radio"" name="""&sGroup&""" class=""inputRadio"" "&valueFill("radio",sGroup,sValue,sChecked)&"/>" & vbcrlf
-		m_contents.add indent(3) & sLabel&"</label>" & vbcrlf
-	end function 
+		m_contents.add indent(3) & "<label for="""&sid&""" class=""labelRadio "&sClass&""">" & vbCrLf
+		m_contents.add indent(3) &	"<input type=""radio"" name="""&sGroup&""" class=""inputRadio"" "&valueFill("radio",sGroup,sValue,sChecked)&"/>" & vbCrLf
+		m_contents.add indent(3) & sLabel&"</label>" & vbCrLf
+	end function
 	
 	'============================
 	'    PRIVATE FUNCTIONS
@@ -812,7 +812,7 @@ class WebForm
 	private function validateFormField(byval sRequired,byval sName,byval sid,byval sFieldType,byval sClass)
 		validateFormField = true	
 		'developer double check uniqueness of field id (depending on input type)
-		if (checkDuplicateFormFieldId(sName, sid, sFieldType)) then validateFormField = false
+		if (checkDuplicateFormFieldId(sName, sid, sFieldType)) then validateFormField = FALSE
 		
 		if wasSubmitted() then 
 			trace("class.form.validateFormField: '"&sid&"'")
@@ -821,74 +821,74 @@ class WebForm
 			'if (sFieldType = "text"  or sFieldType = "password") then 
 			case "text","password"
 				if (isMemberOf(sRequired,"required")) then
-					if not ( requireValue(sName, sid)) then validateFormField = false
+					if not ( requireValue(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"date")) then
-					if not ( checkDate(sName, sid)) then validateFormField = false
+					if not ( checkDate(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"time")) then
-					if not ( checkTime(sName, sid)) then validateFormField = false
+					if not ( checkTime(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"time24")) then
-					if not ( checkTime24(sName, sid)) then validateFormField = false
+					if not ( checkTime24(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"ssn")) then
-					if not ( checkSSN(sName, sid)) then validateFormField = false
+					if not ( checkSSN(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"cc")) then
-					if not ( checkCreditCard(sName, sid)) then validateFormField = false
+					if not ( checkCreditCard(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"phone")) then
-					if not ( checkPhone(sName, sid)) then validateFormField = false
+					if not ( checkPhone(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"money")) then
-					if not ( checkMoney(sName, sid)) then validateFormField = false
+					if not ( checkMoney(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"numeric")) then
-					if not ( checkNumeric(sName, sid)) then validateFormField = false
+					if not ( checkNumeric(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"int")) then
-					if not ( checkInt(sName, sid)) then validateFormField = false
+					if not ( checkInt(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"float")) then
-					if not ( checkFloat(sName, sid)) then validateFormField = false
+					if not ( checkFloat(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"zip")) then
-					if not ( checkZip(sName, sid)) then validateFormField = false
+					if not ( checkZip(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"email")) then
-					if not ( checkEmail(sName, sid)) then validateFormField = false
+					if not ( checkEmail(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"length:")) then
-					if not ( requireLength(sName, sid, sClass)) then validateFormField = false
+					if not ( requireLength(sName, sid, sClass)) then validateFormField = FALSE
 				end if
 			case "textarea"
 			'elseif (sFieldType = "textarea") then
 				if (isMemberOf(sRequired,"required")) then
-					if not ( requireValue(sName, sid)) then validateFormField = false
+					if not ( requireValue(sName, sid)) then validateFormField = FALSE
 				end if
 				if (isMemberOf(sClass,"length:")) then
-					if not ( requireLength(sName, sid, sClass)) then validateFormField = false
+					if not ( requireLength(sName, sid, sClass)) then validateFormField = FALSE
 				end if
 			case "file"
 			'elseif (sFieldType = "file") then 
 				if (isMemberOf(sClass,"required")) then
-					if not ( requireValue(sName, sid)) then validateFormField = false
+					if not ( requireValue(sName, sid)) then validateFormField = FALSE
 				end if
 			case "checkbox"
 			'elseif (sFieldType = "checkbox") then
 				if (isMemberOf(sRequired,"required")) then 
-					if not requireChecked(sName, sid) then validateFormField = false
+					if not requireChecked(sName, sid) then validateFormField = FALSE
 				end if
 			case "radio"
 			'elseif (sFieldType = "radio") then
 				if (isMemberOf(sRequired,"required")) then 
-					if not requireRadio(sName, sid) then validateFormField = false
+					if not requireRadio(sName, sid) then validateFormField = FALSE
 				end if
 			case "select"
 			'elseif (sFieldType = "select") then
 				if (isMemberOf(sRequired,"required")) then 
-					if not requireValue(sName, sid) then validateFormField = false
+					if not requireValue(sName, sid) then validateFormField = FALSE
 				end if
 			'end if
 			case else
@@ -905,7 +905,7 @@ class WebForm
 	end function
 	
 	private function checkDuplicateFormFieldId(fldName, id, sFieldType)
-		dim bolDuplicate : bolDuplicate = false
+		dim bolDuplicate : bolDuplicate = FALSE
 		if m_fieldNames.exists(""&id) then
 			dim erMsg : erMsg = "The "&sFieldType& " field '"&fldName&"' with id '"&id&"' already exists in this form.  It was previously added to this form with "&m_fieldNames(""&id)
 			debug(erMsg)
@@ -928,7 +928,7 @@ class WebForm
 	end function
 	
 	private function isMemberOf(sAttributes,sName)
-		dim bolValid : bolValid = false
+		dim bolValid : bolValid = FALSE
 		if (instr(sAttributes,sName)) then 
 			bolValid = true
 			debug("it is "&sName)
@@ -941,27 +941,27 @@ class WebForm
 		debug("its value is '"&m_request.form(""&id)&"'")
 		if m_request.form(""&id) = "" then
 			addFormError id, "The "& fldName & " field cannot be left blank."
-			requireValue = false
+			requireValue = FALSE
 		end if
-	end function 
+	end function
 	
 	private function requireRadio(rdoGroup, id)
 		'require a radio button from radio group be checked
-		requireRadio = true
+		requireRadio = TRUE
 		if m_request.form(""&id) = "" then
 			addFormError id, "You must select one of the options."
-			requireRadio = false
+			requireRadio = FALSE
 		end if
-	end function 
+	end function
 	
 	private function requireChecked(chkGroup, id)
 		'require a checkbox to be checked
-		requireChecked = true
+		requireChecked = TRUE
 		if m_request.form(""&id) = "" then
 			addFormError id, "The"& chkGroup & " checkbox must be checked."
-			requireChecked = false
+			requireChecked = FALSE
 		end if
-	end function 
+	end function
 	
 	private function requireLength(fldName, id, classString)
 		requireLength = true
@@ -982,11 +982,11 @@ class WebForm
 		dim val : val = m_request.form(""&id)
 		if (min > -1) and (len(val) < min) then 
 			addFormError id, "The "& fldName & " field must be at least " & min & " characters long. It is currently "&len(val)&" characters long."
-			requireLength = false
+			requireLength = FALSE
 		end if
 		if (max > -1) and (len(val) > max) then 
 			addFormError id, "The "& fldName & " field must be no more than " & min & " characters long. It is currently "&len(val)&" characters long."
-			requireLength = false
+			requireLength = FALSE
 		end if
 	end function
 	
@@ -994,22 +994,22 @@ class WebForm
 		checkEmail = true
 		dim val : val = m_request.form(""&id)
 		if val <> "" then
-			dim phony : Set phony = New RegExp
+			dim phony : set phony = new RegExp
 			phony.Pattern = "@(\w+\.)*example\.(com|net|org)$"
-			phony.IgnoreCase = True
-			phony.Global = True
+			phony.IgnoreCase = TRUE
+			phony.Global = TRUE
 			if phony.Test(val) then 
 				addFormError id, "Please enter your email address in the "&fldName&" field."
-				checkEmail = false
+				checkEmail = FALSE
 			end if
 		
-			dim emlformat : set emlformat = New RegExp
+			dim emlformat : set emlformat = new RegExp
 			emlformat.Pattern = "^\w+([+.-]\w+)*@\w+([.-]\w+)*\.\w{2,8}$"
 			emlformat.IgnoreCase = True
 			emlformat.Global = True
 			if not emlformat.test(val) then 
 				addFormError id, "The "&fldName&" field must contain a valid email address."
-				checkEmail = false
+				checkEmail = FALSE
 			end if
 		end if
 	end function
@@ -1021,13 +1021,13 @@ class WebForm
 			Dim re
 			Set re = new RegExp
 		
-			re.IgnoreCase = false
-			re.global = false
+			re.IgnoreCase = FALSE
+			re.global = FALSE
 			re.Pattern = "^[a-zA-Z]\w{3,14}$"
 		
 			if not re.Test(val) then 
 				addFormError id, "The "&fldName&" field must be between 3 and 14 characters long."
-				checkPassword = false
+				checkPassword = FALSE
 			end if
 		end if
 	end function
@@ -1041,7 +1041,7 @@ class WebForm
 			if len(val) > 0 then 
 				if not isNumeric(val) then 
 					addFormError id, "The "&fldName&" field must contain a dollar amount."
-					checkMoney = false
+					checkMoney = FALSE
 				end if
 			end if
 		end if
@@ -1064,59 +1064,59 @@ class WebForm
 	'			elseif( len(val) = 13 ) then  ' very old #, should be reassigned
 	'			elseif( len(val) < 13) then
 	'				addFormError id, "The Visa\xae number you provided is not long enough."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			elseif( len(val) > 16) then
 	'				addFormError id, "The Visa\xae number you provided is too long."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			else
 	'				addFormError id, "The Visa\xae number you provided is either not long enough, or too long."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	' 			end if
 	'		elseif( prefix2 >= 51 && prefix2 <= 55) then
 	'		' MC
 	'			ctype= "MasterCard\xae"
 	'			if( len(val) < 16 ) then
 	'				addFormError id, "The MasterCard\xae number you provided is not long enough."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'				elseif( len(val) > 16 ) then
 	'				addFormError id, "The MasterCard\xae number you provided is too long."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			end if
 	'		elseif( (prefix2 = 34) || (prefix2 = 37) )then
 	'		' AmEx
 	'			ctype= "American Express\xae card"
 	'			if( len(val) < 15) then
 	'				addFormError id, "The American Express\xae card number you provided is not long enough."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			elseif( len(val) > 15) then
 	'				addFormError id, "The American Express\xae card number you provided is too long."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			end if
 	'		elseif( left(val,0,4) = "6011") then
 	'		' Novus/Discover
 	'			ctype= "Discover\xae card"
 	'			if( len(val) < 16) then
 	'				addFormError id, "The Discover\xae card number you provided is not long enough."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			elseif( len(val) > 16) then
 	'				addFormError id, "The Discover\xae card number you provided is too long."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			end if
 	'		end if
 	'		else
 	'		' other
 	'			if( len(val) < 13) then
 	'				addFormError id, "The credit card number you provided is not long enough."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			end if
 	'			if( len(val) > 19) then
 	'				addFormError id, "The credit card number you provided is too long."
-	'				checkCreditCard = false
+	'				checkCreditCard = FALSE
 	'			end if
 	'		end if
 	'		
 	'		dim sum: sum = 0
-	'		dim dbl: dbl = false
+	'		dim dbl: dbl = FALSE
 	'		Dim i : len(val)-1
 	'		Do
 	'			(dbl = not dbl)
@@ -1126,8 +1126,8 @@ class WebForm
 	'		loop until counter=0 
 			
 	'		if(sum%10) then
-	'			addFormError id, "The "+ctype+" number you provided is not valid."& vbcrlf &"Please double-check it and try again."
-	'			checkCreditCard = false
+	'			addFormError id, "The "+ctype+" number you provided is not valid."& vbCrLf &"Please double-check it and try again."
+	'			checkCreditCard = FALSE
 	'		end if
 	'		checkCreditCard = true
 	'		end if
@@ -1139,7 +1139,7 @@ class WebForm
 		if m_request.form(""&id) <> "" then
 			if not isDate(val) then 
 				addFormError id, "The "&fldName&" field date format is invalid. Try using the default format 'MM/DD/YYYY'"
-				checkDate = false
+				checkDate = FALSE
 			end if
 		end if
 	end function
@@ -1160,13 +1160,13 @@ class WebForm
 			end if
 			if (not instr(val,":")) or (not isNumeric(replace(val,":",""))) then 
 				addFormError id, "The "&fldName&" field time format is invalid. Try using the default format 'HH:MM (am/pm)'"
-				checkTime = false
+				checkTime = FALSE
 			elseif cint(left(val,0,instr(val,":")-1)) > 23 then 
 				addFormError id, "The "&fldName&"'s hour must be between 1 and 12 or 24 hour format 00 through 23."
-				checkTime = false
+				checkTime = FALSE
 			elseif cint(right(val,0,instr(val,":")-1)) > 59 then 
 				addFormError id, "The "&fldName&"'s minutes must be between 00 and 59."
-				checkTime = false
+				checkTime = FALSE
 			end if
 		end if
 	end function
@@ -1178,16 +1178,16 @@ class WebForm
 		if len(val) > 0 then
 			if instrRev(val,"am") or instrRev(val,"pm") then
 				addFormError id, "The "&fldName&"'s time must be in 24 hour format (HH:MM) not AM/PM."
-				checkTime24 = false
+				checkTime24 = FALSE
 			elseif (not instr(val,":")) or (not isNumeric(replace(val,":",""))) then 
 				addFormError id, "The "&fldName&" field time format is invalid. Try using the default format 'HH:MM (am/pm)'"
-				checkTime24 = false
+				checkTime24 = FALSE
 			elseif cint(left(val,0,instr(val,":")-1)) > 23 then 
 				addFormError id, "The "&fldName&"'s hour must be between 00 and 23."
-				checkTime24 = false
+				checkTime24 = FALSE
 			elseif cint(right(val,0,instr(val,":")-1)) > 59 then 
 				addFormError id, "The "&fldName&"'s minutes must be between 00 and 59."
-				checkTime24 = false
+				checkTime24 = FALSE
 			end if
 		end if
 	end function
@@ -1206,13 +1206,13 @@ class WebForm
 			end if 
 			if (len(val) < 7) then 
 				addFormError id, "The phone number you supplied for the "&fldName&" field was too short. Dont forget the area code."
-				checkPhone = false
+				checkPhone = FALSE
 			elseif (len(val) > 11) then 
 				addFormError id, "The phone number you supplied for the "&fldName&" field was too long."
-				checkPhone = false
+				checkPhone = FALSE
 			elseif not isNumeric(val) then
 				addFormError id, "The phone number you supplied for the "&fldName&" field was incorrect. Please use only digits (0 through 9) and appropriate punctuation.  Valid formats include 1.234.567.8900, 234-567-8900 x1000, 234-567-8900 ext.1234"
-				checkPhone = false
+				checkPhone = FALSE
 			end if
 		end if
 	end function
@@ -1226,13 +1226,13 @@ class WebForm
 			val = replace(val,".", "")
 			if (len(val) < 9) then 
 				addFormError id, "The Social Security Number you supplied for the "&fldName&" field was too short. The format must be 9 digits. "
-				checkSSN = false
+				checkSSN = FALSE
 			elseif (len(val) > 9) then 
 				addFormError id, "The Social Security Number you supplied for the "&fldName&" field was too long. The format must be 9 digits. "
-				checkSSN = false
+				checkSSN = FALSE
 			elseif not isNumeric(val) then
 				addFormError id, "The Social Security Number you supplied for the "&fldName&" field was incorrect. Please use only digits (0 through 9) and appropriate punctuation.  Valid formats include 123456789,  123-45-6789, or 123.45.6789"
-				checkSSN = false
+				checkSSN = FALSE
 			end if
 		end if
 	end function
@@ -1243,10 +1243,10 @@ class WebForm
 		if len(val) > 0 then
 			if not isnumeric(val) then 
 				addFormError id, "The "&fldName&" field must be numeric."
-				checkNumeric = false
+				checkNumeric = FALSE
 			end if
 		end if
-	end function 
+	end function
 	
 	private function checkInt(fldName, id)
 		checkInt = true
@@ -1254,10 +1254,10 @@ class WebForm
 		if len(val) > 0 then
 			if not isnumeric(val) then 
 				addFormError id, "The "&fldName&" field must be numeric."
-				checkInt = false
+				checkInt = FALSE
 			elseif not anInteger.test(val) then
 				addFormError id, "The "&fldName&" field must be a number containing only digits 0 through 9."
-				checkInt = false
+				checkInt = FALSE
 			end if
 		end if
 	end function
@@ -1268,7 +1268,7 @@ class WebForm
 		if len(val) > 0 then
 			if not isnumeric(val) then 
 				addFormError id, "The "&fldName&" field must be numeric."
-				checkFloat = false
+				checkFloat = FALSE
 			end if
 		end if
 	end function
@@ -1284,16 +1284,16 @@ class WebForm
 			trace("class.form.checkZip: this zip code is of length"&len(val))
 			if not isnumeric(val) then 
 				addFormError id, "The "&fldName&" field must be numeric."
-				checkZip = false
+				checkZip = FALSE
 			elseif not anInteger.test(val) then
 				addFormError id, "The "&fldName&" field must be either a 5 or 9 digit Zip Code containing only digits 0 through 9 (and optionally a hyphen)."
-				checkZip = false
+				checkZip = FALSE
 			elseif ((len(val) < 5)) or ((len(val) > 9)) then 
 				addFormError id, "The "&fldName&" field must be either a 5 or 9 digit Zip Code."
-				checkZip = false
+				checkZip = FALSE
 			elseif ((len(val) > 5)) and ((len(val) < 9)) then 
 				addFormError id, "The "&fldName&" field must be either a 5 or 9 digit Zip Code."
-				checkZip = false
+				checkZip = FALSE
 			end if
 		else
 			trace("class.form.checkZip: Zip Code was empty")
@@ -1314,7 +1314,7 @@ class WebForm
 	'return this form's error dictionary object
 	public function getFormErrors()
 		set getFormErrors = m_dictErrors
-	end function 
+	end function
 	
 	'write HTML formatted errors to the response object
 	public function printFormErrors()
@@ -1326,7 +1326,7 @@ class WebForm
 				dim fld	
 				for each fld in m_request.Form	
 					if len(m_dictErrors(""&fld)) > 0 then
-						strHTMLerr.add "<li class=""error""><a href=#"&fld&" title=""Go to error."">"&replace(m_dictErrors(""&fld),"|","</a></li>"&vbcrlf&"<li class=""error""><a href=#"&fld&" title=""Go to error."">")&"</a></li>"
+						strHTMLerr.add "<li class=""error""><a href=#"&fld&" title=""Go to error."">"&replace(m_dictErrors(""&fld),"|","</a></li>"& vbCrLf &"<li class=""error""><a href=#"&fld&" title=""Go to error."">")&"</a></li>"
 					end if
 			next
 			strHTMLerr.add "</ol></div>"
@@ -1490,7 +1490,7 @@ class WebForm
 		end if
 		isSubmissionChecked = true
 		wasSubmitted = submitted
-	end function 
+	end function
 
 	public function storeFormToSession()
 		debug("class.form.storeFormToSession: storing form submission to session")
@@ -1511,7 +1511,7 @@ class WebForm
 	private function wasStoredToSession(strName)
 		strName = formatName(strName)
 		'check to see if form was stored in session variables
-		dim sessionSaved : sessionSaved = false
+		dim sessionSaved : sessionSaved = FALSE
 		if session("form_name") = strName then
 		'see if specified form name was used to send data to this form using Session variables
 			if (not isSessionChecked) then 
@@ -1525,7 +1525,7 @@ class WebForm
 	
 	private function clearFormFromSession(strName)
 		strName = formatName(strName)
-		if isnull(strName) Or strName = "" then 
+		if isNull(strName) Or strName = "" then 
 			debugError("form.class.clearFormFromSession: you must specify a form name to remove from the session")
 		else
 			dim key, id
@@ -1552,7 +1552,7 @@ class WebForm
 			next
 		end if
 		clearFormFromSession = True
-	end function 
+	end function
 	
 	' Summary:         Upload a file (specified by the form item id) to the server at
 	'                  the specified path (see UploadPath property). If no location is 
@@ -1566,7 +1566,7 @@ class WebForm
 	'                  otherwise returns an empty string if there was nothing to upload.
 	public function fileUp(id, path, fileFormats, fileSizeLimit)
 		fileUp = ""
-		if id = "" or isnull(id) then
+		if id = "" or isNull(id) then
 			debugError("form.class.fileUp: no form field id was specified!")
 			exit function
 		end if
@@ -1609,7 +1609,7 @@ class WebForm
 		next
 
 		'validate path
-		if path = "" or isnull(path) then
+		if path = "" or isNull(path) then
 			trace("form.class.fileUp: no path specified; default UploadPath applied: " &m_UploadPath)
 		else
 			UploadPath = path
@@ -1630,8 +1630,8 @@ class WebForm
 		end if
 
 		if not m_request.Form(id).IsEmpty then 
-			debugInfo(" saving file... '"& objLinks.item("SITE_PATH")& m_UploadPath& m_request.Form(id).ShortFilename&"'")
-			m_request.Form(id).SaveAs ( objLinks.item("SITE_PATH")& m_UploadPath& m_request.Form(id).ShortFilename)
+			debugInfo(" saving file... '"& globals("SITE_PATH")& m_UploadPath& m_request.Form(id).ShortFilename&"'")
+			m_request.Form(id).SaveAs ( globals("SITE_PATH")& m_UploadPath& m_request.Form(id).ShortFilename)
 			if err.number <> 0 then 
 				addFormError ""&id, ""&err.description
 			end if
@@ -1668,7 +1668,7 @@ end class
 		debug("form.getFolderListOption('"&currentFolder&"','"&selectedFolder&"')")
 		theForm.addFormOption optionId, currentFolder, currentFolder, iif(lcase(currentFolder) = lcase(selectedFolder),SELECTED,"")
 		on error resume next
-		dim galFolder : set galFolder = fs.getFolder( objLinks("SITE_PATH")&currentFolder )
+		dim galFolder : set galFolder = fs.getFolder( globals("SITE_PATH")&currentFolder )
 		dim subFolders: set subFolders = galFolder.SubFolders
 		dim folder
 		for each folder in subFolders

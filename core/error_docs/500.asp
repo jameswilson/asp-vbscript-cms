@@ -1,7 +1,7 @@
 <%@ Language=VBScript %>
 <%Option Explicit%>
 <%response.clear%>
-<!--#include file="core/include/global.asp"-->
+<!--#include file="core/include/bootstrap.asp"-->
 <!--#include file="core/src/classes/class.form.asp"-->
 
 
@@ -16,7 +16,7 @@
 <%
 
 writeln( p("The server encountered the following critical error:"))
-dim ASPErr : Set ASPErr = Server.GetLastError()
+dim ASPErr : set ASPErr = Server.GetLastError()
 dim myForm : set myForm = new WebForm
 writeln( p("Error Description: "&  ASPErr.ASPDescription ))
 writeln( p("Error Code: "& AspErr.ASPCode ))
@@ -61,7 +61,7 @@ sub LogErrorToDatabase()
 	set con = Server.CreateObject("ADODB.Connection")
 	set rs = Server.CreateObject("ADODB.Recordset")
 	
-	con.open objLinks.item("DB_MAIN")
+	con.open globals("DB_MAIN")
 	Set rs.ActiveConnection = con
 	on error resume next
 	rs.Open "Select * From tblErrors",,adOpenStatic,adLockOptimistic '3, 3

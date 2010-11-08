@@ -5,9 +5,9 @@
 '* @required Requires the class WebForm be also included!
 '* @usage  To set a page password use the following example 
 '*           before including this file: \code
-'* &lt;!--#include file="core/include/global.asp"--&gt;
+'* &lt;!--#include file="core/include/bootstrap.asp"--&gt;
 '* &lt;% 
-'* addGlobal "DEBUG","1",null
+'* addGlobal "DEBUG", "1", null
 '* dim PASSWORD : PASSWORD = "Password" 
 '* %&gt; 
 '* &lt;!--#include file="core/src/classes/class.form.asp"--&gt;
@@ -26,7 +26,7 @@ function customContent(section)
 	if session("pass") = PASSWORD then exit function
 	err.clear
 	on error resume next
-	if isNull(PASSWORD) or PASSWORD = "" then err.raise 6,"",""
+	if isnull(PASSWORD) or PASSWORD = "" then err.raise 6,"",""
 	if err.number <>0 then 
 		debugError("password-protected.asp: you must set the password before using the password-protected.asp script!")
 		customContent = ErrorMessage("you must set the password before using the password-protected.asp script!")
@@ -57,5 +57,5 @@ function customContent(section)
 		debug("password-protected.asp: the passowrd '"&user_supplied_password&"' is invalid!")
 		customContent = .getContents
 	end with
-end function 
+end function
 %>

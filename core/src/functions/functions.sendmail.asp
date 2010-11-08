@@ -6,7 +6,7 @@ Dim dictFields : Set dictFields = Server.CreateObject("Scripting.Dictionary")
 dim sendSuccess : sendSuccess = "message_sent"
 dim sendFailure : sendFailure = "message_not_sent"
 dim sendSimulation : sendSimulation = "simulate_send"
-Dim MESSAGE_SENT : MESSAGE_SENT = "Thank you, your " & PrettyText(Request.Form("form_name")) & " request has been submitted. Someone from "&objLinks.item("SHORTNAME")&" will be contacting you shortly."
+Dim MESSAGE_SENT : MESSAGE_SENT = "Thank you, your " & PrettyText(Request.Form("form_name")) & " request has been submitted. Someone from "&globals("SHORTNAME")&" will be contacting you shortly."
 Dim MESSAGE_SIMULATE : MESSAGE_SIMULATE = "DEVELOPERS! Message not actually sent because your server is localhost. On the live site, the message would look like the following:"
 Dim MESSAGE_FAILED : MESSAGE_FAILED = "Your message failed to be sent."
 function sendFormMail()
@@ -76,8 +76,8 @@ function createMailMessage()
 		dim objConfig : set objConfig = server.createobject("cdo.configuration")
 		dim flds : set flds = objConfig.Fields
 		flds.Item("http://schemas.microsoft.com/cdo/configuration/sendusing") = 2
-		flds.Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = objLinks.item("SMTPHOST")
-		debug("SMTP HOST: "&objLinks.item("SMTPHOST"))
+		flds.Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = globals("SMTPHOST")
+		debug("SMTP HOST: "&globals("SMTPHOST"))
 		flds.update
 		' Create the message object
 		dim objMessage : set objMessage = server.createobject("cdo.message")
@@ -85,28 +85,28 @@ function createMailMessage()
 		' Create the message body
 		dim emailBody : set emailBody = getEmailBody()
 		
-		objMessage.To = objLinks.item("ADMINEMAIL")
-		objMessage.From = """Webmaster"" <" & objLinks.item("PROVIDER_EMAIL") &">"
+		objMessage.To = globals("ADMINEMAIL")
+		objMessage.From = """Webmaster"" <" & globals("PROVIDER_EMAIL") &">"
 		objMessage.ReplyTo = """"& request.form("contact_name") & """ <" & Request.Form("contact_email")&">"
-		If objLinks.item("BCC") = "YES" Then objMessage.BCC = objLinks.item("BCCEMAIL")
-		If objLinks.item("CCSENDER") = "YES" then objMessage.CC = Request.Form("email")
-		objMessage.Subject = objLinks.item("SUBJECTLINE_PREFIX")& " " & PCase("Customer " & PrettyText(Request.Form("form_name")))
+		If globals("BCC") = "YES" Then objMessage.BCC = globals("BCCEMAIL")
+		If globals("CCSENDER") = "YES" then objMessage.CC = Request.Form("email")
+		objMessage.Subject = globals("SUBJECTLINE_PREFIX")& " " & PCase("Customer " & PrettyText(Request.Form("form_name")))
 		objMessage.TextBody  = emailBody.item("text") 'can be generated automatically if commented out
 		objMessage.HTMLBody = emailBody.item("html")
 		objMessage.fields.update
 		
 		set createMailMessage = objMessage
-end function 
+end function
 
 
 'returns a dictionary with two items 
 ' "html" contains the html body
 ' "text" contains a text version of the email body
 function GetEmailBody()
-	dim logoImg : logoImg = objLinks.item("EMAIL_HEADER_IMG")
-	dim introTxt : introTxt = objLinks.item("INTRO")
-	dim companyTxt : companyTxt = objLinks.item("COMPANY")
-	dim sloganTxt : sloganTxt = objLinks.item("SLOGAN")
+	dim logoImg : logoImg = globals("EMAIL_HEADER_IMG")
+	dim introTxt : introTxt = globals("INTRO")
+	dim companyTxt : companyTxt = globals("COMPANY")
+	dim sloganTxt : sloganTxt = globals("SLOGAN")
 	dim bodyHTML : set bodyHTML = New FastString
 	dim bodyText : set bodyText = New FastString
 	
@@ -148,8 +148,8 @@ function getMessageContentsHTML(objMessage)
 	dim a : set a = New FastString
 	a.add  "<p><strong>To:</strong> <pre>" & server.HTMLencode(objMessage.To)&"</pre>"
 	a.add  "<p><strong>From:</strong> <pre>" & server.HTMLencode(objMessage.From) &"</pre>"
-	If objLinks.item("BCC") = "YES" Then a.add  "<p><strong>BCC:</strong> <pre>"& server.HTMLencode(objMessage.BCC)&"</pre>"
-	If objLinks.item("CCSENDER") = "YES" Then a.add  "<p><strong>CC:</strong> <pre>"& server.HTMLencode(objMessage.CC) &"</pre>"
+	If globals("BCC") = "YES" Then a.add  "<p><strong>BCC:</strong> <pre>"& server.HTMLencode(objMessage.BCC)&"</pre>"
+	If globals("CCSENDER") = "YES" Then a.add  "<p><strong>CC:</strong> <pre>"& server.HTMLencode(objMessage.CC) &"</pre>"
 	a.add  "<p><strong>Subject: </strong> <pre>" & server.HTMLencode(objMessage.Subject) &"</pre>"
 	a.add  "<p><strong>Text Body:</strong>  <pre>" & server.HTMLencode(objMessage.TextBody) &"</pre>"
 	a.add  "<p><strong>HTML Body: </strong> <pre>" & server.HTMLencode(objMessage.HTMLBody) &"</pre>"

@@ -16,7 +16,7 @@
 	const strKey = "ID"  'name of the primary key field in the database
 	const strIdField = "Name" 'name of the field that uniquely identifies a row from the database
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Creator"
+	myForm.Name = Pcase(strContent) &"Creator"
 	
 	strActive = ""
 	strShowEmail = ""
@@ -69,28 +69,29 @@ end function
 'function getTableData(strKeyName,strKeyValue,strTableName)
 '	dim rs, sd, key, counter, i, sql
 '	sql="SELECT * "_
-'		 &"FROM "&strTableName&" "_
-'		 &"WHERE ("&strTableName&"."&strKeyName&"="&strKeyValue&");"
+'		 &"FROM "& strTableName &" "_
+'		 &"WHERE ("& strTableName &"."& strKeyName &"="& strKeyValue &");"
 '	set sd = Server.CreateObject("Scripting.Dictionary")
 '	set rs = db.getRecordSet(sql)
 '	if rs.EOF and rs.BOF then
-'		strError = "There is no "&strContent&" with an "&strKeyName&" of "&strKeyValue&".<br/>" & _
+'		strError = "There is no "& strContent &" with an "& strKeyName &" of "& strKeyValue &".<br/>" & _
 '		"Would you like to  <a href='?view'>go back to the list</a> "& _
 '		"or <a href='?create'>create a new one</a>?"
-'		debugError("no data found for "&strContent&" with "&strKeyName&" '"&strKeyValue&"'.")
+'		debugError("no data found for "& strContent &" with "& strKeyName &" '"& strKeyValue &"'.")
 '		
 '	else
 '		rs.movefirst
 '		counter = rs.fields.count		
 '		do until rs.EOF
-'			debug("getTableData('"&strKeyValue&"')...")				
+'			debug("getTableData('"& strKeyValue &"')...")				
 '			for i=0 to counter-1
-'				key = ""&rs.fields.item(i).name
-'				trace("[ "&key&" -&gt; "&Server.HTMLEncode(""&rs(i))&" ]")
-'				if not sd.exists(""&rs.fields.item(i).name) then 
-'					sd.add ""&rs.fields.item(i).name, ""&rs(i)
+'				key = cstr(rs.fields.item(i).name)
+'               val = cstr(rs(i))
+'				trace("[ "& key &" -&gt; "& Server.HTMLEncode(val) &" ]")
+'				if not sd.exists(key) then 
+'					sd.add key, val
 '				else
-'					debugError("expected result set of 1 item but got more!  A value for '"&rs.fields.item(i).name&"' already exists!")
+'					debugError("expected result set of 1 item but got more!  A value for '"& key &"' already exists!")
 '				end if
 '			next
 '			if rs("Active") then strActive = " checked=checked"

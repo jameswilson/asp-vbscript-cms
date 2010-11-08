@@ -13,15 +13,15 @@ function sendMail(mail_to,mail_from,mail_subject,mail_Dict,mail_BodyHTML, mail_B
 		dim objConfig : set objConfig = server.createobject("cdo.configuration")
 		dim flds : set flds = objConfig.Fields
 		flds.Item("http://schemas.microsoft.com/cdo/configuration/sendusing") = 2
-		flds.Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = objLinks.item("SMTPHOST")
-		debugInfo("mod_form.email: SMTP HOST: "&objLinks.item("SMTPHOST"))
+		flds.Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = globals("SMTPHOST")
+		debugInfo("mod_form.email: SMTP HOST: "&globals("SMTPHOST"))
 		flds.update
 		set oMail.Configuration = objConfig
 	end if
 
 	'//prepare message body 
-	bodyHTML.add globalvarfill("{EMAIL_HTML_HEADER}" & "<br/>" & mail_BodyHTML  & "<br/>" & "<br/>")
-	bodyText.add globalvarfill("{EMAIL_TEXT_HEADER}" & vbCrLf & mail_BodyTEXT  & vbCrLf & vbCrLf)
+	bodyHTML.add token_replace("{EMAIL_HTML_HEADER}" & "<br/>" & mail_BodyHTML  & "<br/>" & "<br/>")
+	bodyText.add token_replace("{EMAIL_TEXT_HEADER}" & vbCrLf & mail_BodyTEXT  & vbCrLf & vbCrLf)
 	bodyHTML.add "<table border=""0"" cellpadding=""4"" cellspacing=""0"">" & vbCrLf
 	dim fldName, displayName, displayValue, spacer, bolEven, sStyle
 	for each fldName in mail_Dict
@@ -43,11 +43,11 @@ function sendMail(mail_to,mail_from,mail_subject,mail_Dict,mail_BodyHTML, mail_B
 			bodyText.add spacer & displayName & ": "& displayValue & vbCrLf
 		end if
 	next 
-	bodyText.add globalvarfill(vbCrLf & vbCrLf & "{EMAIL_TEXT_FOOTER}")	
-	bodyHTML.add globalvarfill("</table><br/>"& "{EMAIL_HTML_FOOTER}")
+	bodyText.add token_replace(vbCrLf & vbCrLf & "{EMAIL_TEXT_FOOTER}")	
+	bodyHTML.add token_replace("</table><br/>"& "{EMAIL_HTML_FOOTER}")
 	
 	'//prepare message subject
-	oMail.Subject = globalVarFill("{SUBJECTLINE_PREFIX} "&mail_subject)
+	oMail.Subject = token_replace("{SUBJECTLINE_PREFIX} "&mail_subject)
 	
 	'//prepare message sender and recipients
 	if (isNull(mail_to) or len(mail_to)=0) then mail_to ="""{Company Name}"" <{Contact Email}>"
@@ -55,13 +55,13 @@ function sendMail(mail_to,mail_from,mail_subject,mail_Dict,mail_BodyHTML, mail_B
 		mail_from = """{SITENAME} Administrator"" <{PROVIDER_EMAIL}>"
 	elseif instr(mail_from,"test@")=1 then
 		mail_to = """{SITENAME} Testing (ADMINEMAIL)"" <{ADMINEMAIL}>"
-		bodyText.add globalVarFill(TEST_MAIL_WARNING)
-		bodyHTML.add small(globalVarFill(TEST_MAIL_WARNING))
+		bodyText.add token_replace(TEST_MAIL_WARNING)
+		bodyHTML.add small(token_replace(TEST_MAIL_WARNING))
 	end if
-	oMail.From = globalVarFill(mail_from)
-	oMail.To = globalVarFill(mail_to)
-	if objLinks("BCC") = "YES" then oMail.BCC = globalVarFill("{BCCEMAIL},{ADMINEMAIL}")
-	if objLinks("CCSENDER") = "1" then oMail.CC = globalVarFill(mail_from)
+	oMail.From = token_replace(mail_from)
+	oMail.To = token_replace(mail_to)
+	if globals("BCC") = "YES" then oMail.BCC = token_replace("{BCCEMAIL},{ADMINEMAIL}")
+	if globals("CCSENDER") = "1" then oMail.CC = token_replace(mail_from)
 
 
 	oMail.TextBody = bodyText.value

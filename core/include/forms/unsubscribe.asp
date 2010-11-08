@@ -18,7 +18,7 @@ if strList <> "" then
 	
 	else	%>
 	   <p>Please enter your name and email address to be removed to the <%=strList%> mailing list.</p>
-			<script type="text/javascript" src="<%=objLinks.item("SITEURL")%>/core/assets/scripts/form_validator.js"></script>
+			<script type="text/javascript" src="<%=globals("SITEURL")%>/core/assets/scripts/form_validator.js"></script>
 			<form action="../../../include/?s=1" method="post" id="feedback" onsubmit="return autocheck(this)" >
 				<fieldset>
 					<p><input type="hidden" id="list" value="<%=strList%>" /></p>
@@ -34,5 +34,5 @@ if strList <> "" then
 	<% end if
 else %>
 	   <p class="error">The server cannot determine the list to which 
-			you are trying to subscribe<%=objLinks.item("ERROR_FEEDBACK")%></p>
+			you are trying to subscribe<%=globals("ERROR_FEEDBACK")%></p>
 <% end if %>

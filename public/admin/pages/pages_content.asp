@@ -7,7 +7,7 @@
 <!--#include file="pages_form.asp"-->
 <!--#include file="../db/db.admin.functions.asp"-->
 <%
-'addGlobal "DEBUG","1",null
+'addGlobal "DEBUG","1", null
 	dim strHeader, strSQL, strActive, strMainMenu, strFormAction, strStatus, strError, strWarn, strSuccess, pageContent
 	dim variableList, strEven
 	dim formContents, formErrors
@@ -32,18 +32,18 @@ function customContent()
 	strError = ""
 	strWarn = ""
 	variableList = "SITEURL"  'a list of variables (comma-separated) that the editor should pre-decode before displaying in the content editor
-	myForm.Name = Pcase(strContent)&"Creator"
-	myForm.isForNewContent = false
+	myForm.Name = Pcase(strContent) & "Creator"
+	myForm.isForNewContent = FALSE
 
-	if instr(Request.QueryString(),"edit")=1 then 
+	if instr(Request.QueryString(), "edit") = 1 then 
 		contentEdit()
-	elseif instr(Request.QueryString(),"update")=1 then 
+	elseif instr(Request.QueryString(), "update") = 1 then 
 		contentUpdate()
-	elseif instr(Request.QueryString(),"add")=1 then 
+	elseif instr(Request.QueryString(), "add") = 1 then 
 		contentAdd()
-	elseif instr(Request.QueryString(),"create")=1 then 
+	elseif instr(Request.QueryString(), "create") = 1 then 
 		contentCreate()
-	elseif instr(Request.QueryString(),"delete")=1 then 
+	elseif instr(Request.QueryString(), "delete") = 1 then 
 		contentDelete()
 	else 
 		contentView()

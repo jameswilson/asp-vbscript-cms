@@ -1,8 +1,8 @@
 <%@ Language=VBScript %>
 <%Option Explicit%>
-<!--#include file="../core/include/global.asp"-->
-<!--#include file="../core/include/secure.asp"-->
-<!--#include file="../core/src/functions/functions.system.asp"-->
+<!--#include file="../../core/include/bootstrap.asp"-->
+<!--#include file="../../core/include/secure.asp"-->
+<!--#include file="../../core/src/functions/functions.system.asp"-->
 <%
 page.setFile(request.ServerVariables("URL"))
 page.setTitle("Dashboard")
@@ -13,8 +13,8 @@ page.setTitle("Dashboard")
 <head>
 <title><%=page.getTitle()%></title>
 <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
-<link rel="stylesheet" href="<%=objLinks.item("ADMINURL")%>/styles/admin.css" type="text/css"/>
-<link rel="shortcut icon" href="<%=GlobalVarFill("{PROVIDER_FAVICON}")%>"/>
+<link rel="stylesheet" href="<%=globals("ADMINURL")%>/styles/admin.css" type="text/css"/>
+<link rel="shortcut icon" href="<%=token_replace("{PROVIDER_FAVICON}")%>"/>
 <script type="text/javascript">
 	var djConfig = {isDebug: true, debugAtAllCosts: false};
 </script>
@@ -34,11 +34,11 @@ page.setTitle("Dashboard")
 			<div class="box threequarterswidth floatleft"> 
 				<%=Session.Contents("CustomMessage")%>
 				<%Session.contents("CustomMessage") = ""%>
-        <h1><%=objLinks.item("PRODUCT_BRANDING")%> Dashboard</h1>
-        <p>Here you can edit your site, <%=objLinks.item("TITLE")%>, via the online 
-				 maintenence system provided by <%=objLinks.item("PROVIDER_NAME")%>. Use the 
+        <h1><%=globals("PRODUCT_BRANDING")%> Dashboard</h1>
+        <p>Here you can edit your site, <%=globals("TITLE")%>, via the online 
+				 maintenence system provided by <%=globals("PROVIDER_NAME")%>. Use the 
 				 navigation bar above to create and modify your site's content.</p>
-				<p>If you need asistance, dont hesitate to contact <%=a("mailto:"&objLinks.item("PROVIDER_EMAIL"),objLinks.item("PROVIDER_SHORTNAME") &" support", "contact "&objLinks.item("PROVIDER_NAME") & " support",null)%>.</p>
+				<p>If you need asistance, dont hesitate to contact <%=a("mailto:"& globals("PROVIDER_EMAIL"), globals("PROVIDER_SHORTNAME") &" support", "contact "& globals("PROVIDER_NAME") & " support", null)%>.</p>
       	<h2>Frequently Asked Questions:</h2>
 				<dl><dt>What does CMS mean?</dt><dd><p>CMS is the acronym for <em>Content Management System</em>, and is 
 				a term coined within the web design world to describe an online system for 

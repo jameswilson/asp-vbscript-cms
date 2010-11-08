@@ -1,7 +1,7 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
-<!--#include file = "../core/include/global.asp"-->
+<!--#include file = "../../core/include/bootstrap.asp"-->
 <%
 		user.logout()
-		Session("CustomMessage") = objLinks.item("LOGOUT_SUCCESS")
-		Response.Redirect(objLinks.item("ADMINURL"))
+		Session("CustomMessage") = globals("LOGOUT_SUCCESS")
+		Response.Redirect(globals("ADMINURL"))
 %>

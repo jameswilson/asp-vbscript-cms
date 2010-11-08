@@ -1,8 +1,8 @@
 <%@ Language=VBScript %>
 <%Option Explicit%>
-<!--#include file="../../core/include/global.asp"-->
+<!--#include file="../../../core/include/bootstrap.asp"-->
 <%page.setSecurityLevel(USER_ADMINISTRATOR)%>
-<!--#include file = "../../core/include/secure.asp"-->
+<!--#include file = "../../../core/include/secure.asp"-->
 <%
 page.setTitle("Compact Database")
 
@@ -12,9 +12,9 @@ dim strDatabase, strFolder, strFileName
 '#################################################
 '# Edit the following two lines
 '# Define the full path to where your database is
-strFolder = objLinks("DB_LOCATION") & "\"  ' dont forget trailing slash
+strFolder = globals("DB_LOCATION") & "\"  ' dont forget trailing slash
 '# Enter the name of the database
-strDatabase = objLinks("SOURCEID")&".mdb"
+strDatabase = globals("PROJECT_NAME") &".mdb"
 '# Stop editing here
 '##################################################
 

@@ -4,7 +4,7 @@
 '------------------------------------------------
 
 
-'** 
+'**
 '* Define the global indentation character for printing xHTML to the Response object
 '* Possible values could be one (or more) space or tab characters.
 const HTML_INDENT = " " 'vbTab
@@ -21,7 +21,7 @@ emlformat.global = True
 '* @param the text/html string to write to the response buffer.
 '*
 function writeln(byval str)
-	response.write EmailObfuscate(""& str & vbcrlf)
+	response.write EmailObfuscate(""& str & vbCrLf)
 end function
 
 '**
@@ -57,7 +57,7 @@ function createTag(byval strTag, byval strAttributes,byval strContent)
 	dim result : set result = new FastString
 	result.add "<"&lcase(strTag)&strAttributes
 	if not isNull(strContent) and (strContent <> "") then 
-		result.add ">"&GlobalVarFill(strContent)&"</"&lcase(strTag)&">"
+		result.add ">"&token_replace(strContent)&"</"&lcase(strTag)&">"
 	else
 		result.add "/>"
 	end if
@@ -96,23 +96,23 @@ function image(byval strURL,byval strAlternateText,byval strTitleText,byval strC
 	if instr(strURL,"http") <> 1 then 
 		if instr(strURL,"/") = 1 then
 			'apply siteurl root to image
-			strURL = objLinks.item("SITEURL") & strURL
+			strURL = globals("SITEURL") & strURL
 		else
 			'leave relative links alone
 		end if
 	end if
-	if not isNull(strURL) and (strURL <> "") then strURL = " src="""&strURL&""""
+	if not isNull(strURL) and (strURL <> "") then strURL = " src="""& strURL &""""
 	'if not isNull(altAttribute) and (altAttribute <> "") then 
-	strAlternateText = " alt="""&strAlternateText&""""
+	strAlternateText = " alt="""& strAlternateText &""""
 	'if not isNull(titleAttribute) and (titleAttribute <> "") then 
-	strTitleText = " title="""&strTitleText&""""
-	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
-	image = createTag("img",strClass&strURL&strAlternateText&strTitleText,null)
+	strTitleText = " title="""& strTitleText &""""
+	if not isNull(strClass) and (strClass <> "") then strClass = " class="""& strClass &""""
+	image = createTag("img", strClass & strURL & strAlternateText & strTitleText, null)
 end function
 
 '**
 '* Apply the xHTML paragraph tag around the specified string of text. 
-'* The optional parameters will not be included if they are empty string or null.
+'* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
 '* @param strTitle (optional) a title attribute to apply to the tag.
@@ -130,7 +130,7 @@ end function
 
 '**
 '* Apply the xHTML division tag around the specified string of text. 
-'* The optional parameters will not be included if they are empty string or null.
+'* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
 '* @param strTitle (optional) a title attribute to apply to the tag.
@@ -148,7 +148,7 @@ end function
 '**
 '* Apply the xHTML unordered list tag around the specified string of text --
 '* preferably a string of list items <li>. 
-'* The optional parameters will not be included if they are empty string or null.
+'* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
 '* @param strTitle (optional) a title attribute to apply to the tag.
@@ -166,7 +166,7 @@ end function
 '**
 '* Apply the xHTML unordered list tag around the specified string of text --
 '* preferably a string of list items <li>. 
-'* The optional parameters will not be included if they are empty string or null.
+'* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
 '* @param strTitle (optional) a title attribute to apply to the tag.
@@ -191,7 +191,7 @@ end function
 '* @return a string wrapped in xHTML message box
 '*
 function Message(byval strText,byval strMessageTypeClass)
-	if len(trim(strText))>0 then Message = division(strText&brClearAll,null,null,strMessageTypeClass&" message")
+	if len(trim(strText)) > 0 then Message = division(strText & brClearAll, null, null, strMessageTypeClass &" message")
 end function
 
 
@@ -203,7 +203,7 @@ end function
 '* @return a string wrapped in xHTML formatted code block
 '*
 function CodeBlock(byval strText)
-	if len(trim(strText))>0 then CodeBlock = createTag("blockquote",null,createTag("code",null,server.htmlencode(strText)))
+	if len(trim(strText)) > 0 then CodeBlock = createTag("blockquote", null, createTag("code", null, server.htmlencode(strText)))
 end function
 
 '**
@@ -211,7 +211,7 @@ end function
 '* @param the string contents to appear inside the tag.
 '* @see anchor()
 '*
-function a(byval hrefAttribute,byval content,byval titleAttribute,byval classAttribute)
+function a(byval hrefAttribute, byval content, byval titleAttribute, byval classAttribute)
 	a = anchor(hrefAttribute, content, titleAttribute, classAttribute)
 end function
 
@@ -225,8 +225,8 @@ end function
 '* @return an xHTML markup and supporting javascripts for displaying the specified media file 
 '* @see image()
 '*
-function img(byval strURL,byval strAlternateText,byval strTitleText,byval strClass)
-	img = image(strURL,strAlternateText,strTitleText,strClass)
+function img(byval strURL, byval strAlternateText, byval strTitleText, byval strClass)
+	img = image(strURL, strAlternateText, strTitleText, strClass)
 end function
 
 
@@ -240,8 +240,8 @@ end function
 '* @return a string wrapped in xHTML div tag
 '* @see division()
 '*
-function div(byval strText,byval strTitle,byval strId,byval strClass)
-	div = division(strText,strTitle,strId,strClass)
+function div(byval strText, byval strTitle, byval strId, byval strClass)
+	div = division(strText, strTitle, strId, strClass)
 end function
 
 '**
@@ -252,7 +252,7 @@ end function
 '* @see paragraph()
 '*
 function p(byval str)
-	p = paragraph(str,null,null,null)
+	p = paragraph(str, null, null, null)
 end function
 
 '**
@@ -263,7 +263,7 @@ end function
 '* @see UnorderedList()
 '*
 function ul(byval str)
-	ul = UnorderedList(str,null,null,null)
+	ul = UnorderedList(str, null, null, null)
 end function
 
 '**
@@ -274,7 +274,7 @@ end function
 '* @see OrderedList()
 '*
 function ol(byval str)
-	ol = OrderedList(str,null,null,null)
+	ol = OrderedList(str, null, null, null)
 end function
 
 
@@ -285,7 +285,7 @@ end function
 '* @see Message()
 '*
 function InfoMessage(byval str)
-	InfoMessage = Message(str,"info")
+	InfoMessage = Message(str, "info")
 end function
 
 '**
@@ -295,7 +295,7 @@ end function
 '* @see Message()
 '*
 function WarningMessage(byval str)
-	WarningMessage = Message(str,"warning")
+	WarningMessage = Message(str, "warning")
 end function
 
 '**
@@ -305,7 +305,7 @@ end function
 '* @see Message()
 '*
 function AlertMessage(byval str)
-	AlertMessage = Message(str,"warning")
+	AlertMessage = Message(str, "warning")
 end function
 
 '**
@@ -315,7 +315,7 @@ end function
 '* @see Message()
 '*
 function SuccessMessage(byval str)
-	SuccessMessage = Message(str,"success")
+	SuccessMessage = Message(str, "success")
 end function
 
 '**
@@ -325,7 +325,7 @@ end function
 '* @see Message()
 '*
 function ErrorMessage(byval str)
-	ErrorMessage = Message(str,"error")
+	ErrorMessage = Message(str, "error")
 end function
 
 '**
@@ -335,7 +335,7 @@ end function
 '* @see Message()
 '*
 function MailSentMessage(byval str)
-	MailSentMessage = Message(str,"mail-success")
+	MailSentMessage = Message(str, "mail-success")
 end function
 
 
@@ -352,7 +352,7 @@ end function
 '* @return a string wrapped in xHTML pre tag
 '*
 function pre(byval str)
-	pre = ("<pre>"&str&"</pre>"&vbcrlf)
+	pre = ("<pre>"& str &"</pre>"& vbCrLf)
 end function
 
 '**
@@ -361,7 +361,7 @@ end function
 '* @return a string wrapped in xHTML Heading 1
 '*
 function h1(byval str)
-	h1 = ("<h1>"&str&"</h1>"&vbcrlf)
+	h1 = ("<h1>"&str&"</h1>"& vbCrLf)
 end function
 
 '**
@@ -370,7 +370,7 @@ end function
 '* @return a string wrapped in  xHTML heading 2 
 '*
 function h2(byval str)
-	h2 = ("<h2>"&str&"</h2>"&vbcrlf)
+	h2 = ("<h2>"&str&"</h2>"& vbCrLf)
 end function
 
 '**
@@ -379,7 +379,7 @@ end function
 '* @return an xHTML heading 3 
 '* 
 function h3(byval str)
-	h3 = ("<h3>"&str&"</h3>"&vbcrlf)
+	h3 = ("<h3>"&str&"</h3>"& vbCrLf)
 end function
 
 '**
@@ -388,7 +388,7 @@ end function
 '* @return an xHTML heading 4 
 '* 
 function h4(byval str)
-	h4 = ("<h4>"&str&"</h4>"&vbcrlf)
+	h4 = ("<h4>"&str&"</h4>"& vbCrLf)
 end function
 
 '**
@@ -397,7 +397,7 @@ end function
 '* @return an xHTML heading 5 
 '* 
 function h5(byval str)
-	h5 = ("<h5>"&str&"</h5>"&vbcrlf)
+	h5 = ("<h5>"&str&"</h5>"& vbCrLf)
 end function
 
 '**
@@ -406,7 +406,7 @@ end function
 '* @return an xHTML heading 6 
 '* 
 function h6(byval str)
-	h6 = ("<h6>"&str&"</h6>"&vbcrlf)
+	h6 = ("<h6>"&str&"</h6>"& vbCrLf)
 end function
 
 '**
@@ -415,7 +415,7 @@ end function
 '* @return a string wrapped in xHTML definition list
 '*
 function dl(byval str)
-	dl = ("<dl>"&str&"</dl>"&vbcrlf)
+	dl = ("<dl>"&str&"</dl>"& vbCrLf)
 end function
 
 '**
@@ -424,7 +424,7 @@ end function
 '* @return a string wrapped in xHTML definition term
 '*
 function dt(byval str)
-	dt = ("<dt>"&str&"</dt>"&vbcrlf)
+	dt = ("<dt>"&str&"</dt>"& vbCrLf)
 end function
 
 '**
@@ -433,7 +433,7 @@ end function
 '* @return a string wrapped in  xHTML definition 
 '*
 function dd(byval str)
-	dd = ("<dd>"&str&"</dd>"&vbcrlf)
+	dd = ("<dd>"&str&"</dd>"& vbCrLf)
 end function
 
 '**
@@ -473,7 +473,7 @@ end function
 '* @param strType the MIME-type of the linked file (eg, text/css)
 '*
 function link(byval strURL,byval strRelation,byval strType)
-	link = "<link rel="""&strRelation&""" type="""&strType&""" href="""&strURL&""" />"&vbcrlf
+	link = "<link rel="""&strRelation&""" type="""&strType&""" href="""&strURL&""" />"& vbCrLf
 end function
 
 '**
@@ -532,9 +532,9 @@ function flash(byval strFileName,byval strTitle,byval strClass,byval strWidth,by
 	strTitle= ""&strTitle
 	strClass= ""&strClass
 	'do flash stuff here
-	result.add "<script src="""&objLinks("SITEURL")&"/core/assets/scripts/active_content.js"" type=""text/javascript""></script>" & vbcrlf
-	result.add "<script type=""text/javascript"">" & vbcrlf
-	result.add "<!--" & vbcrlf
+	result.add "<script src="""&globals("SITEURL")&"/core/assets/scripts/active_content.js"" type=""text/javascript""></script>" & vbCrLf
+	result.add "<script type=""text/javascript"">" & vbCrLf
+	result.add "<!--" & vbCrLf
 	result.add "AC_FL_RunContent( 'codebase','"&FLASH_CODEBASE&"',"
 	if len(strWidth)>0 then result.add "'width','"&strWidth&"',"
 	if len(strHeight)>0 then result.add "'height','"&strHeight&"',"
@@ -546,9 +546,9 @@ function flash(byval strFileName,byval strTitle,byval strClass,byval strWidth,by
 	result.add "'wmode','transparent',"
 	result.add "'pluginspage','http://www.macromedia.com/go/getflashplayer',"
 	result.add "'movie','"&strFileNoExtension&"'"
-	result.add " );" & vbcrlf
-	result.add "-->" & vbcrlf
-	result.add "</script><noscript>" & vbcrlf
+	result.add " );" & vbCrLf
+	result.add "-->" & vbCrLf
+	result.add "</script><noscript>" & vbCrLf
 	result.add  "<object classid="""&FLASH_CLASSID&""" codebase="""&FLASH_CODEBASE&""""
 	result.add " id="""&strFileNoExtension&""""
 	if len(strWidth)>0 then result.add " width="""&strWidth&""""
@@ -556,16 +556,16 @@ function flash(byval strFileName,byval strTitle,byval strClass,byval strWidth,by
 	if len(strTitle)>0 then result.add " title="""&strTitle&""""
 	if len(strClass)>0 then result.add " class="""&strClass&""""
 	result.add ">" 
-	result.add "<param name=""movie"" value="""&strFileName&""" />" &vbcrlf
-	result.add "<param name=""quality"" value=""high"" />" &vbcrlf
-	result.add "<param name=""wmode"" value=""transparent"" />" &vbcrlf
+	result.add "<param name=""movie"" value="""&strFileName&""" />" & vbCrLf
+	result.add "<param name=""quality"" value=""high"" />" & vbCrLf
+	result.add "<param name=""wmode"" value=""transparent"" />" & vbCrLf
 	result.add "<embed src="""&strFileName&""" quality=""high"" pluginspage=""http://www.macromedia.com/go/getflashplayer"" type=""application/x-shockwave-flash"""
 	if len(strWidth)>0 then result.add " width="""&strWidth&""""
 	if len(strHeight)>0 then result.add " height="""&strHeight&""""
-	result.add "></embed></object></noscript>" &vbcrlf 
+	result.add "></embed></object></noscript>" & vbCrLf 
 	flash = result.value
 	set result = nothing
-end function 
+end function
 
 
 '**
@@ -604,20 +604,20 @@ end function
 '* @return an xHTML markup and supporting javascripts for displaying the slideshow
 '*
 function slideshow(byval strFolderName,byval strTitle,byval strClass,byval strWidth,byval strHeight)
-	if strTitle = "" or isNull(strTitle) then strTitle = "A "& objLinks.item("SHORTNAME") & " Slideshow."
+	if strTitle = "" or isNull(strTitle) then strTitle = "A "& globals("SHORTNAME") & " Slideshow."
 	strClass = "slideshow "&strClass
 	dim result : set result = new FastString
 	debug("slideshow: inserting slideshow file '"&strFileName&"'")
-	result.add "<script src="""&objLinks("SITEURL")&"/core/assets/scripts/slideshow/mootools.js"" type=""text/javascript""></script>" & vbcrlf
-	result.add "<script src="""&objLinks("SITEURL")&"/core/assets/scripts/slideshow/slideshow.js"" type=""text/javascript""></script>" & vbcrlf
+	result.add "<script src="""&globals("SITEURL")&"/core/assets/scripts/slideshow/mootools.js"" type=""text/javascript""></script>" & vbCrLf
+	result.add "<script src="""&globals("SITEURL")&"/core/assets/scripts/slideshow/slideshow.js"" type=""text/javascript""></script>" & vbCrLf
 	'Slideshow expects an HTML image <img> wrapped by a block element, such as a <div>. 
 	'Following is an example of how this might appear in your HTML document: 
-	result.add "<div id=""js_slideshow"" class=""slideshow"">" & vbcrlf
+	result.add "<div id=""js_slideshow"" class=""slideshow"">" & vbCrLf
 
   dim myFileList : set myFileList = getFilesInFolder(strFolderName,".jpg")
 	if myFileList.count = 0 then 
 		debugError("html.slideshow:  there are no images in folder '"&strFolderName&"'")
-		result.add "<!--  Slideshow disabled! '"&strFolderName&"' contains no images! "& vbcrlf
+		result.add "<!--  Slideshow disabled! '"&strFolderName&"' contains no images! "& vbCrLf
 	else 
 		randomize
 		dim random: random =int(rnd * myFileList.count)
@@ -626,13 +626,13 @@ function slideshow(byval strFolderName,byval strTitle,byval strClass,byval strWi
 		if strHeight <> "" and not isNull(strHeight) then result.add " height="""&strHeight&""""
 		if strTitle <> "" and not isNull(strTitle) then result.add " alt="""&strTitle&""""
 		if strClass <> "" and not isNull(strClass) then result.add " class=""slideshow "&strClass&""""
-		result.add "/>" & vbcrlf
+		result.add "/>" & vbCrLf
 	end if
-	result.add "</div>" & vbcrlf
+	result.add "</div>" & vbCrLf
 	
-	result.add "<script type=""text/javascript"">" & vbcrlf
-	strFolderName = replace(strFolderName,objLinks.item("SITEURL")&"/","")
-  result.add "myShow = new Slideshow('js_slideshow', {hu: '"&objLinks.item("SITEROOT")&"/"&strFolderName&"', duration: [700,5000], images: ["
+	result.add "<script type=""text/javascript"">" & vbCrLf
+	strFolderName = replace(strFolderName,globals("SITEURL")&"/","")
+  result.add "myShow = new Slideshow('js_slideshow', {hu: '"&globals("SITEROOT")&"/"&strFolderName&"', duration: [700,5000], images: ["
 	separator=""
 	dim imageFile
 	for each imageFile in myFileList
@@ -640,9 +640,9 @@ function slideshow(byval strFolderName,byval strTitle,byval strClass,byval strWi
 		separator=","
 		trace("html.slideshow:  added image '"&imageFile&"' to slideshow")
 	next
-	result.add "]});" & vbcrlf
-	result.add "</script>" & vbcrlf
-	if myFileList.count = 0 then result.add "-->"  & vbcrlf
+	result.add "]});" & vbCrLf
+	result.add "</script>" & vbCrLf
+	if myFileList.count = 0 then result.add "-->"  & vbCrLf
 	slideshow = result.value
 	set result = nothing
 end function

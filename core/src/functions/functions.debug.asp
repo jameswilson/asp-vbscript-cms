@@ -30,7 +30,7 @@ dim strDebugHTML : set strDebugHTML = new FastString
 '**
 '*
 '*
-function logMessage(strMessage,intLevel)
+function logMessage(strMessage, intLevel)
 	logMessage = false
 	if not (intLevel < debugLevel) then 
 		strDebugHTML.add strMessage & vbCrLf
@@ -66,11 +66,11 @@ function printDebugHTML()
 end function
 
 function getDebugHTML()
-	if isDebugMode() then getDebugHTML = "<div id=""debug"" class=""clearfix"">"& vbcrlf & strDebugHTML.value & "</div><!--end debug-->"
+	if isDebugMode() then getDebugHTML = "<div id=""debug"" class=""clearfix"">"& vbCrLf & strDebugHTML.value & "</div><!--end debug-->"
 end function
 
 public function debugMode() 
-	debugMode = (objLinks.item("DEBUG") = "1")
+	debugMode = (globals("DEBUG") = "1")
 end function
 
 public function isDebugMode()

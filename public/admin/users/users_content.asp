@@ -17,7 +17,7 @@
 	const strKey = "id"  'name of the primary key field in the database
 	const strIdField = "UserID" 'name of the field that uniquely identifies a row from the database
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Creator"
+	myForm.Name = Pcase(strContent) &"Creator"
 	
 	strActive = ""
 	strMainMenu = ""

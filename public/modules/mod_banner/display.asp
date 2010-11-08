@@ -1,5 +1,5 @@
-<!--#include file="../../core/include/global.asp" -->
-<!--#include file="../../core/src/classes/class.form.asp" -->
+<!--#include file="../../../core/include/bootstrap.asp" -->
+<!--#include file="../../../core/src/classes/class.form.asp" -->
 <%
 strDebugHTML.clear
 writeln getBanner()
@@ -40,23 +40,23 @@ function getBanner()
 		line = trim(line)
 		if line <> "" and instr(line,"#")<>1 then 
 			trace("mod_banner: line "&i&" added '"&line&"' ")
-			a.add vbcrlf&line
+			a.add vbCrLf&line
 		else
 			trace("mod_banner: line "&i&" ignored '"&line&"'") 
 		end if
 		
 	loop
-	trace("mod_banner: content for processing is  <br/>"&replace(a.value,""&vbcrlf,"<br/>"))
+	trace("mod_banner: content for processing is  <br/>"&replace(a.value,""& vbCrLf,"<br/>"))
 	if err.number <> 0 then
 		debugError("mod_banner: there was an error reading/opening file "&bannerFileName)
-		debugError("VBScript ERROR [" &  Err.number & "] (Ox"& Hex(Err.number) & "): " & Err.description & vbcrlf _
+		debugError("VBScript ERROR [" &  Err.number & "] (Ox"& Hex(Err.number) & "): " & Err.description & vbCrLf _
 						& "URL: "&request.ServerVariables("URL") _
 						& "SOURCE: "&Err.source _
 						& "LINE: "&Err.line)
 		trapError
 		exit function
 	end if
-	banners = split(a.value,""&vbcrlf)
+	banners = split(a.value,""& vbCrLf)
 	a.clear
 	set a = nothing
 	if err.number <> 0 then
@@ -74,7 +74,7 @@ function getBanner()
 	dim bannerImg : set bannerImg = new SiteFile
 	i=0
 	do 
-		text = objLinks.item("SITE_NAME")
+		text = globals("SITE_NAME")
 		link = ""
 		dimensions = null
 		width = null

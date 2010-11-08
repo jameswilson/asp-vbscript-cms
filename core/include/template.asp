@@ -2,12 +2,12 @@
 '**
 '*  This is the site-wide public-facing page template. 
 '*
-'*   It is part of CORE because of our design model that 
+'*  It is part of CORE because of our design model that 
 '*  suggests that all sites should use the the same HTML 
 '*  structure and adjust presentation through our CSS
 '*  framework. The CSS framework allows for various layout
 '*  posibilities, and each page can be assigned a different
-'*  stylesheet layout if so desired. 
+'*  stylesheet layout if so desired.
 '*
 trace("Applying HTML template 'template.asp'...")
 

@@ -18,10 +18,10 @@ function contentAdd()
 			dim pActive : pActive = "0"
 			if myForm.getValue("Active") <> "" then pActive = "1"
 			page.setName(category)
-			page.setTitle("New "&Pcase(strContent)&": "&category)
+			page.setTitle("New "& Pcase(strContent) &": "& category)
 			'add new record into tblProducts  
-			strSQL = "INSERT INTO "&strTableName&" (PID, Category, ShortDescription, LongDescription, Image1, Active) " & vbcrlf & _			
-			"VALUES ('"&pid&"','"&category&"','"&pShortDesc&"','"&pLongDesc&"','"&pImage1&"',"&pActive&")" 			
+			strSQL = "INSERT INTO "& strTableName &" (PID, Category, ShortDescription, LongDescription, Image1, Active) " & vbCrLf & _			
+			"VALUES ('"& pid &"','"& category &"','"& pShortDesc &"','"& pLongDesc &"','"& pImage1 &"',"& pActive &")" 			
 			db.execute(strSQL)
 			if db.hasErrors() = true then 
 				dim dbErr
@@ -29,8 +29,8 @@ function contentAdd()
 					strError = strError & p(dbErr.description)
 				next
 			else
-				strStatus = "The "&strContent&" was added successfully.<br/>" & vbcrlf & _
-					"Would you like to  <a href='?view'>view the list</a> of "&strContentPL & vbcrlf & _
+				strStatus = "The "& strContent &" was added successfully.<br/>" & vbCrLf & _
+					"Would you like to  <a href='?view'>view the list</a> of "& strContentPL & vbCrLf & _
 					"or <a href='?create'>create a new one</a>?"
 				strError = ""
 				contentAdd = "" 'only display formContents if there was an error

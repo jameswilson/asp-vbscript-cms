@@ -31,7 +31,7 @@ if len(myQueryString) > 0 then
 		port.pattern = ":(\d+)"
 		port.global = false
 		myURL = port.replace(myURL,"")
-		myURL = lCase(Mid(myURL, len(objLinks.item("SITEURL")) + 1, len(myURL)))
+		myURL = lCase(Mid(myURL, len(globals("SITEURL")) + 1, len(myURL)))
 		CreateDictionary myQuery,myQueryString,"&","=",adDictOverwrite
 		myCss = myQuery("css")
 	else
@@ -51,10 +51,10 @@ if not db.exists() then
 	server.execute("core/include/utils/lorem.asp")
 	debugError("404.asp: A homepage was not found in the database for your site. We are going to populate with some error text, for testing/display.")
 else
-	trace("404.asp: site enabled? "&globals.getItem("Enabled Site"))
+	trace("404.asp: site enabled? "&settings.getItem("Enabled Site"))
 	trace("404.asp: Processed URL Request is '"&myURL&"'")
-	if globals.getItem("Enabled Site") <> "1" then
-		writeln("404.asp: Public site is disabled!")
+	if settings.getItem("Enabled Site") <> "1" then
+		writeln("404.asp: Public site is offline!")
 		'server.transfer("core/include/utils/unavailable.asp")
 	else
 		dim setFile : setFile = page.setFile(myURL)

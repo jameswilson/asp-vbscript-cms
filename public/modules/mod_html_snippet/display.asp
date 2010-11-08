@@ -1,5 +1,5 @@
-<!--#include file="../../core/include/global.asp" -->
-<!--#include file="../../core/src/classes/class.form.asp" -->
+<!--#include file="../../../core/include/bootstrap.asp" -->
+<!--#include file="../../../core/src/classes/class.form.asp" -->
 <%
 dim myForm
 strDebugHTML.clear
@@ -13,7 +13,7 @@ function getContent()
 	if settings.exists("content") then 
 		content = settings("content")
 		debug("mod_html_snippet.display: content to display: "&codeblock(server.htmlencode(content)) )
-		writeln(globalVarFill(content))
+		writeln(token_replace(content))
 	else
 		debug("mod_html_snippet.display: no content found in this snippet.") 
 	end if

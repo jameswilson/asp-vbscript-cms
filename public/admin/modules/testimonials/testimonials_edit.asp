@@ -9,8 +9,8 @@ function contentEdit()
 		contentEdit = buildFormContents(myForm.getValue(strKey))
 		page.setName("Edit Page")
 	else
-		strError = ErrorMessage("No "&strContent&" was selected for editing. <br/>Would you like to "& vbcrlf & _
-			"<a href='?view'>select a "&strContent&" to edit</a> " & vbcrlf & _
+		strError = ErrorMessage("No "& strContent &" was selected for editing. <br/>Would you like to "& vbCrLf & _
+			"<a href='?view'>select a "& strContent &" to edit</a> " & vbCrLf & _
 			"or <a href='?create'>create a new one</a>?")
 		contentEdit = strError
 		debugError(strError)

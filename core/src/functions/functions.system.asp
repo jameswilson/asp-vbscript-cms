@@ -4,8 +4,8 @@
 '
 '
 function getMachineName()
-	On Error resume next
-	Dim objSystem,ComputerName,IntMachinName
+	on error resume next
+	dim objSystem,ComputerName,IntMachinName
 	set objSystem = server.CreateObject("ActiveDs.WinNTSystemInfo")
 	if err.number = 0 then 
 		getMachineName = objSystem.ComputerName

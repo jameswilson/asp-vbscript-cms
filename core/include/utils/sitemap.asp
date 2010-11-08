@@ -1,4 +1,4 @@
-<!--#include file="../global.asp"-->
+<!--#include file="../bootstrap.asp"-->
 <!--#include file="../../src/classes/class.sitemap.asp"-->
 <%
 page.setFile("default.asp")
@@ -13,7 +13,7 @@ function customContent(byval area)
 	select case area
 		case "main"
 			page.ignoreDBContent = true
-			customContent = div(h2("Sitemap")&sMap.HTML,globalvarfill("{SITENAME} Sitemap"),"sitemap",null)
+			customContent = div(h2("Sitemap") & sMap.HTML, token_replace("{SITENAME} Sitemap"), "sitemap", null)
 		case else
 	end select
 end function

@@ -1,7 +1,7 @@
 <%@ Language=VBScript %>
 <%Option Explicit%>
-<!--#include file="../../core/include/global.asp"-->
-<!--#include file = "../../core/include/secure.asp"-->
+<!--#include file="../../../core/include/bootstrap.asp"-->
+<!--#include file = "../../../core/include/secure.asp"-->
 <% 
 '==============================================================
 ' Summary: This Script is used to import a database table into 
@@ -34,27 +34,27 @@ function createTable(byVal strName,byVal strPath)
 		exit function
 	end if
 	if not db.Init(strName) is nothing then 
-		createTable = ErrorMessage("Cannot install table '"&strName&"' because it already exists!")
-		debugError("the table '"&strName&"' already exists in database '"&dbPath&"'")
+		createTable = ErrorMessage("Cannot install table '"& strName &"' because it already exists!")
+		debugError("the table '"& strName &"' already exists in database '"& dbPath &"'")
 		exit function
 	end if
 	dim installFile : set installFile = new SiteFile
 	installFile.Path = strPath
 	if installFile.fileExists() = false then
-		createTable = ErrorMessage("The installation file '"&strPath&"' could not be found.")
-		debugError("please specify an existing file for the sql instructions, '"&strPath&"' does not exist.")
+		createTable = ErrorMessage("The installation file '"& strPath &"' could not be found.")
+		debugError("please specify an existing file for the sql instructions, '"& strPath &"' does not exist.")
 		exit function
 	end if
 	
 	dim dbPath, conn
 	set conn = server.createObject("ADODB.Connection")
-	dbPath = globalVarFill("{DB_LOCATION}\{SOURCEID}.mdb")
-	debugInfo("db path: "&dbPath)
+	dbPath = token_replace("{DB_LOCATION}\{PROJECT_NAME}.mdb")
+	debugInfo("db path: "& dbPath)
 	db.ConnectOpen(dbPath)
 	'if not fs.fileExists(dbPath) then createDB(dbPath)
 	'conn.open "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" &dbPath 
 	on error resume next
-	debug("opening text file '"&installFile.AbsolutePath&"'")
+	debug("opening text file '"& installFile.AbsolutePath &"'")
 	dim ts, sql
 	set ts = fs.OpenTextFile(installFile.AbsolutePath,1,0) 'forReading,TristateFalse
 	createTable = ""
@@ -62,16 +62,16 @@ function createTable(byVal strName,byVal strPath)
 		sql = sql & trim(ts.ReadAll)
 		trapError
 		if len(sql)>0 and not instr(sql,"--")=1 then
-			debug("instrrev(sql,';') = "&instrrev(sql,";")&"")
-			debug("len(sql) = "&len(sql)&"")
+			debug("instrrev(sql,';') = "& instrrev(sql,";") &"")
+			debug("len(sql) = "& len(sql) &"")
 			if instrrev(sql,";")>0 then
-				debug("executing SQL: '"&sql&"'...")
+				debug("executing SQL: '"& sql &"'...")
 				if not db.execute(sql) then
-					createTable = createTable &ErrorMessage("The server encountered an error during installation. '"&strName&"' could not be created.")
-					debugError("there was an error in creating table '"&strName&"' with SQL ("&sql&")")
-					if err.number <> 0 then debugError("error in "&err.source&" error code "&err.number&": "&err.description)
+					createTable = createTable &ErrorMessage("The server encountered an error during installation. '"& strName &"' could not be created.")
+					debugError("there was an error in creating table '"& strName &"' with SQL ("& sql &")")
+					if err.number <> 0 then debugError("error in "& err.source &" error code "& err.number &": "& err.description)
 				else
-					createTable = createTable &InfoMessage("<strong>Success!</strong> The table was created successfully. <a href="""&request.ServerVariables("HTTP_REFERER")&""">Return to the previous page</a>.")
+					createTable = createTable &InfoMessage("<strong>Success!</strong> The table was created successfully. <a href="""& request.ServerVariables("HTTP_REFERER") &""">Return to the previous page</a>.")
 				end if
 				sql = ""
 			end if

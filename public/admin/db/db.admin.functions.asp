@@ -24,7 +24,7 @@
 public function CreateSQL(byval queryType, byref strTableName,byref objContentDict,byval strPKid)
 	dim cat : set cat = server.createObject("ADOX.Catalog")
 	dim con : set con = server.createObject("ADODB.Connection")
-	dim dbPath : dbPath = globalVarFill("{DB_LOCATION}\{SOURCEID}.mdb")
+	dim dbPath : dbPath = token_replace("{DB_LOCATION}\{PROJECT_NAME}.mdb")
 	dim dbConString : dbConString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" &dbPath
 	con.open dbConString 
 	cat.activeConnection = con
@@ -36,7 +36,7 @@ public function CreateSQL(byval queryType, byref strTableName,byref objContentDi
 			end if
   next
 	if isObject(tbl) = false then
-		strError = strError & "Could not find table '"&strTableName&"' in database."
+		strError = strError & "Could not find table '"& strTableName &"' in database."
 		exit function
 	end if
 	
@@ -51,7 +51,7 @@ public function CreateSQL(byval queryType, byref strTableName,byref objContentDi
 		
 		skip = false
 		sqlValue = objContentDict(myfld.Name)
-		debug("db.admin.functions.CreateSQL: field "&myfld&" has value "&sqlValue)
+		debug("db.admin.functions.CreateSQL: field "& myfld &" has value "& sqlValue)
 		if myfld.name <> strPKid then 
 			select case myfld.Type
 				case adBoolean   'Boolean
@@ -65,9 +65,9 @@ public function CreateSQL(byval queryType, byref strTableName,byref objContentDi
 				case adDate, adDBTimeStamp 'Date / Time
 					if not isNull(sqlValue) and sqlValue <> "" then 
 						if isDate(sqlValue) = true then 
-							sqlValue = "#"&Date(sqlValue)&"#"
+							sqlValue = "#"& Date(sqlValue) &"#"
 						else
-							strError = strError & "The "&myfld.Name&" field value '"&sqlValue&"' is not a valid date format."
+							strError = strError & "The "& myfld.Name &" field value '"& sqlValue &"' is not a valid date format."
 							exit function
 						end if
 					else
@@ -81,12 +81,12 @@ public function CreateSQL(byval queryType, byref strTableName,byref objContentDi
 							
 				case adUnsignedTinyInt, adTinyInt,adCurrency, adDouble, adSingle, adInteger, adSmallInt
 					if not isNumeric(sqlValue) then
-						strError = strError & "The value '"&sqlValue&"' for field "&myfld.Name&" is not numeric."
+						strError = strError & "The value '"& sqlValue &"' for field "& myfld.Name &" is not numeric."
 						exit function
 					end if			
 								
 				case else
-					strError = strError & "The value '"&sqlValue&"' for for field "&myfld.Name&"  could not be processed due to an unknown field type '"&myfld.Type&"'"
+					strError = strError & "The value '"& sqlValue &"' for for field "& myfld.Name &"  could not be processed due to an unknown field type '"& myfld.Type &"'"
 					exit function
 					
 			end select
@@ -102,11 +102,11 @@ public function CreateSQL(byval queryType, byref strTableName,byref objContentDi
 		case "insert"
 			CreateSQL = "INSERT INTO " & quot(tbl.name) & " (" &sqlInsertFields.value &")  VALUES (" & sqlInsertContents.value & ");"
 		case "update"
-			CreateSQL = "UPDATE " & quot(tbl.name) & " SET " & sqlUpdateContent.value &" WHERE (" & quot(tbl.name) &"." & quot(strPKid)& "="& objContentDict(strPKid) &");"
+			CreateSQL = "UPDATE " & quot(tbl.name) & " SET " & sqlUpdateContent.value &" WHERE (" & quot(tbl.name) &"." & quot(strPKid) & "="& objContentDict(strPKid) &");"
 		case "delete"
 			CreateSQL = "DELETE * FROM " & quot(tbl.name) & " WHERE (" & quot(tbl.name) &"." & quot(strPKid) & "="& objContentDict(strPKid) &");"
 		case else
-			strError = "There is no such query type '"&queryType&"' for database manipulation."
+			strError = "There is no such query type '"& queryType &"' for database manipulation."
 	end select
 	
 	set sqlInsertFields = nothing
@@ -129,41 +129,41 @@ public function createDB(ByVal filePath)
 	dim myPath : myPath = filePath
 	dim myParent : myParent = fs.getParentFolderName(myPath)
 	dim result
-	debug("does "&myPath&" exist? "& fs.fileExists(myPath))
+	debug("does "& myPath &" exist? "& fs.fileExists(myPath))
 	if fs.fileExists(myPath) = true then
 		result = true
 	elseif fs.folderExists(myParent) = true then
-		debug("creating database file "&myPath)
+		debug("creating database file "& myPath)
 		cat.create  dbCreate
 		if err.number <> 0 then
-			debugError("there was an error in database creation at filepath ("&myPath&")")
-			debugError("error in "&Err.source&" error code "&err.number&": "&err.description)
+			debugError("there was an error in database creation at filepath ("& myPath &")")
+			debugError("error in "& Err.source &" error code "& err.number &": "& err.description)
 			err.clear
 		end if
 		result = true
 	else 
-		debug("parent folder doesnt exist,  building parent folder "&myParent)
+		debug("parent folder doesnt exist,  building parent folder "& myParent)
 		call buildDirectories(myParent, 1)
 		result = true
 	end if
-	debug("result is "&result& " for "& myPath)
+	debug("result is "& result & " for "& myPath)
 end function
 
 public sub buildDirectories(ByVal folderPath, ByRef counter)
 	on error resume next
 	dim i : i = folderPath
 	dim p : p = fs.getParentFolderName(i)
-	debug(""&counter&" does "&i&" exist? "& fs.folderExists(i))
-	debug(""&counter&" does "&p&" exist? "& fs.folderExists(p))
+	debug(""& counter &" does "& i &" exist? "& fs.folderExists(i))
+	debug(""& counter &" does "& p &" exist? "& fs.folderExists(p))
 	if not fs.folderExists(p) then 
 		call buildDirectories(p,counter + 1)
 	end if
-	debug("creating "&i)
+	debug("creating "& i)
 	fs.createFolder(i)
 	if err.number <> 0 then
-		debugError("there was an error in recursion at filepath ("&i&")")
-		if err.number = 70 then debugError("the IUSR_ doesnt have write permissions in folder "&p)
-		debugError("error was "&err.number&": "&err.description)
+		debugError("there was an error in recursion at filepath ("& i &")")
+		if err.number = 70 then debugError("the IUSR_ doesnt have write permissions in folder "& p)
+		debugError("error was "& err.number &": "& err.description)
 		err.clear
 	end if
 	i = null

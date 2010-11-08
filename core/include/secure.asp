@@ -32,13 +32,13 @@ if user.getRole() >= page.getSecurityLevel() then
 		requested_url = request.ServerVariables("URL")
 		if len(request.querystring())>0 then requested_url = requested_url & "?" & request.querystring()
 		errMsg = WarningMessage("Your session has expired! Please login again to view this page.")
-		redirect_target = objLinks.item("ADMINURL")&"/"
+		redirect_target = globals("ADMINURL")&"/"
 	end if
 else
 	'Session.Timeout
 	requested_url = request.ServerVariables("URL")
 	errMsg = WarningMessage(user.getRoleName()&"s are not allowed to view the page '"&requested_url&"'.")
-	redirect_target = objLinks.item("ADMINURL")&"/"
+	redirect_target = globals("ADMINURL")&"/"
 end if
 if len(errMsg)>0 then Session(CUSTOM_MESSAGE) = errMsg
 if len(requested_url)>0 then Session(REQUESTED_PAGE) = requested_url

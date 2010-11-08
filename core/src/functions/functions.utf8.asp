@@ -156,7 +156,7 @@ Function Encode_UTF8(astr)
 		End If
 	Next
 	Encode_UTF8 = utftext
-End Function
+end function
 
 %>
 

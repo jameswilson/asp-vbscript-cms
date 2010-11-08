@@ -11,7 +11,7 @@
 	const strKey = "SettingId"  'name of the primary key field in the database
 	const strIdField = "SettingName" 'name of the field that uniquely identifies a row from the database
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Creator"
+	myForm.Name = Pcase(strContent) &"Creator"
 	myForm.Action = "?update"
 	page.setName("Site Settings")
 	

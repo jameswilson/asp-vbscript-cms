@@ -1,5 +1,5 @@
-<!--#include file="../../core/include/global.asp" -->
-<!--#include file="../../core/src/classes/class.form.asp" -->
+<!--#include file="../../../core/include/bootstrap.asp" -->
+<!--#include file="../../../core/src/classes/class.form.asp" -->
 <%
 dim myForm
 strDebugHTML.clear
@@ -36,7 +36,7 @@ function getContent()
 			debugInfo("mod_gallery.display: number of images "&fileDict.count)
 			if fileDict.count > 0 then  
 				dim filename, path, name, ext, url, thmb, lnk, page, num_pages
-				content.add "<div class=""photo-gallery"">" & vbcrlf
+				content.add "<div class=""photo-gallery"">" & vbCrLf
 				dim i : i = 0
 				num_pages = 0
 				debugInfo("mod_gallery.display: the current page is '"&current_page&"'.")
@@ -46,9 +46,9 @@ function getContent()
 					path = fileDict(fileName)
 					ext = mid(path,instrrev(path,"."),len(path))
 					name = PCase(PrettyText(replace(replace(replace(fileName,ext,""),"."," "),"-"," ")))
-					url = objLinks("SITEURL")&gallery_folder&"/"&fileName
+					url = globals("SITEURL")&gallery_folder&"/"&fileName
 					thmb = gallery_folder&"/_thumbs/"&fileName
-					thmb_url = objLinks("SITEURL")&thmb
+					thmb_url = globals("SITEURL")&thmb
 					if int(current_page) = int(page) then 
 						thmb = iif( fileExists(thmb), thmb_url, url)
 						thmb = "<img src="""&thmb&""" alt="""&name&""" class=""lightbox"""&thumb_size&"/>"
@@ -60,32 +60,32 @@ function getContent()
 					
 					debugInfo("mod_gallery.display: found file '"&name&"' url string '"&url&"' thumb is '"&thmb&"' and page is '"&page&"'")
 
-					content.add lnk&vbcrlf
+					content.add lnk& vbCrLf
 					'finally increment the number of pages if this file is a multiple of the max_images_per_page
 					if i mod max_images_per_page = 1 then num_pages = num_pages + 1
 					
 				next
 				if num_pages > 1 then
-					content.add "<div id=""gallery-page-links"" style=""text-align:right;margin:1em;"">" &vbcrlf
-					content.add "<script type=""text/javascript"">" &vbcrlf&"<!--"&vbcrlf
-					content.add "document.write('<p style=""text-align:center;margin:1em;"">Click any image to start the slideshow.</p>');"&vbcrlf
-					content.add "// -->"&vbcrlf&"</script>"
-					content.add "<p>Pages "&vbcrlf
+					content.add "<div id=""gallery-page-links"" style=""text-align:right;margin:1em;"">" & vbCrLf
+					content.add "<script type=""text/javascript"">" & vbCrLf &"<!--"& vbCrLf
+					content.add "document.write('<p style=""text-align:center;margin:1em;"">Click any image to start the slideshow.</p>');"& vbCrLf
+					content.add "// -->"& vbCrLf &"</script>"
+					content.add "<p>Pages "& vbCrLf
 					for i = 1 to num_pages
-						content.add iif((int(i)=int(current_page)),i,a("?page="&i,i,"Open page"&i&" of this gallery","")) & vbcrlf
+						content.add iif((int(i)=int(current_page)),i,a("?page="&i,i,"Open page"&i&" of this gallery","")) & vbCrLf
 					next
-					content.add "</p></div>" & vbcrlf
+					content.add "</p></div>" & vbCrLf
 				end if
-				content.add link(objLinks("SITEURL")&"/scripts/lytebox/lytebox.css","stylesheet","text/css") &vbcrlf
-				content.add "<script type=""text/javascript"" src="""&objLinks("SITEURL")&"/scripts/lytebox/lytebox.shrinksafe.packered.base64.shrunk-var.js""></script>"&vbcrlf
-				'content.add link(objLinks("SITEURL")&"/test/lightbox/css/lightbox.css","stylesheet","text/css") &vbcrlf
-				'content.add "<script type=""text/javascript"" src="""&objLinks("SITEURL")&"/test/lightbox/js/prototype.js""></script >"&vbcrlf
-				'content.add "<script type=""text/javascript"" src="""&objLinks("SITEURL")&"/test/lightbox/js/scriptaculous.js?load=effects""/></script >"&vbcrlf
-				'content.add "<script type=""text/javascript"" src="""&objLinks("SITEURL")&"/test/lightbox/js/lightbox.js""/>"&vbcrlf
-				content.add "</div>"& vbcrlf
+				content.add link(globals("SITEURL")&"/scripts/lytebox/lytebox.css","stylesheet","text/css") & vbCrLf
+				content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/scripts/lytebox/lytebox.shrinksafe.packered.base64.shrunk-var.js""></script>"& vbCrLf
+				'content.add link(globals("SITEURL")&"/test/lightbox/css/lightbox.css","stylesheet","text/css") & vbCrLf
+				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/test/lightbox/js/prototype.js""></script >"& vbCrLf
+				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/test/lightbox/js/scriptaculous.js?load=effects""/></script >"& vbCrLf
+				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/test/lightbox/js/lightbox.js""/>"& vbCrLf
+				content.add "</div>"& vbCrLf
 			end if
 		end if
 	end if
-	writeln(globalVarFill(content.value))
+	writeln(token_replace(content.value))
 end function
 %>

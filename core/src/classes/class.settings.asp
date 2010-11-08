@@ -90,20 +90,20 @@ class SiteSettings
 	end sub
 end class
 
-' Add a global variable to the objLinks object.
+' Add a global variable to the globals object.
 ' Overwritting any current variable if it already
 ' exists.
 function addGlobal(strKey, strVal, strFallBack)
-	strVal = GlobalVarFill(""&strVal)
+	strVal = token_replace("" & strVal)
 	if strVal = "" then 
-		if GlobalVarFill(strFallBack) <> "" then 
-			strVal = GlobalVarFill(strFallBack)
+		if token_replace(strFallBack) <> "" then 
+			strVal = token_replace(strFallBack)
 		end if
 	end if
-	if objLinks.exists(strKey) then 
-		objLinks.remove(strKey)
+	if globals.exists(strKey) then 
+		globals.remove(strKey)
 	end if
-	objLinks.add strKey, strVal
+	globals.add strKey, strVal
 end function
 
 ' Process the provided string, filling in any 
@@ -111,7 +111,7 @@ end function
 ' {SITERURL} would be converted to the real 
 ' site's url.
 dim regex_globalVar : set regex_globalVar = new RegExp
-regex_globalVar.pattern = KEYWORD_PREFIX&"([\w_ ]+)"&KEYWORD_SUFFIX
+regex_globalVar.pattern = KEYWORD_PREFIX & "([\w_ ]+)" & KEYWORD_SUFFIX
 regex_globalVar.global = true
 
 
@@ -121,26 +121,26 @@ regex_globalVar.global = true
 '* Currently global strings are denoted between currly brackets, eg, {SITEURL} or {Company Name}
 '* @param str the string to replace global variables
 '* @return a string with all global variables replaced.
-function GlobalVarFill(byval str)
-	if (str <> "") and (not isnull(str)) then 
-	  str = replace(str,server.urlencode(KEYWORD_PREFIX),KEYWORD_PREFIX)
-	  str = replace(str,server.urlencode(KEYWORD_SUFFIX),KEYWORD_SUFFIX)
-		if instr(str,KEYWORD_PREFIX)>0 then
+function token_replace(byval str)
+	if (str <> "") and (not isNull(str)) then 
+	  str = replace(str, server.urlencode(KEYWORD_PREFIX), KEYWORD_PREFIX)
+	  str = replace(str, server.urlencode(KEYWORD_SUFFIX), KEYWORD_SUFFIX)
+		if instr(str, KEYWORD_PREFIX) > 0 then
 			dim expr, matched, variableName
 			set matched = regex_globalVar.execute(str)
 			if matched.count > 0 then
 				for each expr in matched
-					variableName = Mid(expr.value,2,len(expr.value)-2)
-					trace("class.settings.globalVarFill: '"&variableName&"'")
-					if objLinks.exists(""&variableName) then 
-						str = replace(str,expr.value,objLinks.item(""&variableName))
-					elseif not globals is nothing then
-							if globals.exists(PrettyText(variableName)) = true then 
-								str = replace(str,expr.value, globals.getItem(PrettyText(variableName)))
+					variableName = Mid(expr.value, 2, len(expr.value)-2)
+					trace("class.settings.token_replace: '" & variableName & "'")
+					if globals.exists("" & variableName) then 
+						str = replace(str, expr.value, globals("" & variableName))
+					elseif not settings is nothing then
+							if settings.exists(PrettyText(variableName)) = true then 
+								str = replace(str,expr.value, settings.getItem(PrettyText(variableName)))
 							'else
-'								if Execute(eval(""&variableName)) then 
-'								str = eval(""&variableName)
-'								end if
+							'	if Execute(eval(""&variableName)) then 
+							'	str = eval(""&variableName)
+							'	end if
 							end if
 					end if
 				next
@@ -149,16 +149,16 @@ function GlobalVarFill(byval str)
 	else
 		str = ""
 	end if
-	GlobalVarFill = str
+	token_replace = str
 end function
 
-function GlobalVarDecode(byval str,byval varList)
+function GlobalVarDecode(byval str, byval varList)
 	on error resume next
-	if (str = "") or (isnull(str)) or (varList = "") or isnull(varList) then
+	if (str = "") or (isNull(str)) or (varList = "") or isNull(varList) then
 		GlobalVarDecode = ""
 		exit function
 	end if
-	trace("class.settings.globalVarDecode: '"&varList&"'")
+	trace("class.settings.globalVarDecode: '"& varList &"'")
 	varList = split(varList,",")
 	trace("class.settings.globalVarDecode: list has "&ubound(varList)&"  items")
 	str = replace(str,server.urlencode(KEYWORD_PREFIX),KEYWORD_PREFIX)
@@ -166,8 +166,8 @@ function GlobalVarDecode(byval str,byval varList)
 	dim i : i=0
 	do
 		trace("class.settings.globalVarDecode: decoding '"&varList(i)&"'")
-		trace("class.settings.globalVarDecode: replaceing '"&varList(i)&"' with '"&objLinks.item(""&varList(i)) & "'" )
-		str = replace(str,KEYWORD_PREFIX&varList(i)&KEYWORD_SUFFIX,objLinks(""&varList(i)))
+		trace("class.settings.globalVarDecode: replaceing '"&varList(i)&"' with '"&globals(""&varList(i)) & "'" )
+		str = replace(str,KEYWORD_PREFIX&varList(i)&KEYWORD_SUFFIX,globals(""&varList(i)))
 	loop until i=ubound(varList)
 	trapError
 	GlobalVarDecode = str
@@ -175,7 +175,7 @@ function GlobalVarDecode(byval str,byval varList)
 end function
 
 function GlobalVarEncode(byval str, byval varList)
-	if (str = "") or (isnull(str)) or (varList = "") or isnull(varList) then
+	if (str = "") or (isNull(str)) or (varList = "") or isNull(varList) then
 		GlobalVarEncode = ""
 		exit function
 	end if
@@ -186,7 +186,7 @@ function GlobalVarEncode(byval str, byval varList)
 	str = replace(str,server.urlencode(KEYWORD_SUFFIX),KEYWORD_SUFFIX)
 	dim i
 	for i=0 to ubound(varList)
-		str = replace(str,objLinks(""&varList(i)),KEYWORD_PREFIX&varList(i)&KEYWORD_SUFFIX)
+		str = replace(str,globals(""&varList(i)),KEYWORD_PREFIX&varList(i)&KEYWORD_SUFFIX)
 	next
 	GlobalVarEncode = str
 end function

@@ -161,7 +161,7 @@ class FastString
 		
 		Redim StringArray(InitStringLength - 1)
 		StringLength = InitStringLength
-	end function		
+	end function
 end class 
 
 %>

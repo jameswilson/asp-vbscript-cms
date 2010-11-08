@@ -1,4 +1,4 @@
-<!--#include file="../../../core/src/classes/class.form.asp"-->
+<!--#include file="../../../../core/src/classes/class.form.asp"-->
 <!--#include file="../../../modules/mod_testimonials/functions.asp"-->
 <%
 function buildFormContents(id)
@@ -11,7 +11,7 @@ function buildFormContents(id)
   set rscount = db.getrecordset("SELECT COUNT(SortOrder) FROM tblTestimonials ")
 	idSortorder = rscount(0)
 	rscount.close
-	debugInfo("we got id='"&id&"'")
+	debugInfo("we got id='"& id &"'")
 	set sdContent = nothing
 	if id <> "" then 
 		set sdContent = getTestimonialById(id)
@@ -23,18 +23,18 @@ function buildFormContents(id)
 	end if
 	dim i
 	for i=0 to sdContent.count-1
-			debug(""&pcase(strContent)&" Field "&i+1&": '"&sdContent.keys()(i)&"' '"&sdContent.items()(i)&"'")
+			debug(pcase(strContent) &" Field "& i+1&": '"& sdContent.keys()(i) &"' '"& sdContent.items()(i) &"'")
 	next
 
 	if sdContent("Active") then strActive = "checked"
 	if sdContent("ShowEmail") then strShowEmail = "checked"
 	with myForm
 	'.CreateNew(formName, action)
-	.addFieldset ""&pcase(strContent)&" Content","<strong>Bold</strong> fields are required."
+	.addFieldset pcase(strContent) &" Content","<strong>Bold</strong> fields are required."
 	.startNoteSection()
 	.addNote "Customer Information","Fill in the Name, Email, and Extra Info with "_
 					&"valid information to achieve best presentation on your site."
-	.addNote "Public Email?","A public email means that on the live site's "&pcase(strContentPL)&"" _
+	.addNote "Public Email?","A public email means that on the live site's "& pcase(strContentPL) &"" _
 					&"page, the <strong>Customer's Name</strong> will appear as an  <acronym " _
 					&"title=""the hyperlink will appear as 'mailto:customername@domain.com'"">email " _
 					&"hyperlink</acronym> that when clicked, will allow you to compose " _
@@ -51,9 +51,9 @@ function buildFormContents(id)
 	.addFormInput  "required", "Testimonial Date", "TestimonialDate",  "text", "date", sdContent("TestimonialDate"), DBTEXT,""
 	.addFormGroup  "checkbox", "optional", "Display Options", ""
 	.addFormInput  "optional", "Make email address public?", "ShowEmail", "checkbox", "compact", "Yes", strShowEmail, ""
-	.addFormInput  "optional", "Make this "&strContent&" visible on live website?", "Active", "checkbox", "compact", "Yes",  strActive, ""
+	.addFormInput  "optional", "Make this "& strContent &" visible on live website?", "Active", "checkbox", "compact", "Yes",  strActive, ""
 	.endFormGroup()
-	.addFormInput  "required wide", "Customer's Comments", "Comments",  "textarea", "simple expanding", sdContent("Comments"), " rows=""15"""& DBMEMO,"Please enter the customer's "&strContent&". See the side note on <strong>Advanced Content Editing</strong> for more details."
+	.addFormInput  "required wide", "Customer's Comments", "Comments",  "textarea", "simple expanding", sdContent("Comments"), " rows=""15"""& DBMEMO,"Please enter the customer's "& strContent &". See the side note on <strong>Advanced Content Editing</strong> for more details."
 	.addFormSubmission "left","Submit &raquo;","","",""
 	.endFieldset()
 	

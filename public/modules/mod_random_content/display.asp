@@ -1,11 +1,11 @@
-<!--#include file="../../core/configuration.asp" -->
-<!--#include file="../../core/src/functions/functions.html.asp" -->
-<!--#include file="../../core/src/functions/functions.debug.asp" -->
-<!--#include file="../../core/src/functions/functions.error.asp" -->
-<!--#include file="../../core/src/classes/class.settings.asp" -->
-<!--#include file="../../core/src/classes/class.modules.asp" -->
-<!--#include file="../../core/src/classes/class.strings.asp" -->
-<!--#include file="../../core/src/classes/class.db.asp" -->
+<!--#include file="../../../core/configuration.asp" -->
+<!--#include file="../../../core/src/functions/functions.html.asp" -->
+<!--#include file="../../../core/src/functions/functions.debug.asp" -->
+<!--#include file="../../../core/src/functions/functions.error.asp" -->
+<!--#include file="../../../core/src/classes/class.settings.asp" -->
+<!--#include file="../../../core/src/classes/class.modules.asp" -->
+<!--#include file="../../../core/src/classes/class.strings.asp" -->
+<!--#include file="../../../core/src/classes/class.db.asp" -->
 <%
 strDebugHTML.clear
 getRandomContent()
@@ -33,11 +33,11 @@ function getRandomContent()
 -->
 </style>
 <%
-	writeln  indent(2) &"<div class=""random-content clearfix"">" & vbcrlf
-	writeln  indent(3) &"<div class=""wrapper clearfix"">" & vbcrlf
+	writeln  indent(2) &"<div class=""random-content clearfix"">" & vbCrLf
+	writeln  indent(3) &"<div class=""wrapper clearfix"">" & vbCrLf
 	
 	trace("mod_random_content: testing id '"&id&"' for validity...")
-	if (not isnull(id)) and (id <> "") then 
+	if (not isNull(id)) and (id <> "") then 
 		dim pName, pContent
 		trace("mod_random_content: ... id is valid")
 		trace("mod_random_content: getting random child page of parent page id '"&id&"'...")
@@ -53,19 +53,19 @@ function getRandomContent()
 		trace("got a child")
 		if rs.EOF or rs.BOF then
 			debugError("mod_random_content:  no child pages found with parent id '"&id&"'")
-			writeln(ErrorMessage("ERROR 1001:  there is no content to display.  Page at '"&strFilePath&"' has no child pages stored in the db! "&objLinks.item("ERROR_FEEDBACK")))
+			writeln(ErrorMessage("ERROR 1001:  there is no content to display.  Page at '"&strFilePath&"' has no child pages stored in the db! "&globals("ERROR_FEEDBACK")))
 		else
 			trace("mod_random_content: the random selection is "&rs("PageName")&" with content id of '"&rs("ContentID")&"' and modification date of '"&rs("ModifiedDate")&"')")
-			pName = GlobalVarFill(rs("PageName"))
+			pName = token_replace(rs("PageName"))
 			pUrl = rs("PageFileName")
 			pHoverText = "Click here to find out more about "& pName
-			pContent = GlobalVarFill(rs("PageContent"))
+			pContent = token_replace(rs("PageContent"))
 			trace("mod_random_content:  content-pre is '"&server.HTMLEncode(content_pre)&"'")
 			debugInfo("mod_random_content: >>Random Child Page Name: "&pName)
 			trace("mod_random_content: unedited page content is: ")
 			trace(server.HTMLEncode(pContent))
 			
-			writeln(indent(4) & h2(content_pre & anchor(pUrl,pName,pHoverText,null)))
+			writeln(indent(4) & h2(content_pre & anchor(pUrl,pName,pHoverText, null)))
 			dim regex,matched
 			set regex = new RegExp
 			regex.pattern = "(<(img|IMG).+?>)"
@@ -102,7 +102,7 @@ function getRandomContent()
 	else 
 		trace("mod_random_content: ... id is not valid")
 		debugError("mod_random_content: The Random content module was not provided a valid parent page id.")
-		writeln(ErrorMessage("ERROR 1002: The random content module was not setup with a valid parent page id. "&objLinks.item("ERROR_FEEDBACK")))
+		writeln(ErrorMessage("ERROR 1002: The random content module was not setup with a valid parent page id. "&globals("ERROR_FEEDBACK")))
 	end if
 	writeln(indent(3) &"</div>")
 	writeln(indent(2) &"</div>")

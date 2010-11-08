@@ -5,7 +5,7 @@ dim sFile, sRoot, sDir, sExt, objShell, objFSO, sMIME, objStream
 ' Author: Adrian Forbes -->
 
 ' Make sure this is the same sRoot variable that is defined in browse.asp
-sRoot = globalVarFill("{SITEPATH}\assets\")
+sRoot = token_replace("{SITEPATH}\assets\")
 
 ' Get the directory relative to the root folder
 sDir = Request("dir")
@@ -25,7 +25,7 @@ set objFSO = nothing
 ' HKEY_CLASSES_ROOT.<ext>Content Type
 ' Create an instance of Wscript.Shell to let us read the registry
 Set objShell = Server.CreateObject("Wscript.Shell")
-On Error Resume Next
+on error resume next
 ' Get the MIME type
 sMIME = objShell.RegRead("HKEY_CLASSES_ROOT." & sExt & "Content Type")
 On Error GoTo 0

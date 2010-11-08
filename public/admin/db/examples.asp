@@ -7,11 +7,11 @@ sub tableCreationExample()
 	for each tbl in cat.tables  
 			if tbl.type = "TABLE" and lcase(tbl.name) = lcase(tableName) then 
 					tableExists = true 
-					debug("table "&tableName&" already exists")
+					debug("table "& tableName &" already exists")
 			end if
 			if err.number <> 0 then
 				debugError("there was an error in table detection")
-				debugError("error in "&Err.source&" error code "&err.number&": "&err.description)
+				debugError("error in "& Err.source &" error code "& err.number &": "& err.description)
 				err.clear
 			end if 
 	next 	
@@ -31,8 +31,8 @@ sub tableCreationExample()
 				"MemoColumn MEMO DEFAULT '')" 
 		conn.execute tableCreate, , 129 
 		if err.number <> 0 then
-			debugError("there was an error in table creation with SQL ("&tableCreate&")")
-			debugError("error in "&Err.source&" error code "&err.number&": "&err.description)
+			debugError("there was an error in table creation with SQL ("& tableCreate &")")
+			debugError("error in "& Err.source &" error code "& err.number &": "& err.description)
 			err.clear
 		end if 
 	end if

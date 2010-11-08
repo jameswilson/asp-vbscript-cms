@@ -1,6 +1,6 @@
 <%@ Language=VBScript %>
 <%Option Explicit%>
-<!--#include file = "../../core/include/global.asp"-->
+<!--#include file = "../../core/include/bootstrap.asp"-->
 <% 
 session(CUSTOM_MESSAGE) = getContent()
 

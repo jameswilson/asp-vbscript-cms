@@ -1,9 +1,9 @@
-<!--#include file="../global.asp"--><% 
+<!--#include file="../bootstrap.asp"--><% 
 'dim result : set result = new FastString
 
 
-'	result.add "<p>"&objLinks.item("DISABLEDTEXT")&"</p>"
-'	result.add "<p>"&objLinks.item("ERROR_FEEDBACK")&"</p>"
+'	result.add "<p>"&globals("SITE_OFFLINE_MESSAGE")&"</p>"
+'	result.add "<p>"&globals("ERROR_FEEDBACK")&"</p>"
 	
 'session.contents(CUSTOM_MESSAGE) = session(CUSTOM_MESSAGE) & result.value
 
@@ -14,7 +14,7 @@
 <title>Site Unavailable</title>
 </head>
 <body>
-<p><%=objLinks.item("DISABLEDTEXT")%></p>
-<p><%=objLinks.item("ERROR_FEEDBACK")%></p>
+<p><%=globals("SITE_OFFLINE_MESSAGE")%></p>
+<p><%=globals("ERROR_FEEDBACK")%></p>
 </body>
 </html>

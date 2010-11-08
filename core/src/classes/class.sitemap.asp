@@ -49,7 +49,7 @@ class SiteMap
 		&"xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" "_
 		&"xmlns=""http://www.sitemaps.org/schemas/sitemap/0.9"">")
 		writeln(CrawlPages(0))
-		writeln(CrawlSite(objLinks("SITE_PATH")))
+		writeln(CrawlSite(globals("SITE_PATH")))
 		writeln("</urlset>")
 		response.end()
 	end function
@@ -85,7 +85,7 @@ class SiteMap
 	private function CrawlSite(byval sFolder)
 		CrawlSite = ""
 		if isNull(sFolder) or sFolder = "" then
-			debugError("must provide a valid folder from which to start... try objLinks(""SITEPATH"")")
+			debugError("must provide a valid folder from which to start... try globals(""SITEPATH"")")
 			exit function
 		end if
 		if not fs.folderExists(sFolder) then 
@@ -175,9 +175,9 @@ class SiteMap
 			if i=0 then
 				sClass = sClass & " first"
 				if iLevel = 0 then 
-					result.add "<"&m_list&" id="""&listId&"""" & vbcrlf
+					result.add "<"&m_list&" id="""&listId&"""" & vbCrLf
 				else
-					result.add m_list&" class=""l"&iLevel&"""" & vbcrlf
+					result.add m_list&" class=""l"&iLevel&"""" & vbCrLf
 				end if
 			end if
 			if rs.EOF then
@@ -186,11 +186,11 @@ class SiteMap
 			strLink =  CreateNavLink(sFile, sName, sHover, sClass)
 			result.add indent(iLevel+1) & ">" & strLink & "<"
 			'Recursive call to check for children
-			result.add List(sNewId,iLevel+1,null)
+			result.add List(sNewId,iLevel+1, null)
 			if rs.EOF and iLevel > 0 then
 				result.add "/li></"&m_list&"></li"
 			else
-				result.add "/li" & vbcrlf
+				result.add "/li" & vbCrLf
 			end if
 			i = i+1
 		loop

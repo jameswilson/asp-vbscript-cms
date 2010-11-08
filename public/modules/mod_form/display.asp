@@ -1,5 +1,5 @@
-<!--#include file="../../core/include/global.asp" -->
-<!--#include file="../../core/src/classes/class.form.asp" -->
+<!--#include file="../../../core/include/bootstrap.asp" -->
+<!--#include file="../../../core/src/classes/class.form.asp" -->
 <!--#include file="email.asp"-->
 <!--#include file="subscribe.asp"-->
 <%
@@ -48,7 +48,7 @@ function getForm()
 		sClass = rsForm("FieldValidation")
 		sDefaultVal = rsForm("FieldValue")
 		sCustomTags = rsForm("CustomAttributes")
-		sMessage = globalvarfill(rsForm("FieldDescription"))
+		sMessage = token_replace(rsForm("FieldDescription"))
 		trace("mod_form.display: fieldId="&sId)
 		trace("mod_form.display: fieldName="&sName)
 		trace("mod_form.display: fieldType="&sFieldType)

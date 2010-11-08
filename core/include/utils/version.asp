@@ -1,4 +1,4 @@
-<!--#include file="../global.asp"-->
+<!--#include file="../bootstrap.asp"-->
 <%
 page.setFile("default.asp")
 function customContent(byval area)
@@ -11,7 +11,7 @@ function customContent(byval area)
 		& img("{PROVIDER_LOGO}","{PRODUCT_BRANDING} Logo", "{PRODUCT_BRANDING}","floatleft branding") _
 		& p(PRODUCT_DESCRIPTION) _
 		& p(brclearall&"For questions, comments and support, please contact {PROVIDER_SUPPORT_EMAIL}") _
-		,null,"product-version",null)
+		, null, "product-version", null)
 	
 	'TODO: add list of installed modules, accentuating the ones that are active.
 		case else

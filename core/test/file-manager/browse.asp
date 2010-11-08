@@ -1,5 +1,5 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%><%option explicit%>
-<!--#include file="../../core/include/global.asp"-->
+<!--#include file="../../core/include/bootstrap.asp"-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -14,7 +14,7 @@
 dim sRoot, sDir, sParent, objFSO, objFolder, objFile, objSubFolder, sSize
 ' This is the root directory that the explorer will browse.  Make sure there is no backslash ()
 ' at the end.  Also make sure that show.asp has an identical sRoot variable.
-sRoot = globalVarFill("{SITEPATH}\assets\")
+sRoot = token_replace("{SITEPATH}\assets\")
 
 ' Get the directory relative to the root directory
 sDir = Request("Dir")
@@ -22,7 +22,7 @@ sDir = Request("Dir")
 ' Add a backslash
 sDir = sDir & "\"
 
-Response.Write "<h1>" & sDir & "</h1>" & vbCRLF
+Response.Write "<h1>" & sDir & "</h1>" & vbCrLf
 
 ' Create a copy of FileSystemObject
 Set objFSO = CreateObject("Scripting.FileSystemObject")
@@ -48,12 +48,12 @@ Response.Write "<table border=""1"">"
 
 ' Give a link to the parent folder.  This is just a link to this page only pssing in
 ' the new folder as a parameter
-Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.URLEncode(sParent) & """>Parent folder</a></td></tr>" & vbCRLF
+Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.URLEncode(sParent) & """>Parent folder</a></td></tr>" & vbCrLf
 
 ' Now we want to loop through the subfolders in this folder
 For Each objSubFolder In objFolder.SubFolders
     ' And provide a link to them
-    Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.URLEncode(sDir & objSubFolder.Name) & """>" & objSubFolder.Name & "</a></td></tr>" & vbCRLF
+    Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.URLEncode(sDir & objSubFolder.Name) & """>" & objSubFolder.Name & "</a></td></tr>" & vbCrLf
 Next
 
 ' Now we want to loop through the files in this folder
@@ -65,7 +65,7 @@ For Each objFile In objFolder.Files
     end if
     ' And provide a link to view them.  This is a link to show.asp passing in the directory and the file
     ' as parameters
-    Response.Write "<tr><td><a href=""show.asp?file=" & server.URLEncode(objFile.Name) & "&dir=" & server.URLEncode (sDir) & """>" & objFile.Name & "</a></td><td>" & sSize & "</td><td>" & objFile.Type & "</td></tr>" & vbCRLF
+    Response.Write "<tr><td><a href=""show.asp?file=" & server.URLEncode(objFile.Name) & "&dir=" & server.URLEncode (sDir) & """>" & objFile.Name & "</a></td><td>" & sSize & "</td><td>" & objFile.Type & "</td></tr>" & vbCrLf
 Next
 
 Response.Write "</table>"

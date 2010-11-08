@@ -1,37 +1,37 @@
-<!--#include file="../../core/src/functions/functions.source.asp"-->
+<!--#include file="../../../core/src/functions/functions.source.asp"-->
 <%
 
 function contentView()
 	myForm.isForNewContent = false
-	'strHeader.add PCase(strContent)&" Manager"
+	'strHeader.add PCase(strContent) &" Manager"
 	
 	dim sf, sRoot, sPath
 	
 	
 	'get any path supplied on the url or from post
-	sPath = replace(request("view"),"\","/")
+	sPath = replace(request("view"), "\", "/")
 	
 	
 	
-	if len(sPath)>0 then 
+	if len(sPath) > 0 then 
 		'prepend the path with leading slash
-		if instr(sPath,"/")<>1 then sPath = "/" & sPath 
+		if instr(sPath,"/") <> 1 then sPath = "/" & sPath 
 		
 		'filter out any hackers
-		if instr(sPath,"/~")=1 or instr(sPath,"/..")>0 then 
-			strError = "The path provided, '"&sPath&"', is invalid."
+		if instr(sPath,"/~") = 1 or instr(sPath, "/..") > 0 then 
+			strError = "The path provided, '" & sPath & "', is invalid."
 			exit function
 		end if
 		
 		'remove double slashes 
-		sPath = replace(sPath,"//","/") 
+		sPath = replace(sPath, "//", "/") 
 		
 		set sf = new SiteFile
-		sf.path = "/"&FILE_FOLDER&sPath
+		sf.path = "/"& FILE_FOLDER &sPath
 		
 		'if the path doesnt exist as a file or folder in the site
 		if not sf.fileExists() then 
-			strError = "The path provided, '"&sPath&"', is invalid."
+			strError = "The path provided, '" & sPath & "', is invalid."
 			exit function
 		end if 
 		
@@ -45,38 +45,38 @@ function contentView()
 
 	' if the above section didnt find the path to be a file...
 	' then continue to process it as if it were a folder
-	sRoot = sPath &"/"	
+	sRoot = sPath & "/"	
 	
 	'remove double slashes 
-	sRoot = replace(sRoot,"//","/") 
+	sRoot = replace(sRoot, "//", "/") 
 		
 	set sf = new SiteFile
-	sf.path = "/"&FILE_FOLDER&sRoot
+	sf.path = "/" & FILE_FOLDER & sRoot
 	
 	
 
 	' have the FileSystemObject prove the path is really a folder.
 	if not fs.FolderExists(sf.absolutepath) then
-		strError = "The folder provided, '"&sRoot&"', does not exist."
+		strError = "The folder provided, '" & sRoot & "', does not exist."
 		exit function
 	end if
 	
-	dim breadcrumb,paths,j,path,separator : paths = split(sRoot,"/")
-	breadcrumb = "/"& a("?view="&path,FILE_FOLDER,"Explore folder '"&FILE_FOLDER&"'",null) 
+	dim breadcrumb, paths, j, path, separator : paths = split(sRoot, "/")
+	breadcrumb = "/"& a("?view=" & path, FILE_FOLDER, "Explore folder '" & FILE_FOLDER & "'", null) 
 	for j=0 to ubound(paths)
 		if len(paths(j))>0 then
 			separator = "/"
 			path = path & "/" & trim(paths(j))
-			breadcrumb = breadcrumb & separator & a("?view="&path,trim(paths(j)),"Explore folder '"&paths(j)&"'",null) 
+			breadcrumb = breadcrumb & separator & a("?view=" & path, trim(paths(j)), "Explore folder '" & paths(j) & "'", null)
 		end if
 	next
 
 	''' the following is for debug only
-	'pageContent.add p("The Current folder is "&sRoot)
-	'pageContent.add p("the absolute path is "&sf.absolutepath)
-	'pageContent.add p("instr(path,'.')="&instr(sRoot,"."))
+	'pageContent.add p("The Current folder is "& sRoot)
+	'pageContent.add p("the absolute path is "& sf.absolutepath)
+	'pageContent.add p("instr(path,'.')="& instr(sRoot,"."))
 
-	pageContent.add h3("Folder: "&breadcrumb)
+	pageContent.add h3("Folder: "& breadcrumb)
 	
 
 	
@@ -87,116 +87,116 @@ function contentView()
 	set fi=fo.Files
 	
 	if sfo.count = 0 and fi.count = 0 then
-		pageContent.add "" & vbcrlf _
-		 &WarningMessage("There are currently no "&strContentPL&". " _
-		 &"Would you like to <a href='?create'>create the first one</a>?")& vbcrlf
+		pageContent.add "" & vbCrLf _
+		 &WarningMessage("There are currently no " & strContentPL & ". " _
+		 &"Would you like to <a href='?create'>create the first one</a>?") & vbCrLf
 	else
 	
 		stats = "The current folder has "
 		if sfo.count > 0 then 
-			stats = stats & sfo.count&" sub-folder"
+			stats = stats & sfo.count & " sub-folder"
 			if sfo.count > 1 then stats = stats & "s"
 			divider = " and "
 		end if
 		if fi.count > 0 then
-			stats = stats & divider & fi.count&" file"
+			stats = stats & divider & fi.count & " file"
 			if fi.count > 1 then stats = stats & "s"
 		end if
-		if len(divider)>0 then stats = stats & ", totaling "&sfo.count + fi.count &" items"
+		if len(divider)>0 then stats = stats & ", totaling " & sfo.count + fi.count & " items"
 		stats = stats & "."	
 		pageContent.add p(stats)
 		
-		pageContent.add "" & vbcrlf _
-		 &"<form id='list' action='?edit' method='post'>" & vbcrlf _
-		 &"<table id='pages' class='list sortable' width='100%' border='0' cellspacing='0' cellpadding='3'>" & vbcrlf _
-		 &"<thead>" & vbcrlf _
-		 &"<tr>" & vbcrlf _
-		 &"<th width='2%' class='icon'>Type</th>" & vbcrlf _
-		 &"<th>Name</th>" & vbcrlf _
-		 &"<th>File Description</th>" & vbcrlf _
-		 &"<th>Mime Type</th>" & vbcrlf _
-		 &"<th>Size</th>" & vbcrlf _
-		 &"<th width='12%'>Created</th>" & vbcrlf _
-		 &"<th width='12%'>Modified</th>" & vbcrlf _
-			&"<th width='5%' class='sorttable_nosort' colspan=4>Actions</th>" & vbcrlf _
-			&"</tr>" & vbcrlf _
-			&"</thead>" & vbcrlf _
-		 &"" & vbcrlf _
-		 &"" & vbcrlf
+		pageContent.add "" & vbCrLf _
+		 & "<form id='list' action='?edit' method='post'>" & vbCrLf _
+		 & "<table id='pages' class='list sortable' width='100%' border='0' cellspacing='0' cellpadding='3'>" & vbCrLf _
+		 & "<thead>" & vbCrLf _
+		 & "<tr>" & vbCrLf _
+		 & "<th width='2%' class='icon'>Type</th>" & vbCrLf _
+		 & "<th>Name</th>" & vbCrLf _
+		 & "<th>File Description</th>" & vbCrLf _
+		 & "<th>Mime Type</th>" & vbCrLf _
+		 & "<th>Size</th>" & vbCrLf _
+		 & "<th width='12%'>Created</th>" & vbCrLf _
+		 & "<th width='12%'>Modified</th>" & vbCrLf _
+			& "<th width='5%' class='sorttable_nosort' colspan=4>Actions</th>" & vbCrLf _
+			& "</tr>" & vbCrLf _
+			& "</thead>" & vbCrLf _
+		 & "" & vbCrLf _
+		 & "" & vbCrLf
 		 
 		 
 		
 		dim strEven, strPath, strMime, strExt, subfo, x, i
 		if sRoot <> "/" then
 			set x = fo.ParentFolder
-			strPath = left(sRoot,len(sRoot)-len(fo.name&"/"))
-			pageContent.add "" & vbcrlf _
-			 &"<tr class='file folder"&strEven&"'>" & vbcrlf _
-			 &"<td class='parent-folder' sorttable_customkey='__"&x.Name&"'><span>folder</span></td>" & vbcrlf _
-			 &"<td><a href='?view="&strPath&"' title='Browse parent folder ["&x.name&"]'>../</a></td>" & vbcrlf _
-			 &"<td>Parent "&x.Type&"</td>" & vbcrlf _
-			 &"<td></td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.Size&"'>"&formatSize(x.Size) &"</td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.DateCreated&"'>"&getRelativeDate(x.DateCreated)&"</td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.DateLastModified&"'>"&getRelativeDate(x.DateLastModified) &"</td>" & vbcrlf _
-			 &"<td class='action edit'><a class='edit action' href='?edit="&strPath&"' title='Edit this folder'>Edit</a></td>" & vbcrlf _
-			 &"<td class='action view'><a class='view action' href='?view="&strPath&"' title='Open this folder'>Link</a></td>" & vbcrlf _
-			 &"<td></td>" & vbcrlf _
-			 &"<td></td>" & vbcrlf _
-			 &"</tr>" & vbcrlf
+			strPath = left(sRoot, len(sRoot) - len(fo.name & "/"))
+			pageContent.add "" & vbCrLf _
+			 & "<tr class='file folder"& strEven &"'>"& vbCrLf _
+			 & "<td class='parent-folder' sorttable_customkey='__"& x.name &"'><span>folder</span></td>"& vbCrLf _
+			 & "<td><a href='?view=" & strPath & "' title='Browse parent folder [" & x.name &"]'>../</a></td>"& vbCrLf _
+			 & "<td>Parent "& x.Type &"</td>" & vbCrLf _
+			 & "<td></td>" & vbCrLf _
+			 & "<td sorttable_customkey='"& x.Size &"'>"& formatSize(x.Size) &"</td>"& vbCrLf _
+			 & "<td sorttable_customkey='"& x.DateCreated &"'>"& getRelativeDate(x.DateCreated) &"</td>"&  vbCrLf _
+			 & "<td sorttable_customkey='"& x.DateLastModified &"'>"& getRelativeDate(x.DateLastModified) &"</td>"& vbCrLf _
+			 & "<td class='action edit'><a class='edit action' href='?edit="& strPath &"' title='Edit this folder'>Edit</a></td>" & vbCrLf _
+			 & "<td class='action view'><a class='view action' href='?view="& strPath &"' title='Open this folder'>Link</a></td>" & vbCrLf _
+			 & "<td></td>" & vbCrLf _
+			 & "<td></td>" & vbCrLf _
+			 & "</tr>" & vbCrLf
 			trapError
-			i=i+1
+			i = i + 1
 		end if
 		for each x in sfo
-			strPath = sRoot&x.name
-			strEven = iif( (i MOD 2 = 0), " even", "" )
-			pageContent.add "" & vbcrlf _
-			 &"<tr class='file folder"&strEven&"'>" & vbcrlf _
-			 &"<td class='folder'sorttable_customkey='_"&x.Name&"'><span>folder</span></td>" & vbcrlf _
-			 &"<td><a href='?view="&strPath&"' title='Browse "&x.name&" folder'>"&x.name &"</a></td>" & vbcrlf _
-			 &"<td>"&x.Type&"</td>" & vbcrlf _
-			 &"<td></td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.Size&"'>"&formatSize(x.Size) &"</td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.DateCreated&"'>"&getRelativeDate(x.DateCreated)&"</td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.DateLastModified&"'>"&getRelativeDate(x.DateLastModified) &"</td>" & vbcrlf _
-			 &"<td class='action edit'><a class='edit action' href='?edit="&strPath&"' title='Edit this folder'>Edit</a></td>" & vbcrlf _
-			 &"<td class='action view'><a class='view action' href='?view="&strPath&"' title='Open this folder'>Link</a></td>" & vbcrlf _
-			 &"<td></td>" & vbcrlf _
-			 &"<td class='action delete'><a class='delete action' href='?delete="&strPath&"' title='Delete this folder "&x.name&"' onclick=""return confirm('Really delete folder \'"&strPath&"\'?')"">Delete</a></td>" & vbcrlf _
-			 &"</tr>" & vbcrlf
+			strPath = sRoot & x.name
+			strEven = iif((i MOD 2 = 0), " even", "")
+			pageContent.add "" & vbCrLf _
+			 & "<tr class='file folder" & strEven & "'>" & vbCrLf _
+			 & "<td class='folder'sorttable_customkey='_" & x.name & "'><span>folder</span></td>" & vbCrLf _
+			 & "<td><a href='?view="& strPath &"' title='Browse " & x.name & " folder'>" & x.name & "</a></td>" & vbCrLf _
+			 & "<td>" & x.Type & "</td>" & vbCrLf _
+			 & "<td></td>" & vbCrLf _
+			 & "<td sorttable_customkey='" & x.Size & "'>" & formatSize(x.Size) &"</td>" & vbCrLf _
+			 & "<td sorttable_customkey='" & x.DateCreated & "'>" & getRelativeDate(x.DateCreated) & "</td>" & vbCrLf _
+			 & "<td sorttable_customkey='" & x.DateLastModified & "'>" & getRelativeDate(x.DateLastModified) &"</td>" & vbCrLf _
+			 & "<td class='action edit'><a class='edit action' href='?edit=" & strPath & "' title='Edit this folder'>Edit</a></td>" & vbCrLf _
+			 & "<td class='action view'><a class='view action' href='?view=" & strPath & "' title='Open this folder'>Link</a></td>" & vbCrLf _
+			 & "<td></td>" & vbCrLf _
+			 & "<td class='action delete'><a class='delete action' href='?delete=" & strPath & "' title='Delete this folder " & x.name & "' onclick=""return confirm('Really delete folder \'" & strPath & "\'?')"">Delete</a></td>" & vbCrLf _
+			 & "</tr>" & vbCrLf
 			trapError
-			i = i+1
+			i = i + 1
 		next
 		for each x in fi
-			strPath = sRoot&x.name
-			strEven = iif( (i MOD 2 = 0), " even", "" )
+			strPath = sRoot & x.name
+			strEven = iif((i MOD 2 = 0), " even", "" )
 			strMime = getMimeType(x.name)
-			strExt = mid(x.name,instrrev(x.name,".")+1)
-			pageContent.add "" & vbcrlf _
-			 &"<tr class='file"&strEven&"'>" & vbcrlf _
-			 &"<td class='file "&replace(replace(strMime,"/"," "),"."," ")&"'sorttable_customkey='"&strExt&"_"&x.name&"'><span>"&strMime&"</span></td>" & vbcrlf _
-			 &"<td><a href='?view="&strPath&"' title='Download "&x.name&"'>"&x.name &"</a></td>" & vbcrlf _
-			 &"<td>"&x.Type&"</td>" & vbcrlf _
-			 &"<td>"&strMime&"</td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.Size&"'>"&formatSize(x.Size) &"</td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.DateCreated&"'>"&getRelativeDate(x.DateCreated)&"</td>" & vbcrlf _
-			 &"<td sorttable_customkey='"&x.DateLastModified&"'>"&getRelativeDate(x.DateLastModified) &"</td>" & vbcrlf _
-			 &"<td class='action edit'><a class='edit action' href='?edit="&strPath&"' title='Edit this "&strContent&"'>Edit</a></td>" & vbcrlf _
-			 &"<td class='action view'><a class='view action' href='"&sf.virtualPath&x.name&"' title='Link to this "&strContent&"'>Link</a></td>" & vbcrlf _
-			 &"<td class='action download'><a class='download action' href='?view="&strPath&"&dl=1' title='Download this "&strContent&"'>Download</a></td>" & vbcrlf _
-			 &"<td class='action delete'><a class='delete action' href='?delete="&strPath&"' title='Delete "&strContent&" "&x.name&"' onclick=""return confirm('Really delete "&strContent&" \'"&strPath&"\'?')"">Delete</a></td>" & vbcrlf _
-			 &"</tr>" & vbcrlf
+			strExt = mid(x.name, instrrev(x.name,".") + 1)
+			pageContent.add "" & vbCrLf _
+			 & "<tr class='file" & strEven&"'>" & vbCrLf _
+			 & "<td class='file " & replace(replace(strMime,"/"," "), ".", " ") & "'sorttable_customkey='" & strExt & "_" & x.name & "'><span>" & strMime & "</span></td>" & vbCrLf _
+			 & "<td><a href='?view=" & strPath & "' title='Download " & x.name & "'>" & x.name & "</a></td>" & vbCrLf _
+			 & "<td>"& x.Type &"</td>" & vbCrLf _
+			 & "<td>"& strMime &"</td>" & vbCrLf _
+			 & "<td sorttable_customkey='" & x.Size &"'>"& formatSize(x.Size) &"</td>" & vbCrLf _
+			 & "<td sorttable_customkey='" & x.DateCreated &"'>"& getRelativeDate(x.DateCreated) &"</td>" & vbCrLf _
+			 & "<td sorttable_customkey='" & x.DateLastModified &"'>"& getRelativeDate(x.DateLastModified) &"</td>" & vbCrLf _
+			 & "<td class='action edit'><a class='edit action' href='?edit="& strPath &"' title='Edit this "& strContent &"'>Edit</a></td>" & vbCrLf _
+			 & "<td class='action view'><a class='view action' href='"& sf.virtualPath & x.name & "' title='Link to this " & strContent & "'>Link</a></td>" & vbCrLf _
+			 & "<td class='action download'><a class='download action' href='?view=" & strPath & "& dl=1' title='Download this " & strContent & "'>Download</a></td>" & vbCrLf _
+			 & "<td class='action delete'><a class='delete action' href='?delete=" & strPath & "' title='Delete " & strContent & " " & x.name & "' onclick=""return confirm('Really delete " & strContent & " \'" & strPath & "\'?')"">Delete</a></td>" & vbCrLf _
+			 & "</tr>" & vbCrLf
 			trapError
-			i = i+1
+			i = i + 1
 		next
 		
 		
 		
-		pageContent.add "</table>" & vbcrlf _
-		 &"<div class='buttonbar'><ul><li><a class='new button' title='New "&Pcase(strContent)&"' href='?create'>Add a "&strContent&"</a></li></ul></div>" & vbcrlf _
-		 &"</form>" & vbcrlf _
-		 &"" & vbcrlf _
-		 &"<script type=""text/javascript"" src="""&objLinks("SITEURL")&"/core/assets/scripts/sorttable.js""></script>" & vbcrlf
+		pageContent.add "</table>" & vbCrLf _
+		 & "<div class='buttonbar'><ul><li><a class='new button' title='New "& Pcase(strContent) &"' href='?create'>Add a "& strContent &"</a></li></ul></div>" & vbCrLf _
+		 & "</form>" & vbCrLf _
+		 & "" & vbCrLf _
+		 & "<script type=""text/javascript"" src="""& globals("SITEURL") &"/core/assets/scripts/sorttable.js""></script>" & vbCrLf
 		
 	end if
 end function
@@ -382,10 +382,10 @@ function getHTMLHeader(objSiteFile)
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><%=objSiteFile.Name%></title>
-<link rel="stylesheet" type="text/css" href="<%=objLinks("SITEURL")%>/core/assets/style/sourcecode.css">
+<link rel="stylesheet" type="text/css" href="<%=globals("SITEURL")%>/core/assets/style/sourcecode.css">
 </head>
 <body>
-<h3>File: <%=objSiteFile.Name%> (<a href="<%=request.ServerVariables("URL")&"?"&request.QueryString()%>&dl=1" title="Download this file">download file</a>)</h3>
+<h3>File: <%=objSiteFile.Name%> (<a href="<%=request.ServerVariables("URL") &"?"& request.QueryString()%>&dl=1" title="Download this file">download file</a>)</h3>
 <dl>
 <dt></dt><dd></dd>
 </dl>

@@ -55,9 +55,9 @@ class ClientUser
 	
 	
 	private sub initUserGlobals()
-		addGlobal "USERNAME", user.getName(),null
-		addGlobal "USERID", user.getId(),null
-		addGlobal "USERFULLNAME", user.getFullName(),null
+		addGlobal "USERNAME", user.getName(), null
+		addGlobal "USERID", user.getId(), null
+		addGlobal "USERFULLNAME", user.getFullName(), null
 	end sub
 
 	'called when object instance is set to nothing
@@ -72,7 +72,7 @@ class ClientUser
 	public function setId(userId)
 		trace("class.user.setId: '"&userId&"'")
 		myUserId = userId
-	end function 
+	end function
 	
 	public function getName()
 		getName = myUserName
@@ -120,7 +120,7 @@ class ClientUser
 	public function setRole(byVal roleLevel)
 		on error resume next
 		trace("class.user.setRole: '"&roleLevel&"'")
-		if (roleLevel = "") or (isnull(roleLevel)) then 
+		if (roleLevel = "") or (isNull(roleLevel)) then 
 			myRoleLevel = 0
 		else 
 			myRoleLevel = cint(roleLevel)
@@ -136,7 +136,7 @@ class ClientUser
 	
 	public function getLastLogin()
 		getLastLogin = myLastLogin
-	end function	
+	end function
 	
 	public function setLastLogin(strDate)
 		trace("class.user.setLastLogin: '"&strDate&"'")
@@ -178,7 +178,7 @@ class ClientUser
 				session(""&getId()) = encrypt(""&date()-91)
 			end if
 		end if
-	end function 
+	end function
 	
 	
 	'to use this function you are responsible for 
@@ -202,10 +202,10 @@ class ClientUser
 				debug("class.user.login: password="&password)
 				
 				if rs("Password")<>password then
-					addError objLinks.item("BAD_PASSWORD")
+					addError globals("BAD_PASSWORD")
 				'2 - Active user check
 				elseif rs("Disabled")  then
-					addError objLinks.item("LOGIN_EXPIRED")
+					addError globals("LOGIN_EXPIRED")
 				else
 					setName(rs("FirstName"))
 					setFullName(rs("FirstName")&" "&rs("SecondName"))
@@ -218,9 +218,9 @@ class ClientUser
 					debug("class.user.login: firstname="&rs("FirstName"))	
 				end if
 			elseif nCount = 0 then
-				addError objLinks.item("INVALID_USER")
+				addError globals("INVALID_USER")
 			elseif nCount < 0 then
-				addError ErrorMessage("Site access is temporarily unavailable. "&objLinks.item("ERROR_FEEDBACK"))
+				addError ErrorMessage("Site access is temporarily unavailable. "&globals("ERROR_FEEDBACK"))
 			end if
 		
 			' Error processing
@@ -276,11 +276,11 @@ class ClientUser
 	
 	public function toString()
 		dim a : set a = new FastString
-		a.add "[UserId -> " & myUserId & "]" & vbcrlf
-		a.add "[UserName -> " & myUserName & "]" & vbcrlf
-		a.add "[FullName -> " & myFullName & "]" & vbcrlf
-		a.add "[Role -> " & getRole & "]" & vbcrlf
-		a.add "[LastLogin -> "& myLastLogin & "]" & vbcrlf
+		a.add "[UserId -> " & myUserId & "]" & vbCrLf
+		a.add "[UserName -> " & myUserName & "]" & vbCrLf
+		a.add "[FullName -> " & myFullName & "]" & vbCrLf
+		a.add "[Role -> " & getRole & "]" & vbCrLf
+		a.add "[LastLogin -> "& myLastLogin & "]" & vbCrLf
 		toString = a.value
 		set a = nothing
 	end function

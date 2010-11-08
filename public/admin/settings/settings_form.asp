@@ -1,29 +1,29 @@
-<!--#include file="../../core/src/classes/class.form.asp"-->
+<!--#include file="../../../core/src/classes/class.form.asp"-->
 <% 
 function buildFormContents()
 	with myForm
-		debugInfo("Building form '"&.getName()&"' (action='"&.getAction()&"')" )
+		debugInfo("Building form '"&.getName() &"' (action='"&.getAction() &"')" )
 		'.CreateNew(formName, action)
 		createFieldsetForCategory("General")
 		createFieldsetForCategory("Company")
 		createFieldsetForCategory("Correspondence")
 		createFieldsetForCategory("Advanced")
 				
-		dim overlib : overlib = "<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&"/core/assets/scripts/overlib_mini.js""></script>" & vbcrlf
+		dim overlib : overlib = "<script type=""text/javascript"" src="""& globals("SITEURL") &"/core/assets/scripts/overlib_mini.js""></script>" & vbCrLf
 		buildFormContents =  overlib & .getContents()
 	end with 
-end function	
+end function
 	
 function createFieldsetForCategory(cat)
 	dim required, instructions
 	dim extraAttributes, valueAttribute, classAttribute
 	instructions = "<strong>Bold</strong> fields are required." 
 	if(user.getRole() < USER_ADMINISTRATOR and cat="Advanced") then instructions = "<strong>Note:</strong> this information is editable only by the Administrator."
-	dim rs : set rs = db.getRecordSet("SELECT * FROM "&strTableName&" WHERE SettingCategory = '"&cat&"' ORDER BY SortOrder, "&strIdField&"")
+	dim rs : set rs = db.getRecordSet("SELECT * FROM "& strTableName &" WHERE SettingCategory = '"& cat &"' ORDER BY SortOrder, "& strIdField &"")
 	if rs.state > 0 then 
 		if rs.EOF or rs.BOF then
-			strError =  strError& "There are no site "&strContentPL&" for category '"&cat&"'<br/>"
-			debugError("createFieldsetForCategory(): no "&strContentPL&" found in database for category '"&cat&"'.")
+			strError =  strError& "There are no site "& strContentPL &" for category '"& cat &"'<br/>"
+			debugError("createFieldsetForCategory(): no "& strContentPL &" found in database for category '"& cat &"'.")
 		else
 			dim formLabel
 			with myForm
@@ -45,7 +45,7 @@ function createFieldsetForCategory(cat)
 					if instr(rs("ValidationRule"),"required") > 0 then 
 						required = "required"
 					end if
-					formLabel = rs(strIdField)&" <a class=""tooltip"" href=""#"" onmouseover=""return overlib('"&encode(""&rs("SettingDescription"))&"');"" onmouseout=""return nd();""><img align=""absmiddle"" src="""&objLinks.item("SITEURL")&"/core/assets/i/tango/small/gif/help-browser.gif"" alt=""?""/>"&"</a>"
+					formLabel = rs(strIdField) &" <a class=""tooltip"" href=""#"" onmouseover=""return overlib('"& encode(""& rs("SettingDescription")) &"');"" onmouseout=""return nd();""><img align=""absmiddle"" src="""& globals("SITEURL") &"/core/assets/i/tango/small/gif/help-browser.gif"" alt=""?""/>"&"</a>"
 					.addFormInput required, formLabel , rs("SettingId"), rs("ValueType"), rs("ValidationRule"), valueAttribute, extraAttributes, null 
 					trapError
 					rs.movenext
@@ -55,8 +55,8 @@ function createFieldsetForCategory(cat)
 			end with
 		end if
 	else
-		strError = "Site Settings are not implemented in the database. "&vbcrlf
-		strError = strError& "This site will not function correctly without any "&strContentPL&" stored in the database. You must <a href="""&objLinks.item("ADMINURL")&"/db/install.asp?name="&strTableName&"&path=/core/src/install/create_"&strTableName&".ddl"">install "&strContentPL&"</a>."&vbcrlf
+		strError = "Site Settings are not implemented in the database. "& vbCrLf
+		strError = strError& "This site will not function correctly without any "& strContentPL &" stored in the database. You must <a href="""& globals("ADMINURL") &"/db/install.asp?name="& strTableName &"& path=/core/src/install/create_"& strTableName &".ddl"">install "& strContentPL &"</a>."& vbCrLf
 	end if
 end function
 %>

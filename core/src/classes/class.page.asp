@@ -2,33 +2,30 @@
 <%
 'class AspPage encapsulates Page Data as stored in database tblPages and tblPageContent
 
-const DEFAULT_ENCODING  = "iso-8859-1"
-const TDIV = " &raquo; "
-
 'dim customMessage : customMessage = session.contents("CustomMessage")
 'session.contents("CustomMessage")=""
 
 class AspPage
 	
-	private myFilePath
-	private myPageName
-	private myPageId
-	private myPageTitle
-	private myFileName
-	private myPathArray
-	private myPageDataDict
-	private myMetaData
-	private myCharSet
-	private myPageErrorsDict
-	private myModulesDict
-	private bolExists
-	private modules
-	private hasModules
-	private mySecurityLevel
-	private myStyleSheet
-	private hasStyleOverride
-	private myBreadcrumbs
-	private myCrumbDivider
+	private m_filepath
+	private m_name
+	private m_PID
+	private m_title
+	private m_filename
+	private m_path
+	private m_info
+	private m_metadata    
+	private m_charset
+	private m_Errors
+	private m_moduleList
+	private m_exists
+	private m_modules
+	private m_hasModules
+	private m_securityLevel
+	private m_stylesheet
+	private m_hasStyleOverride
+	private m_breadcrumbs
+	private m_breadcrumbDivider
 	private m_useCustomContent
 	
 	'============================
@@ -37,25 +34,25 @@ class AspPage
 
 	'called at creation of instance
 	private sub class_Initialize()
-		set myPageErrorsDict = Server.CreateObject("Scripting.Dictionary") 
-		set myModulesDict = Server.CreateObject("Scripting.Dictionary")
-		set myPageDataDict = Server.CreateObject("Scripting.Dictionary")
-		set modules = new SiteModules
-		mySecurityLevel = 0 'default security level is public
-		myStyleSheet = "main"
-		hasStyleOverride = false
-		redim myBreadcrumbs(2,0)
-		setCrumbDivider(TDIV)
+		set m_Errors = Server.CreateObject("Scripting.Dictionary") 
+		set m_moduleList = Server.CreateObject("Scripting.Dictionary")
+		set m_info = Server.CreateObject("Scripting.Dictionary")
+		set m_modules = new SiteModules
+		m_securityLevel = 0 'default security level is public
+		m_stylesheet = "main"
+		m_hasStyleOverride = false
+		redim m_breadcrumbs(2,0)
+		setCrumbDivider(globals("BREADCRUMB_DIVIDER"))
 		'default filepath is the url of the ASP file that includes the Page class.
 		setFile(request.ServerVariables("URL"))
 	end sub
 	
 	'called when object instance is set to nothing
 	private sub class_Terminate()
-		set myPageDataDict = nothing
-		set myPageErrorsDict = nothing
-		set myMetaData = nothing
-		set modules = nothing
+		set m_info = nothing
+		set m_Errors = nothing
+		set m_metadata = nothing
+		set m_modules = nothing
 	end sub
 
 	' set the internal scripting dictionary of 
@@ -67,75 +64,76 @@ class AspPage
 	' returned by the database query. 
 	' RETURN true if page was initialized correctly
 	' RETURN false if no content found or there was an error
-	private function initialize(filePath)
-		debugInfo("initializing file at path "&filePath)
-		bolExists = false
+	private function initialize(filepath)
+		debugInfo("initializing file at path " & filepath)
+		m_exists = false
 		initialize = false
 		setCharEncoding(DEFAULT_ENCODING)
-		myPathArray = split(filePath, "/")
-		myFileName = myPathArray(ubound(myPathArray))
-		myFilePath = replace(filePath,objLinks.item("SOURCEID")&"/","")
-		if left(myfilePath,1) = "/" then 	myFilePath = mid(myFilePath,2,len(myFilePath))
-		myPageName = PCase(PrettyText(myFileName)) 'default page name unless otherwise specified
-		myPageTitle = myPageName
-		set myPageDataDict = Server.CreateObject("Scripting.Dictionary")
+		m_path = split(filepath, "/")
+		m_filename = m_path(ubound(m_path))
+		m_filepath = replace(filepath, globals("PROJECT_NAME") & "/","")
+		if left(m_filepath,1) = "/" then 
+			m_filepath = mid(m_filepath, 2, len(m_filepath))
+		end if
+		
+		set m_info = Server.CreateObject("Scripting.Dictionary")
 		dim id
-		if isnull(myFilePath) or myFilePath = "" then 
+		if isNull(m_filepath) or m_filepath = "" then 
 			debugWarning("class.page.init: filepath must be non-null")
 		else 
-			if lcase(myFilePath) = "default.asp" then
-				set myPageDataDict =  getHomepageData()
+			if lcase(m_filepath) = "default.asp" then
+				set m_info =  getHomepageData()
 			else
-				set myPageDataDict = getPageDataByFileName(myFilePath)
+				set m_info = getPageDataByFileName(m_filepath)
 			end if
-			debug("class.page.init: page data dict size "&myPageDataDict.count)
-			id = myPageDataDict.item("PageID")
-			if myPageDataDict.count = 0 or id = "" then
-				debugWarning("class.page.init: no id found for filepath '"&myFilePath&"'")
+			debug("class.page.init: page data dict size "&m_info.count)
+			id = m_info.item("PageID")
+			if m_info.count = 0 or id = "" then
+				debugWarning("class.page.init: no id found for filepath '"&m_filepath&"'")
 				initialize = true
 			else
 				trace("class.page.init: obtaining page data for id '"&id&"'")
-				hasModules = modules.setPage(id)
-				if hasModules = true then
-					debugInfo("class.page.init: page has "&modules.count&" custom modules to display")
+				m_hasModules = m_modules.setPage(id)
+				if m_hasModules = true then
+					debugInfo("class.page.init: page has "&m_modules.count&" custom m_modules to display")
 				else
-					debugInfo("class.page.init: page has NO custom modules to display!")
+					debugInfo("class.page.init: page has NO custom m_modules to display!")
 				end if 
-				myPageName = myPageDataDict.item("PageName")
-				myFilePath = myPageDataDict.item("PageFileName")
-				myPageId =  myPageDataDict.item("PageID")
-				myPageTitle = iif(len(trim(myPageDataDict.item("PageTitle")))>0,myPageDataDict.item("PageTitle"),myPageName)
-				bolExists = true
+				m_name = m_info.item("PageName")
+				m_filepath = m_info.item("PageFileName")
+				m_PID =  m_info.item("PageID")
+				m_title = iif(len(trim(m_info.item("PageTitle")))>0,m_info.item("PageTitle"),m_name)
+				m_exists = true
 				initialize = true
 			end if		
 		end	if
-		myPageTitle = trim(myPageTitle) & objLinks.item("TITLE_DIVIDER") & objLinks.item("TITLE")
+		m_title = trim(m_title) & globals("TITLE_DIVIDER") & globals("TITLE")
 		initPageGlobals()		
 		trace(toString)
 	end function
 	
 	private function initPageGlobals()
-		addGlobal "PAGENAME",getName,null 
-		addGlobal "FILENAME",getFileName,null
-		addGlobal "FILEPATH",getFilePath,null
-		addGlobal "PAGE_ENCODING",getCharEncoding,null
-		addGlobal "PAGE_TITLE",getTitle,null
+		addGlobal "PAGENAME", getName, null 
+		addGlobal "FILENAME", getFileName, null
+		addGlobal "FILEPATH", getFilePath, null
+		addGlobal "PAGE_ENCODING", getCharEncoding, null
+		addGlobal "PAGE_TITLE", getTitle, null
 	end function
 
 	private function addError(strErrorMessage)
-		myPageErrorsDict.add ""&myPageErrorsDict.count, strErrorMessage
+		m_Errors.add "" & m_Errors.count, strErrorMessage
 	end function
 	
 	'return the dictionary object of Errors for this page
 	public function getErrors()
-		set getErrors = myPageErrorsDict
-	end function	
+		set getErrors = m_Errors
+	end function
 	
 	're-initialize this Page with the specified file
 	'returns FALSE if an error was encountered
 	public function setFile(filename)
 		dim result
-		debug("class.page.setFile: '"&filename&"'")
+		debug("class.page.setFile: '"& filename &"'")
 		if isNull(filename) or filename = "" then 
 			debugWarning("class.page.setFile: non-null filename required")
 			result = false
@@ -151,67 +149,131 @@ class AspPage
 	end function
 	
 	public function setSecurityLevel(intLevel)
-		mySecurityLevel = cint(intLevel)	
+		m_securityLevel = cint(intLevel)	
 	end function
 	
 	public function getSecurityLevel()
-		getSecurityLevel = mySecurityLevel
+		getSecurityLevel = m_securityLevel
 	end function
 	
-	'change the character encoding of this class.page.
-	'RETURNS FALSE if an error was encountered
+	'**
+	'* Change the Page's character encoding.
+	'* @return (bool)
+	'*   Returns FALSE if an error was encountered.
 	public function setCharEncoding(strCharSet)
 		trace("class.page.setCharEncoding: '"&strCharSet&"'")
-		myCharSet = strCharSet
+		m_charset = strCharSet
 	end function
 
+	'**
+	'* Retrieve the Page's character encoding.
+	'* @return string 
+	'*   Returns the current Page's character encoding.
 	public function getCharEncoding()
-		getCharEncoding = myCharSet
+		getCharEncoding = m_charset
 	end function
 
-	'return the meta data formatted for display inside the HTML <head> tag
+	'**
+	'* Retrieve the Page's metadata formatted for display in the HEAD tag.
+	'*
 	public function getMetaData()
 		dim a : set a = new FastString
-		a.add "<meta http-equiv=""content-type"" content=""text/html; charset="&getCharEncoding&""" />" & vbcrlf
-		if getDescription <> "" then	a.add "<meta name=""description"" content="""&getDescription& """ />" & vbcrlf
-		if getKeywords <> "" then	a.add "<meta name=""keywords"" content="""&getKeywords & """ />" & VbCrLf
+		a.add "<meta http-equiv=""content-type"" content=""text/html; charset="& getCharEncoding &""" />"& vbCrLf
+		if getDescription <> "" then
+			a.add "<meta name=""description"" content="""& getDescription &""" />"& vbCrLf
+		end if
+		if getKeywords <> "" then
+			a.add "<meta name=""keywords"" content="""& getKeywords &""" />"& vbCrLf
+		end if
 		getMetaData = a.value
 		set a = nothing
 	end function
 	
-	'return the page description string for display in the HTML <meta name="description"> tag
+	'**
+	'* Retrieve the Page's description.
+    '* Useful for display in the description metadata HTML tag.
+	'*
 	public function getDescription()
-		getDescription = objLinks.item("DESCRIPTION")
-		if myPageDataDict.item("PageDescription") <> "" then 
-			getDescription = getDescription & " " & replace(myPageDataDict.item("PageDescription"),"""","'")
+		getDescription = globals("DESCRIPTION")
+		if m_info.item("PageDescription") <> "" then 
+			getDescription = getDescription &" "& replace(m_info.item("PageDescription"), """", "'")
 		end if
 	end function
-	
-	
-	'return the page keywords string for display in the HTML <meta name="keywords"> tag
+
+	'**
+	'* Retrieve the Page's keywords.
+    '* Useful for display in the keywords metadata HTML tag.
+	'*
 	public function getKeywords()
-		getKeywords = objLinks.item("KEYWORDS") 
-		if myPageDataDict.item("PageKeywords") <> "" then 
-			getKeywords = getKeywords & " " & replace(myPageDataDict.item("PageKeywords"),"""","'")
+		getKeywords = globals("KEYWORDS") 
+		if m_info.item("PageKeywords") <> "" then 
+			getKeywords = getKeywords & " " & replace(m_info.item("PageKeywords"),"""","'")
+		end if
+	end function
+
+	'**
+	'* Retrieve the Page's name, useful for display in the title and elsewhere.
+	'* If no page name has been specifically set, then the name defaults to a
+    '* formatted and capitalized version of the filename without the file 
+	'* extension. 
+	'* 
+	'* For example:   our_services.asp => Our Services
+	'* 
+	'* @return string
+	'*   The current Page's name.
+	'*
+	public function getName()
+		if m_name <> "" then
+			getName = m_name
+		else
+			getName = PCase(PrettyText(m_filename)) 
+		end if
+	end function
+
+	'**
+	'* Change the Name of the current page.
+	'* If no pagename is specifically set, then the pagename defaults to the 
+	'* filename, without a file extension.
+	'* 
+	'* @param string name
+	'*    the current Page's name.
+	'* @see Page.getName()  
+	public function setName(name)
+		m_name = name
+	end function
+
+	'**
+	'* Retrieve the Page's title. Useful for display in the TITLE tag.
+	'* If no page title is specifically set, then the title defaults to the 
+	'* Page's name. There is a special case for formatting the Page titles of 
+	'* administration pages.
+	'* @return string title
+	'*   the current Page's title.
+	'* @see Page.getName()
+	public function getTitle()
+		
+		' Use pagename if title doesnt exist.
+		if m_title = "" then
+			m_title = getName()
+		end if
+		
+		' The title must be entity-encoded.
+		getTitle = encode(m_title)
+		
+		' Special case handling for administrative pages.
+		if isAdminPage = TRUE then
+			getTitle = " Administer " & m_title & globals("TITLE_DIVIDER") & globals("TITLE") &" ["&PRODUCT_BRANDING&" "&PRODUCT_VERSION&"]"
 		end if
 	end function
 	
-	
-	'This function returns the page name to be displayed in the title and elsewhere.
-	'Page name is a formatted and capitalized version of the filename without a file extension (.asp)
-	public function getName()
-		getName = myPageName
+	public function setTitle(title)
+		m_title = title
 	end function
-	
-	'change the default page name (the calling page's asp filename) to the specified name.
-	public function setName(strName)
-		myPageName = strName
-	end function
-	
+
 	' return a Dictionary object of the Parent Page
 	public function getParentPage()
-		set getParentPage = getPageDataById(myPageDataDict.item("ParentPage"))
-	end function 
+		set getParentPage = getPageDataById(m_info.item("ParentPage"))
+	end function
 	
 	'return the parent page name string of the current Page 
 	public function getParentPageName()
@@ -222,85 +284,78 @@ class AspPage
 	'return "0" if page has no parent
 	'return the empty string if page doesnt exist
 	public function getParentPageId()
-		getParentPageId = myPageDataDict.item("ParentPage")
+		getParentPageId = m_info.item("ParentPage")
 	end function
 	
 	'return the file name with no formatting, including the file extension (.asp)
 	public function getFileName()
-		getFileName = myFileName
+		getFileName = m_filename
 	end function
 	
 	'TODO: move this functionality to globals or somewhere else because it 
 	' has nothing to do with a page, but more has to do with the site.
 	public function getRootPath()
-		getRootPath = objLinks.item("ROOT_PATH")
-	end function 
+		getRootPath = globals("ROOT_PATH")
+	end function
 	
 	'returns the relative path/filename of the Page, based off of the site root.
 	public function getFilePath()
-		getFilePath = myFilePath
-	end function 
-	
-	'return the page title as it should be displayed in the HTML <title> tag
-	public function getTitle()
-		getTitle = encode(myPageTitle)
-		if isAdminPage = true then getTitle = " Admin"& TDIV & myPageTitle & objLinks("TITLE_DIVIDER")&objLinks("TITLE") &" ["&PRODUCT_BRANDING&" "&PRODUCT_VERSION&"]"
+		getFilePath = m_filepath
 	end function
 	
-	public function setTitle(title)
-		myPageTitle = title
-	end function
-	
-	public function addBreadcrumb(strName,strURL)
-		debugInfo("adding BREADCRUMB: '"&strName&"' url '"&strURL&"'")
-		dim lastCrumb : lastCrumb = ubound(myBreadCrumbs,2)
+	public function addBreadcrumb(strName, strURL)
+		debugInfo("adding BREADCRUMB: '" & strName & "' url '" & strURL & "'")
+		dim lastCrumb : lastCrumb = ubound(m_breadcrumbs, 2)
 		debugInfo("number of crumbs is  '"&lastCrumb&"'")
-		if lastCrumb = 0 and len(myBreadcrumbs(0,lastCrumb))>0 and len(myBreadcrumbs(1,lastCrumb))>0 then
-			lastCrumb = lastCrumb+1
+		if lastCrumb = 0 and len(m_breadcrumbs(0, lastCrumb)) > 0 and len(m_breadcrumbs(1, lastCrumb)) > 0 then
+			lastCrumb = lastCrumb + 1
 		end if
-		redim preserve myBreadcrumbs(2,lastCrumb)
-		myBreadcrumbs(0,lastCrumb)=strURL
-		myBreadcrumbs(1,lastCrumb)=strName
+		redim preserve m_breadcrumbs(2, lastCrumb)
+		m_breadcrumbs(0, lastCrumb) = strURL
+		m_breadcrumbs(1, lastCrumb) = strName
 	end function
 	
 	public function setCrumbDivider(strDivider)
-		myCrumbDivider = " " & trim(strDivider) & " "
+		m_breadcrumbDivider = " " & trim(strDivider) & " "
 	end function
 
 	public function getBreadcrumbs()
-		dim str,i
+		dim i, url, name, title, str
 		on error resume next
-		for i=0 to ubound(myBreadcrumbs,2)
-			debugInfo("adding crumb '"&i&"'")
-			debugInfo("... url '"&myBreadcrumbs(0,i)&"', name '"&myBreadcrumbs(1,i)&"'")
-			str = str & a(myBreadcrumbs(0,i),myBreadcrumbs(1,i),"Open "&myBreadcrumbs(1,i),null) & myCrumbDivider
+		for i=0 to ubound(m_breadcrumbs, 2)
+			url = m_breadcrumbs(0, i)
+			name = m_breadcrumbs(1, i)
+			title = "Open "& name
+			debugInfo("adding breadcrumb '"&i&"'")
+			debugInfo("... url '"& url &"', name '"& name &"'")
+			str = str & a(url, name, title, null) & m_breadcrumbDivider
 		next
 		getBreadcrumbs = str & getName 
 	end function
 	
 	public function getId()
-		getId = myPageId
+		getId = m_PID
 	end function
 	
 	public function getStyle()
-		if not hasStyleOverride then
-			if len(myPageDataDict.item("Style")) > 0 then
-				if fileExists("/styles/"&myPageDataDict.item("Style")&".css") then
-					myStyleSheet = myPageDataDict.item("Style")
+		if not m_hasStyleOverride then
+			if len(m_info.item("Style")) > 0 then
+				if fileExists("/styles/" & m_info.item("Style") & ".css") then
+					m_stylesheet = m_info.item("Style")
 				end if
 			end if
 		end if
-		writeln(link(objLinks.item("SITEURL")&"/styles/"&myStyleSheet&".css","stylesheet","text/css"))
+		writeln(link(globals("SITEURL") & "/styles/" & m_stylesheet & ".css", "stylesheet", "text/css"))
 		if (isIE60() = true) and (fileExists("/styles/css-framework/ie.css") = true) then
 			writeln("<!--[if lt IE 7]>")
-			writeln(link(objLinks.item("SITEURL") & "/styles/css-framework/ie.css","stylesheet","text/css"))
+			writeln(link(globals("SITEURL") & "/styles/css-framework/ie.css", "stylesheet", "text/css"))
 			writeln("<![endif]-->")
 		end if
 		if isDebugMode() = true then 
-			writeln(link(objLinks.item("SITEURL")&"/core/assets/style/debug.css","stylesheet","text/css") )
+			writeln(link(globals("SITEURL") & "/core/assets/style/debug.css", "stylesheet", "text/css") )
 		end if
 		if isIE() = true then 
-			writeln("<script type=""text/javascript"" src="""&objLinks.item("SITEURL")&"/core/assets/scripts/sfhover.js""></script>" )
+			writeln("<script type=""text/javascript"" src=""" & globals("SITEURL") &"/core/assets/scripts/sfhover.js""></script>" )
 		end if
 	end function
 	
@@ -312,9 +367,9 @@ class AspPage
 	'   Returns true if the file exists.
 	public function setStyle(byval strStyleSheetName)
 		setStyle = false
-		if fileExists("/styles/"&strStyleSheetName&".css") then
-			trace("class.page.setStyle:  style set to '"&strStyleSheetName&"'")
-			myStyleSheet = strStyleSheetName
+		if fileExists("/styles/" & strStyleSheetName & ".css") then
+			trace("class.page.setStyle:  style set to '" & strStyleSheetName & "'")
+			m_stylesheet = strStyleSheetName
 			setStyle = true
 		end if
 	end function
@@ -325,19 +380,19 @@ class AspPage
 	' folder.
 	'   Returns true if the override is successful (if file exists).
 	public function overrideStyle(byval strStyleSheetName)
-		overrideStyle = false
+		overrideStyle = FALSE
 		trace("class.page.overrideStyle:  attempting to override stylesheet with '"&strStyleSheetName&"'")
-		if setStyle(strStyleSheetName) = true then
-			hasStyleOverride = true
-			overrideStyle = true
+		if setStyle(strStyleSheetName) = TRUE then
+			m_hasStyleOverride = TRUE
+			overrideStyle = TRUE
 		end if	
 	end function
 		
 	'return the content of this Page with HTML formatting
 	public function getContent()
-		ignoreDBContent = false
-		dim divOpen : divOpen = vbcrlf&"<div class=""first""><div><div class=""wrapper"">"&vbcrlf
-		dim divClose : divClose = vbcrlf&"<br clear=""all""/>"&vbcrlf&"</div></div></div>"&vbcrlf
+		ignoreDBContent = FALSE
+		dim divOpen : divOpen = vbCrLf &"<div class=""first""><div><div class=""wrapper"">"& vbCrLf
+		dim divClose : divClose = vbCrLf &"<br clear=""all""/>"& vbCrLf &"</div></div></div>"& vbCrLf
 		dim a, msg, cnt 
 		set a = New FastString
 		on error resume next
@@ -348,22 +403,22 @@ class AspPage
 		session.contents.remove("main")
 		session.contents.remove(CUSTOM_MESSAGE)'clear custom message once its been grabbed
 		if len(msg) > 0 then 
-			a.add vbcrlf & msg & vbcrlf
+			a.add vbCrLf & msg & vbCrLf
 		end if
 		if pageHasErrors = true then
 			processErrors
 		end if
 		if exists then
 			if user.isAdministrator then 
-				a.add  vbcrlf & "<div class='adminedit'><a title='Edit This Page' href='"&objLinks.item("ADMINURL")&"/pages/pages.asp?edit="&myPageDataDict.item("PageID")&"'><span>Edit</span></a></div>" &vbcrlf
+				a.add  vbCrLf & "<div class='adminedit'><a title='Edit This Page' href='"& globals("ADMINURL") &"/pages/pages.asp?edit="& m_info.item("PageID") &"'><span>Edit</span></a></div>" & vbCrLf
 			end if
-			a.add myPageDataDict.item("PageContent")
+			a.add m_info.item("PageContent")
 		end if
 		if len(cnt) > 0 then 
 			if m_useCustomContent = true then a.clear
-			a.add vbcrlf & cnt & vbcrlf
+			a.add vbCrLf & cnt & vbCrLf
 		end if
-		getContent = divOpen & EmailObfuscate(GlobalVarFill(a.value)) & divClose
+		getContent = divOpen & EmailObfuscate(token_replace(a.value)) & divClose
 		set a = nothing
 		ignoreDBContent = false
 	end function
@@ -385,8 +440,8 @@ class AspPage
 
 	' a wrapper function that executes functionality of Class
 	' SiteModules.executeMod() subroutine.
-	public sub executeMod(strHandler,strCustomSettings)
-		modules.executeMod strHandler,strCustomSettings
+	public sub executeMod(strHandler, strCustomSettings)
+		m_modules.executeMod strHandler, strCustomSettings
 	end sub	 	
 
 	' return an HTML formatted string "summary" of content
@@ -407,25 +462,25 @@ class AspPage
 		end if
 		trace("class.page.hasParent: "&result)
 		hasParent = result
-	end function	
+	end function
 	
 	public function hasContent()
-		dim result : result = (myPageDataDict.item("PageContent") <> "")
+		dim result : result = (m_info.item("PageContent") <> "")
 		hasContent = result
-		trace("class.page.hasContent: "&result)
+		trace("class.page.hasContent: "& result)
 	end function
 	
 	public function exists()
-		exists = bolExists
-		trace("class.page.exists: "&bolExists)
-	end function 
+		exists = m_exists
+		trace("class.page.exists: "& m_exists)
+	end function
 	
 	'returns true if the ADMIN_DIR is included in the file path of the current page
 	public function isAdminPage()
-		dim result : result = cbool(instr(getFilePath,objLinks.item("ADMIN_DIR")) > 0)
-		trace("class.page.isAdminPage: getfilepath="&getFilePath)
-		trace("class.page.isAdminPage: adminDir="&objLinks.item("ADMIN_DIR"))
-		trace("class.page.isAdminPage: "&result)
+		dim result : result = cbool(instr(getFilePath,globals("ADMIN_DIR")) > 0)
+		trace("class.page.isAdminPage: getfilepath="& getFilePath)
+		trace("class.page.isAdminPage: adminDir="& globals("ADMIN_DIR"))
+		trace("class.page.isAdminPage: "& result)
 		isAdminPage = result
 	end function
 	
@@ -433,24 +488,30 @@ class AspPage
 	' the keys in the dictionary are the database column names 
 	' from tblPages and tblPageContent
 	public function getPageData()
-		set getPageData = myPageDataDict
+		set getPageData = m_info
 	end function
 	
 
-	' return a scripting dictionary of page data for the specified page id.  This page data is 
-	' a combination of page metadata from tblPages and the most recent modification from 
-	' tblPagesContent.  The keys in the scripting dictionary are the field names from the 
-	' returned database query. 
-	public function getPageDataById(id)
+	'**
+	'* Retrieve the Page Data of the page specified by id.  The page data is 
+	'* a combination of page metadata from tblPages and the most recent 
+	'* modification from tblPagesContent.  The keys in the scripting dictionary
+	'* are the field names from the returned database query.  
+	'*
+	'* @param String pageID
+	'*   The PageID who's PageData you want to retrieve.
+	'* @return Scripting Dictionary
+	'*   The PageData object.
+	public function getPageDataById(pageID)
 		dim rs, sd, key, val, counter, i, sql
 		set sd = Server.CreateObject("Scripting.Dictionary")
-		debug("class.page.getPageDataById:  getting page data for id '"&id&"'...")
-		if isnull(id) or id = "" then 
-			debugWarning("class.page.getPageDataById: non-null id required")
+		debug("class.page.getPageDataById:  getting page data for pageID '"& pageID &"'...")
+		if isNull(pageID) or pageID = "" then 
+			debugWarning("class.page.getPageDataById: non-null pageID required")
 		else 
 			sql = "SELECT TOP 1 tblPages.*, tblPageContent.ContentID, tblPageContent.PageContent, tblPageContent.ModifiedDate "_
 			&"FROM tblPages LEFT JOIN tblPageContent ON tblPages.PageID = tblPageContent.PageID "_
-			&"WHERE (((tblPages.PageID)="&id&")) "_
+			&"WHERE (((tblPages.PageID)="& pageID &")) "_
 			&"ORDER BY tblPageContent.ContentId DESC;"
 			set rs = db.getRecordSet(sql)
 			
@@ -487,7 +548,7 @@ class AspPage
 	end function
 	
 	public function getModuleById(id)
-		modules.getModuleById(id)
+		m_modules.getModuleById(id)
 	end function
 	
 	public function getHomepageData()
@@ -504,7 +565,9 @@ class AspPage
 			&" ) "_
 			&"ORDER BY tblPages.PageID, tblPageContent.ContentId DESC;"
 		set rs = db.getRecordSet(sql)
-		if rs.state > 0 then
+		if rs is nothing then 
+			debugError("class.page.getHomepageData: database could not be found.")
+		elseif rs.state > 0 then
 			if rs.EOF and rs.BOF then
 				debugError("class.page.getHomepageData: no homepage could be found in the database.")
 			else
@@ -535,7 +598,7 @@ class AspPage
 		dim rs, sd, key, val, counter, i, sql
 		set sd = Server.CreateObject("Scripting.Dictionary")
 		debug("class.page.getPageDataByFileName:  getting page data for path '"&strFilePath&"'...")
-		if isnull(strFilePath) or strFilePath = "" then 
+		if isNull(strFilePath) or strFilePath = "" then 
 			debugWarning("class.page.getPageDataByFileName: non-null path required")
 		else 
 			sql = "SELECT TOP 1 tblPages.*, tblPageContent.ContentID, tblPageContent.PageContent, tblPageContent.ModifiedDate "_
@@ -582,7 +645,7 @@ class AspPage
 	'return the unique database ID string for the page with the specified name
 	private function getPageIdByName(strName)
 		dim rs, sql
-		if isnull(strName) or strName = "" then 
+		if isNull(strName) or strName = "" then 
 			debugWarning("class.page.getPageIdByName: non-null name required")
 		else 
 			sql="SELECT tblPages.PageID "_
@@ -598,13 +661,13 @@ class AspPage
 				getPageIdByName = rs(0)
 			end if
 		end if
-	end function 
+	end function
 	
 	'return the unique database ID string for the page with the specified relative file path 
 	public function getPageIdByFilePath(strFilePath) 
 		debugWarning("page.class.getPageIdByFilePath: this method is deprecated,  please create a new page and use the getId() method")
 		'dim rs
-		'if isnull(strFilePath) or strFilePath = "" then 
+		'if isNull(strFilePath) or strFilePath = "" then 
 			'debugWarning("class.page.getPageIdByFilePath: non-null filepath required")
 		'else 
 			'debug("class.page.getPageIdByFilePath: query database for PageId by FilePath '"&strFilePath&"'")
@@ -620,14 +683,14 @@ class AspPage
 			'end if
 			
 		'end if
-	end function 
+	end function
 
 	public function toString()
 		dim a : set a = new FastString 
-		a.add "class.page.PageId = '"&myPageId&"'"&vbcrlf
-		a.add "class.page.PageName = '"&myPageName&"'"&vbcrlf
-		a.add "class.page.FilePath = '"&myFilePath&"'"&vbcrlf
-		a.add "class.page.FileName = '"&myFileName&"'"&vbcrlf
+		a.add "class.page.PageId = '"&m_PID&"'"& vbCrLf
+		a.add "class.page.PageName = '"&m_name&"'"& vbCrLf
+		a.add "class.page.FilePath = '"&m_filepath&"'"& vbCrLf
+		a.add "class.page.FileName = '"&m_filename&"'"& vbCrLf
 		toString = a.value
 		set a = nothing
 	end function
@@ -636,7 +699,7 @@ class AspPage
 	
 	
 	'Summary:  
-	'          Process this page's modules registered at the specified location. 
+	'          Process this page's m_modules registered at the specified location. 
 	'
 	'Example: 
 	'          Provided the following locations 'main,sub,local' exist as valid 
@@ -668,7 +731,7 @@ class AspPage
 		if strLocation = "meta" then getMeta
 		if strLocation = "analytics" then getAnalytics
 		if strLocation = "banner" then response.write(getBanner)
-		modules.display(strLocation)
+		m_modules.display(strLocation)
 		trace("...end class.page.display('"&strLocation&"')")
 	end function
 	
@@ -700,16 +763,16 @@ class AspPage
 					debug("class.page.getLocalLinks: there are no children or siblings to list for this page")
 				else
 					set objLocalList = Server.CreateObject("Scripting.Dictionary")
-					a.add vbcrlf 
-					a.add indent(3) &	"<ul>" & vbcrlf 
+					a.add vbCrLf 
+					a.add indent(3) &	"<ul>" & vbCrLf 
 					rsLocalPages.MoveFirst
 					do until rsLocalPages.EOF
-						strLocalLink = indent(3) & CreateNavLink(rsLocalPages("PageFileName"), rsLocalPages("PageName"), rsLocalPages("PageLinkHoverText"),"") & "</li>" & vbcrlf
+						strLocalLink = indent(3) & CreateNavLink(rsLocalPages("PageFileName"), rsLocalPages("PageName"), rsLocalPages("PageLinkHoverText"),"") & "</li>" & vbCrLf
 						a.add strLocalLink 
 						trapError
 						rsLocalPages.MoveNext
 					Loop
-					a.add indent(3) &	"</ul>" & vbcrlf
+					a.add indent(3) &	"</ul>" & vbCrLf
 				end if
 			end if
 			
@@ -725,8 +788,8 @@ class AspPage
 	public function getBanner()
 		if fileExists(DEFAULT_BANNER) then 
 			dim a : set a = new FastString
-			a.add indent(2) & "<div class=""banner"">" & vbcrlf
-			a.add indent(2) & img(objLinks.item("BANNER"),"Banner Image",objLinks.item("BANNER_TITLE"),"banner")
+			a.add indent(2) & "<div class=""banner"">" & vbCrLf
+			a.add indent(2) & img(globals("BANNER"),"Banner Image",globals("BANNER_TITLE"),"banner")
 			a.add indent(2) & "</div>"
 			getBanner = a.value
 			set a = nothing
@@ -759,7 +822,7 @@ class AspPage
 	public function getSampleContent(strLocation)
 		select case strLocation
 			case "local", "sub" 
-				getSampleContent = "<div><div><div class=""wrapper"">"&replace(objLinks("BOILERPLATE_CONTENT"),"Section",PCase(strLocation))&"</div></div></div>"
+				getSampleContent = "<div><div><div class=""wrapper"">"&replace(globals("BOILERPLATE_CONTENT"),"Section",PCase(strLocation))&"</div></div></div>"
 			case else
 				getSampleContent = ""
 		end select

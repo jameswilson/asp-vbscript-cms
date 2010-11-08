@@ -38,14 +38,14 @@ end function
 'returns HTML formatted list of testimonials
 function getActiveTestimonialsAsHTML()
 	dim rsTestimonilas, a, sql, strEven, i, strAdmin
-	strAdmin = objLinks.item("ADMINURL")&"/modules/testimonials/testimonials.asp"
+	strAdmin = globals("ADMINURL")&"/modules/testimonials/testimonials.asp"
 	set a = New FastString
-	a.add "<div id=""testimonials"">" &vbcrlf
+	a.add "<div id=""testimonials"">" & vbCrLf
 	if user.isAdministrator() then
-		a.add indent(1) & "<ul>" & vbcrlf
-		a.add indent(2) & "<li><a title=""Administer all testimonials."" href="""&strAdmin&"?view"">Admin Testimonials</a></li>" & vbcrlf
-		a.add indent(2) & "<li class=""last""><a title=""Create a new testimonials."" href="""&strAdmin&"?create"">Create New Testimonial</a></li>  " & vbcrlf
-		a.add indent(1) & "</ul>" & vbcrlf
+		a.add indent(1) & "<ul>" & vbCrLf
+		a.add indent(2) & "<li><a title=""Administer all testimonials."" href="""&strAdmin&"?view"">Admin Testimonials</a></li>" & vbCrLf
+		a.add indent(2) & "<li class=""last""><a title=""Create a new testimonials."" href="""&strAdmin&"?create"">Create New Testimonial</a></li>  " & vbCrLf
+		a.add indent(1) & "</ul>" & vbCrLf
 	end if
 	sql="SELECT * "_
 		 &"FROM tblTestimonials "_
@@ -54,33 +54,33 @@ function getActiveTestimonialsAsHTML()
 	i = 1
 	do while not rsTestimonials.EOF and not rsTestimonials.BOF
 		strEven = iif( i mod 2 = 0, " even", " odd")
-		a.add indent(1) & "<div class=""testimonial"&strEven&""">"&vbcrlf
+		a.add indent(1) & "<div class=""testimonial"&strEven&""">"& vbCrLf
 		
 		dim comments : comments = rsTestimonials("Comments")
 		if user.isAdministrator() then
 			comments = comments & "<span class=""adminedit""><a title=""Edit This Testimonial"" href="""&strAdmin&"?edit="&rsTestimonials("ID")&"""><span>...edit</span></a></span>"
 		end if
 		if (instr(lcase(comments),"<p>")=0) then comments = p(comments)
-		a.add indent(2) & "<div class=""comment"" id=""comment"&rsTestimonials("ID")&""">"& vbcrlf
-		a.add indent(3) & comments & vbcrlf
-		a.add indent(2) & "</div>" & vbcrlf
-		a.add indent(2) & "<div class=""author"">"&vbcrlf
+		a.add indent(2) & "<div class=""comment"" id=""comment"&rsTestimonials("ID")&""">"& vbCrLf
+		a.add indent(3) & comments & vbCrLf
+		a.add indent(2) & "</div>" & vbCrLf
+		a.add indent(2) & "<div class=""author"">"& vbCrLf
 		if lcase(rsTestimonials("ShowEmail")) = lcase("true") then
-			a.add indent(3) & "<span class=""name email""><a href="""&EmailObfuscate("mailto:"&rsTestimonials("Email"))&"?subject=Regarding Your Review on "&objLinks("SITENAME")&" Site"">"&rsTestimonials("Name")&"</a></span>" & vbcrlf
+			a.add indent(3) & "<span class=""name email""><a href="""&EmailObfuscate("mailto:"&rsTestimonials("Email"))&"?subject=Regarding Your Review on "&globals("SITENAME")&" Site"">"&rsTestimonials("Name")&"</a></span>" & vbCrLf
 		else 
-			a.add indent(3) & "<span class=""name"">"&rsTestimonials("Name")&"</span>" & vbcrlf
+			a.add indent(3) & "<span class=""name"">"&rsTestimonials("Name")&"</span>" & vbCrLf
  		end if
-		a.add indent(3) & "<span class=""location"">"&rsTestimonials("Location")&"</span> "& vbcrlf
-		a.add indent(3) & "<span class=""date"">"&rsTestimonials("TestimonialDate")&"</span>" & vbcrlf 
-		a.add indent(2) & "</div>"&vbcrlf
-		a.add indent(1) & "</div>"&vbcrlf
+		a.add indent(3) & "<span class=""location"">"&rsTestimonials("Location")&"</span> "& vbCrLf
+		a.add indent(3) & "<span class=""date"">"&rsTestimonials("TestimonialDate")&"</span>" & vbCrLf 
+		a.add indent(2) & "</div>"& vbCrLf
+		a.add indent(1) & "</div>"& vbCrLf
 		trapError
 		rsTestimonials.movenext
 		i=i+1
 	loop
 	
 	processErrors
-	a.add "</div>" &vbcrlf
+	a.add "</div>" & vbCrLf
 	getActiveTestimonialsAsHTML = getCSS & a.value
 	set a = nothing
 end function

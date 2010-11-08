@@ -7,7 +7,7 @@
 ' COLLISION RESOLUTION:  if you provide an existing dictionary as the objDict, it is useful to
 ' also provide the appropriate setting if a key provided in the strList already exists in the 
 ' provided dictionary.  The possible collisionResolution options are:
-'   0 : Leave the existing value in place   [DEFAULT, same as "", or null]
+'   0 : Leave the existing value in place   [DEFAULT, same as "", or , null]
 '   1 : Overwrite the existing value with the new value provided in the strList.
 '   2 : Append the new value provided in the strList to the existing value found in the 
 '       provided dictionary object.

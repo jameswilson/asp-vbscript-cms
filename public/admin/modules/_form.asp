@@ -1,4 +1,4 @@
-<!--#include file="../../core/src/classes/class.form.asp"-->
+<!--#include file="../../../core/src/classes/class.form.asp"-->
 <%
 const MODULE_LOCATIONS = "header,nav,main,local,sub,footer,extra1,extra2,extra3"
 const MODULE_CUSTOM_FIELDS = "admin.asp"  'name of file (in module folder) where custom form fields are imported
@@ -11,56 +11,56 @@ checked = ""
 selected = ""
 
 if len(id)> 0 then 
-	debug("admin.mod.buildFormContents: id supplied was "&id)
+	debug("admin.mod.buildFormContents: id supplied was "& id)
 	set modules = new SiteModules
 	set sd = modules.getModuleById(id)
 else
 	debug("admin.mod.buildFormContents:  no id was supplied ")
 	set sd = Server.CreateObject("Scripting.Dictionary")
-	sd.add "Active",""&true
-	sd.add "Location","main"
+	sd.add "Active", cstr(TRUE)
+	sd.add "Location", "main"
 end if
 
 if len(modType) > 0 then 
 	set modules = new SiteModules
 	set sd = modules.getModuleByType(modType)
-	sd.add "Type", ""&modType
+	sd.add "Type", cstr(modType)
 	dim mods : set mods = modules.getActiveModules()
-	debug("Modhandler is " &mods.item(""&modType))
+	debug("Modhandler is " & mods.item(cstr(modType)))
 	
-	sd.add "ModHandler", mods(""&modType)
-	sd.add "Active",""&true
-	sd.add "Location","main"
+	sd.add "ModHandler", mods(cstr(modType))
+	sd.add "Active", cstr(TRUE)
+	sd.add "Location", "main"
 end if
-if len(sd("ModName"))>0 then strHeader.add sd("ModName")&" Module"
+if len(sd("ModName")) > 0 then strHeader.add sd("ModName") & " Module"
 
 
 with myForm
 '.CreateNew formName, action
-if not (myForm.isForNewContent = true) then .addFormInput  "", "", "ID",  "hidden", "", sd("ID"), "",""
+if not (myForm.isForNewContent = TRUE) then .addFormInput "", "", "ID", "hidden", "", sd("ID"), "", ""
 
-.addFormInput  "", "", "Type",  "hidden", "", sd("Type"), "",""
-.addFieldset "Module Info",""
+.addFormInput  "", "", "Type", "hidden", "", sd("Type"), "", ""
+.addFieldset "Module Info", ""
 .startNoteSection()
-.addNote sd("ModName")&" Module",sd("ModDescription")
+.addNote sd("ModName") & " Module", sd("ModDescription")
 .endNoteSection()
 .addFormInput  "required", "Module Name", "Name",  "text", "", sd("Name"), " maxsize=""50""",""
-.addFormInput  "optional", "Description", "Description",  "textarea", "simple", sd("Description"), DBTEXT,""
-if ""&sd("Active") = ""&true then checked = "checked"
-.addFormInput  "optional", "This module is active?", "Active", "checkbox", "", "1",  checked, ""
+.addFormInput  "optional", "Description", "Description",  "textarea", "simple", sd("Description"), DBTEXT, ""
+if cstr(sd("Active")) = cstr(TRUE) then checked = "checked"
+.addFormInput  "optional", "This module is active?", "Active", "checkbox", "", "1", checked, ""
 
 'process and insert modules custom settings
-dim moduleHandler : moduleHandler = MODULE_FOLDER& sd("ModHandler")&"/"&MODULE_CUSTOM_FIELDS
+dim moduleHandler : moduleHandler = MODULE_FOLDER & sd("ModHandler") &"/"& MODULE_CUSTOM_FIELDS
 dim custModuleResults : custModuleResults = executeFile(moduleHandler, getVariableDefinitionScript(sd))
-debug("admin.mod.buildFormContents: file execution returned: "&custModuleResults)
-.addFormSubmission "left","Submit &raquo;","","",""
+debug("admin.mod.buildFormContents: file execution returned: "& custModuleResults)
+.addFormSubmission "left", "Submit &raquo;", "", "", ""
 .endFieldset 
 
 .addFieldset "Module Location",""
-.addFormSelect "required", "Location", "Location","selectOne",""
-for each location in split(MODULE_LOCATIONS,",")
+.addFormSelect "required", "Location", "Location", "selectOne", ""
+for each location in split(MODULE_LOCATIONS, ",")
 	selected = ""
-	debug("module location is '"&sd("Location")&"'")
+	debug("module location is '"& sd("Location") &"'")
 	if lcase(trim(location)) = lcase(trim(sd("Location"))) then selected = "selected"
 	.addFormOption "Location", lcase(trim(location)), lcase(trim(location)), selected
 next
@@ -76,8 +76,8 @@ end if
 
 
 .addFormSelect "required", "Page(s)", "PageIDs","selectMany"," size=""10"""
-if instr(sd("PageIDs"),":0:")> 0 then selected = "selected"
-.addFormOption "PageIDs", ":0:", "All",selected
+if instr(sd("PageIDs"), ":0:") > 0 then selected = "selected"
+.addFormOption "PageIDs", ":0:", "All", selected
 set rs = db.getRecordSet("SELECT * FROM tblPages ORDER BY Active, MainMenu, MenuIndex, ParentPage;")
 if not (rs.EOF and rs.BOF) then
 	rs.movefirst
@@ -85,8 +85,8 @@ if not (rs.EOF and rs.BOF) then
 		selected = ""
 		active = " [Inactive]"
 		if (rs("Active")) then active = " [Active]"
-		if instr(sd("PageIDs"),":"&rs("PageId")&":")> 0 then selected = "selected"
-		.addFormOption "PageIDs", ":"&rs("PageId")&":", rs("PageName")&active, selected
+		if instr(sd("PageIDs"),":" & rs("PageId") & ":")> 0 then selected = "selected"
+		.addFormOption "PageIDs", ":" & rs("PageId") & ":", rs("PageName") & active, selected
 		rs.movenext
 	loop
 end if
@@ -109,22 +109,22 @@ end with
 end function
 
 
-function executeFile(byval virtualPathToModule,byval pretext)
+function executeFile(byval virtualPathToModule, byval pretext)
 	const forReading = 1 
 	executeFile = false
 	dim f : set f = new SiteFile
 	f.Path = virtualPathToModule
 	if f.fileExists() then
-		debug("admin.mod.executeFile: file absolute path is "&f.absolutePath)
+		debug("admin.mod.executeFile: file absolute path is "& f.absolutePath)
 		dim ts : set ts = fs.openTextFile(f.absolutePath, forReading)
-		dim content : content = pretext & vbcrlf & replace(replace(ts.readAll,"<"&"%",""),"%"&">","")
-		debug("admin.mod.executeFile: file contents are: "&codeblock(content))
+		dim content : content = pretext & vbCrLf & replace(replace(ts.readAll, "<"&"%", ""), "%"&">", "")
+		debug("admin.mod.executeFile: file contents are: "& codeblock(content))
 		err.clear
 		on error resume next
 		Execute(content)
 
 		if err.number <> 0 then 
-			debugError("there was an error executing "&codeblock(content))
+			debugError("there was an error executing "& codeblock(content))
 			trapError
 		else 
 			executeFile = true		
@@ -137,10 +137,11 @@ function getVariableDefinitionScript(sd)
 	dim key, result
 	
 	for each key in sd.keys
-	'had to add the prefix m_ to all the variable generated here due to the fact that 
-	'this will break at runtime if the field name in the db happens to be a reserved keyword!
-		result = result & "dim m_"&key&" : m_"&key&" = """&replace(replace(replace(replace(sd(key),"""",""""""),vbcrlf,"""& vbcrlf &"""),vbcr,"""& vbcr &"""),vblf,"""& vblf &""")&""" : debug(""m_"&key&" is '""&server.HTMLEncode(m_"&key&")&""'"")" & vbcrlf
+		' All module Variables are prefixed with  m_ to avoid runtime compile
+		' errors upon execution, if the field name from the database happens
+		' to be a reserved keyword.
+		result = result & "dim m_"& key &" : m_"& key &" = """& replace(replace(replace(replace(sd(key), """", """"""), vbCrLf,"""& vbCrLf &"""), vbcr, """& vbcr &"""), vbLf, """& vblf &""") &""" : debug(""m_"& key &" is '""& server.HTMLEncode(m_"& key &") &""'"")" & vbCrLf
 	next
 	getVariableDefinitionScript = result
-end function 
+end function
 %>

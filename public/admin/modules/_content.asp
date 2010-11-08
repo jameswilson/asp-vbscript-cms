@@ -19,7 +19,7 @@
 	const strKey = "ID"  'name of the primary key field in the database
 	const strIdField = "Name" 'name of the field that uniquely identifies a row from the database
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Creator"
+	myForm.Name = Pcase(strContent) &"Creator"
 	set strHeader = new FastString
 	set pageContent = new FastString
 
@@ -31,7 +31,7 @@ if instr(Request.QueryString(),"delete")=1 then contentDelete()
 if instr(Request.QueryString(),"view")=1 or len(Request.QueryString())=0 then contentView()
 	
 	
-	writeln(h1(a(objLinks.item("ADMINURL")&"/modules/modules.asp","Site Modules",null,null) & connector & strHeader.value))
+	writeln(h1(a(globals("ADMINURL") &"/modules/modules.asp","Site Modules", null, null) & connector & strHeader.value))
 	checkPageForErrors()
 	myForm.printFormErrors()
 	writeln(pageContent.value)

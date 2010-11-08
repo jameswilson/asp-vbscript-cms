@@ -17,7 +17,7 @@ dim maxBytes : maxBytes = 1024 * 20  ' 20 kilobytes upload limit.
 '	set upl = Server.CreateObject("SoftArtisans.FileUp")
 '	if contentFormat.exists(lcase(upl.Form(id).ContentType)) then 
 '		upl.MaxBytesToCancel = maxBytes
-'		upl.Path = objLinks.item("SITE_PATH")&location
+'		upl.Path = globals("SITE_PATH") &location
 '		if not upl.Form(id).IsEmpty then upl.Form(id).Save
 '		fileUp = upl.Form(id).ShortFilename
 '	end if

@@ -22,18 +22,18 @@
 	set strHeader = new FastString
 	set pageContent = new FastString
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Administrator"
+	myForm.Name = Pcase(strContent) &"Administrator"
 
 	
 	'* Custom strings for File Manager
 	const FILE_FOLDER = "assets"
 	const CONTENT_TYPE = "image/gif,image/jpeg,image/jpg,image/pjpeg"
-	dim MAX_FILE_SIZE:MAX_FILE_SIZE = ""& (1024 * 25) ' 25 Kilobytes max file size
+	dim MAX_FILE_SIZE : MAX_FILE_SIZE = cstr(1024 * 25) ' 25 Kilobytes max file size
 
 
 	'*  Custom settings for File Manager
 	myForm.isForNewContent = false
-	myForm.uploadPath = "/"&FILE_FOLDER
+	myForm.uploadPath = "/"& FILE_FOLDER
 
 	
 	if instr(Request.QueryString(),"edit")=1 then 
@@ -50,7 +50,7 @@
 		contentView()
 	end if	
 		
-	writeln(h1(a(objLinks.item("ADMINURL")&"/modules/admin/","Module Administrator",null,null) & connector & strHeader.value))
+	writeln(h1(a(globals("ADMINURL") &"/modules/admin/", "Module Administrator", null, null) & connector & strHeader.value))
 	checkPageForErrors()
 	myForm.printFormErrors()
 	writeln(pageContent.value)

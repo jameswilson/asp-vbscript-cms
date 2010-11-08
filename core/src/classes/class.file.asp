@@ -1,13 +1,22 @@
 <%
-dim fs : set fs=Server.CreateObject("Scripting.FileSystemObject") '*< global FileSystemObject
-dim domainRx : set domainRx = new RegExp '*< RegExp to match domain names
+'**
+'* Intialize the global filesystem object.
+dim fs : set fs = Server.CreateObject("Scripting.FileSystemObject")
+
+'**
+'* A regular expression to match domain names.
+dim domainRx : set domainRx = new RegExp
 domainRx.pattern      = "(^(http[s]?://)?[\w.-]*?)(/)"
+
+'**
+'* Regular Expression constants.
 const adFileIgnore    = 0 '*< ignore file
 const adFileOverwrite = 1 '*< overwrite file
 const adFileAppend    = 2 '*< overwrite file
 const ForReading      = 1 '*< open file for reading
 const TristateFalse   = 0 '*< tristate false
 
+'**
 '* Use this one-liner function call to do a quick check to see if a file exists.
 '* This global function may be used instead of writing code to initialize a 
 '* SiteFile object just to check to see if it exists.
@@ -20,6 +29,7 @@ function fileExists(path_to_file)
 	fileExists = fl.fileExists()
 	set fl = nothing
 end function
+
 
 '! @class SiteFile
 '! @file class.file.asp
@@ -66,9 +76,9 @@ end function
 '! on the URL.
 '! \code
 '! dim file : file = new SiteFile
-'! file.Path = objLinks.item("SITE_URL")&"/images/photo1.jpg"
+'! file.Path = globals("SITE_URL")&"/images/photo1.jpg"
 '! Response.write(file.Url)
-'! Response.write(vbcrlf)
+'! Response.write(vbCrLf)
 '! Response.write(file.AbsolutePath)
 '! \endcode
 '! on localhost this would produce output:
@@ -93,10 +103,10 @@ class SiteFile
 	private m_fileObject
 	
 	public sub Class_Initialize()
-		if objLinks.item("SITE_PATH") = "" then
+		if globals("SITE_PATH") = "" then
 			debugError("class.file.init: global variable 'SITE_PATH' is required but was not found")
 		else
-			trace("class.file.init: global variable 'SITE_PATH' is '"&objLinks.item("SITE_PATH")&"'")
+			trace("class.file.init: global variable 'SITE_PATH' is '" & globals("SITE_PATH") & "'")
 		end if
 		fUrl = ""
 		fPath = ""
@@ -120,7 +130,8 @@ class SiteFile
 		set m_defaultFileType = nothing
 	end sub
 	
-	'* create a SiteFile for the specified path_to_file
+	'**
+	'* Create a SiteFile for the specified path_to_file
 	'* @usage 
 	'*  \code
 	'*  
@@ -138,68 +149,72 @@ class SiteFile
 			debugError("class.file.path: must provide a non-empty, non-null string to set the path.")
 		else
 			fPath = strPath
-			trace("class.file.path: file name string is '"&strPath&"'")
-			if instr(fPath,objLinks.item("SITEURL")) > 0 then 
+			trace("class.file.path: file name string is '"& strPath &"'")
+			if instr(fPath, globals("SITEURL")) > 0 then 
 				'the file is on this domain
-				fPath = replace(fPath,objLinks.item("SITEURL"),"") 'domainRx.replace(fPath,"$3")
-				trace("class.file.path: the file is on this domain... converted Path to '"&fPath&"'")
+				fPath = replace(fPath, globals("SITEURL"), "") 'domainRx.replace(fPath, "$3")
+				trace("class.file.path: the file is on this domain... converted Path to '"& fPath &"'")
 			end if
-			if instr(fPath,"http") = 1 then
-				'the file is not on this domain, and we assume it exists
+			if instr(fPath, "http") = 1 then
+				' Assume that a file exists if its not on this domain.
 				fExists = true
-				trace("class.file.path: the file '"&fPath&"'is not on this domain, and we assume it exists")
+				trace("class.file.path: the file '"& fPath &"'is not on this domain, and we assume it exists")
 			else
-				'the file is a relative path
-				fPath = replace(fPath,"/","\") 'MapPath causes error on mixed, duplicate  
-				fPath = replace(fPath,"\\","\") 'path separators eg, 'path/\to\file.txt'
-				trace("class.file.path: getting absoulte path for '"&fPath&"'...")
-				if left(fPath,1) = "\" then 
+				' If the path is not a canonical URI, then check the filesystem
+				' to ensure the file exists.
+				
+				' Strip multiple and mixed slashs that can cause runtime errors
+				' in MapPath. (eg 'path/\to\file.txt'
+				fPath = replace(fPath, "/", "\")
+				fPath = replace(fPath, "\\", "\")
+				trace("class.file.path: getting absoulte path for '" & fPath & "'...")
+				if left(fPath, 1) = "\" then 
 					trace("class.file.path: path specified was a virtual path based off of the site root")
 					'if virtual file reference is based off the root, add the site_path
-					fAbsolutePath = objLinks.item("SITE_PATH")&fPath
-					'trace("class.file.path: path before processing: "&fAbsolutePath)
-					'fAbsolutePath = Server.MapPath(objLinks.item("SITE_PATH")&fPath)
-					'trace("class.file.path: path after processing: "&fAbsolutePath)
+					fAbsolutePath = globals("SITE_PATH") & fPath
+					'trace("class.file.path: path before processing: " & fAbsolutePath)
+					'fAbsolutePath = Server.MapPath(globals("SITE_PATH") & fPath)
+					'trace("class.file.path: path after processing: " & fAbsolutePath)
 				else 
-					if instr(fPath,objLinks("SITE_PATH"))=1 then
+					if instr(fPath, globals("SITE_PATH")) = 1 then
 						trace("class.file.path: path specified was absolute path inside this site.")
 						fAbsolutePath = fPath
-						fPath = right(fPath,len(objLinks("SITE_PATH")))
+						fPath = right(fPath, len(globals("SITE_PATH")))
 					else
 						trace("class.file.path: path specified was a virtual path based off of the current folder")
 						fAbsolutePath = Server.MapPath(fPath)
 					end if
 				end if
-				trace("class.file.path: file absolute path is '"&fAbsolutePath&"'")
+				trace("class.file.path: file absolute path is '"& fAbsolutePath &"'")
 				
-				'set up the files virtual path off of the site root (if in fact it sits somewhere visible on the site)
-				if inStr(fAbsolutePath,objLinks.item("SITE_PATH")) > 0 then
-					fUrl = objLinks.item("SITEURL")&replace(fAbsolutePath,objLinks.item("SITE_PATH"),"")
-					fUrl = replace(fUrl,"\","/")
-					fVirtualPath = replace(fUrl,"https://"&request.ServerVariables("HTTP_HOST"),"")
-					fVirtualPath = replace(fUrl,"http://"&request.ServerVariables("HTTP_HOST"),"")
-					trace("class.file.path: file virtual path is '"&fVirtualPath&"'")
-					trace("class.file.path: file complete url is '"&fUrl&"'")
+				' If the file is in the public website, determine the virtual
+				' path (relative url from the site root).
+				if inStr(fAbsolutePath, globals("SITE_PATH")) > 0 then
+					fUrl = globals("SITEURL") & replace(fAbsolutePath, globals("SITE_PATH"), "")
+					fUrl = replace(fUrl, "\" , "/")
+					fVirtualPath = replace(fUrl, "https://" & request.ServerVariables("HTTP_HOST"), "")
+					fVirtualPath = replace(fUrl, "http://" & request.ServerVariables("HTTP_HOST"), "")
+					trace("class.file.path: file virtual path is '" & fVirtualPath & "'")
+					trace("class.file.path: file complete url is '" & fUrl & "'")
 				end if
 				fIsFile = fs.fileExists(fAbsolutePath) 
 				fIsFolder = fs.folderExists(fAbsolutePath)
 				fExists = fIsFile or fIsFolder
 				trapError	
 			end if
-			if instrrev(fPath,"\")>0 and instrrev(fPath,"\")<len(fPath) then 
-				fName = mid(fPath,instrrev(fPath,"\")+1)
+			if inStrRev(fPath, "\") > 0 and inStrRev(fPath, "\") < len(fPath) then 
+				fName = mid(fPath, inStrRev(fPath, "\") + 1)
 			else
 				fName = fPath
 			end if
-			if instrrev(fName,".")>0 and instrrev(fName,".")<len(fName) then 
-				fExtention = mid(fName,instrrev(fName,".")+1)
+			if inStrRev(fName, ".") > 0 and inStrRev(fName, ".") < len(fName) then 
+				fExtention = mid(fName, inStrRev(fName, ".") + 1)
 			end if
 			if m_defaultFileType.test(fUrl) = true then
 				fUrl = m_defaultFileType.replace(fUrl,"")
 			end if
-			'
-			'ensure RFC-3986 compliance for URIs
-			'
+
+			' Ensure RFC-3986 compliance for URIs.
 			fUrl = EncodeURI(fUrl)
 			if fExists then
 				if fIsFile then
@@ -210,9 +225,9 @@ class SiteFile
 			end if
 		end if
 		if fExists then 
-			debugInfo("class.file.path: file at path '"&fPath&"' exists")
+			debugInfo("class.file.path: file at path '" & fPath & "' exists")
 		else
-			debugWarning("class.file.path: file at path '"&fPath&"' does not exist")
+			debugWarning("class.file.path: file at path '" & fPath & "' does not exist")
 		end if
 	end property
 	
@@ -228,12 +243,12 @@ class SiteFile
 		end if
 	end function
 	
-	'return true if there is a real file that exists 
+	'* Return true if there is a real file that exists.
 	public function fileExists()
 		fileExists = fExists
 	end function
 	
-	'return the virtual path (url) off of the site root.
+	'* Return the virtual path (url) off of the site root.
 	public function VirtualPath()
 		VirtualPath = fVirtualPath
 	end function
@@ -260,14 +275,14 @@ class SiteFile
 	
 	public function run()
 		if not fileExists() = true then
-			debugError("class.file.run: module handler '"&fVirtualPath&"' does not exist!")
+			debugError("class.file.run: module handler '" & fVirtualPath & "' does not exist!")
 		else
-			trace("class.file.run: executing module: '"&fVirtualPath&"'")
+			trace("class.file.run: executing module: '" & fVirtualPath & "'")
 			on error resume next
 			server.execute(fVirtualPath)
 			if err.number <> 0 then 
-				debugError("class.file.run: error executing '"&fVirtualPath&"'")
-				debugError("class.file.run: "&err.number&" - "&err.description)
+				debugError("class.file.run: error executing '" & fVirtualPath & "'")
+				debugError("class.file.run: " & err.number & " - " & err.description)
 				err.clear
 			end if
 		end if
@@ -275,115 +290,115 @@ class SiteFile
 	
 	private function AddError(byval strError)
 		debugError(strError)
-		fErrors=fErrors&" <br> "&strError
+		fErrors = fErrors & " <br> " & strError
 	end function
 	
 	public function GetErrors()
-		getErrors=fErrors
+		getErrors = fErrors
 	end function
 	
-	public function copy_file(byval strfilesource,byval strfiledestination,byval stroverwrite)
-		copy_file=false
+	public function copy_file(byval strfilesource, byval strfiledestination, byval stroverwrite)
+		copy_file = false
 		'--------------------------------[error checking]--------------------------------
 		' error checking!!!!...
-		if strfilesource = "" or isnull(strfilesource) then
-		AddError("File source path is required when calling this function")
-		exit function
+		if strfilesource = "" or isNull(strfilesource) then
+			AddError("File source path is required when calling this function")
+			exit function
 		end if
 		' error checking!!!!...
-		if strfiledestination = "" or isnull(strfiledestination) then
-		AddError("File destination path is required when calling this function")
-		exit function
+		if strfiledestination = "" or isNull(strfiledestination) then
+			AddError("File destination path is required when calling this function")
+			exit function
 		end if
-		if strfiledestination=strfilesource then
+		if strfiledestination = strfilesource then
 			AddError("The destination file is the same as the source ")
 			exit function
 		end if
 		' error checking!!!!...[true - false]
-			if stroverwrite = "" or isnull(stroverwrite) then
-		AddError("Parameter overwrite must be true or false")
-		exit function
+		if stroverwrite = "" or isNull(stroverwrite) then
+			AddError("Parameter overwrite must be true or false")
+			exit function
 		end if
-		if fs.fileexists(objLinks("SITE_PATH")&"/"&strfilesource)=false then
-		AddError("The source file '"&strfilesource&"' does not exist")
-		exit function
+		if fs.fileexists(globals("SITE_PATH") & "/" & strfilesource) = FALSE then
+			AddError("The source file '" & strfilesource & "' does not exist")
+			exit function
 		end if
 		'--------------------------------[/error checking]--------------------------------
-		dim f,path,max,i,path_write
-		path=split(replace(strfiledestination,"/","\"),"\")
-		max=ubound(path)
-		path_write=""
-		for i=0 to max-1
-			if len(path(i))>0 then
-				path_write = path_write &"\"& path(i)
-				if fs.FolderExists(objLinks("SITE_PATH")& path_write)=false then
-					debugInfo("Folder '"&objLinks("SITE_PATH")& path_write&"' created!")
-						set f=fs.CreateFolder(objLinks("SITE_PATH")& path_write)
-						set f=nothing
+		dim f, path, max, i, path_write
+		path = split(replace(strfiledestination, "/", "\"), "\")
+		max = ubound(path)
+		path_write = ""
+		for i = 0 to max - 1
+			if len(path(i)) > 0 then
+				path_write = path_write & "\" & path(i)
+				if fs.FolderExists(globals("SITE_PATH") & path_write) = FALSE then
+					debugInfo("Folder '" & globals("SITE_PATH") & path_write &"' created!")
+						set f = fs.CreateFolder(globals("SITE_PATH") & path_write)
+						set f = nothing
 				else
 					Trace("Folder exist!")
 				end if
-				debugInfo(objLinks("SITE_PATH")& path_write& "<br>")
+				debugInfo(globals("SITE_PATH") & path_write & "<br>")
 			end if
 		next
 		on error resume next
-		fs.CopyFile objLinks("SITE_PATH")&"/"&strfilesource, objLinks("SITE_PATH")& path_write&"\"&path(max),stroverwrite
-		if err.number<>0 then
+		fs.CopyFile globals("SITE_PATH") & "/" & strfilesource, globals("SITE_PATH") & path_write & "\" & path(max), stroverwrite
+		if err.number <> 0 then
 			trapError
 			exit function
 		end if	
-		copy_file=true
-		debugInfo("Copied '"&strfilesource&"' to '"&objLinks("SITE_PATH")& path_write&"\"&path(max)&"'")
+		copy_file = TRUE
+		debugInfo("Copied '" & strfilesource & "' to '" & globals("SITE_PATH") & path_write & "\" & path(max) & "'")
 	end function
 	public function delete_file(byval strfilesource)
-		delete_file = false
-		if strfilesource = "" or isnull(strfilesource) then
+		delete_file = FALSE
+		if strfilesource = "" or isNull(strfilesource) then
 			AddError("File source path is required when calling this function") 
 			exit function
 		end if
 		on error resume next
-		fs.deletefile objLinks("SITE_PATH")&"/"&strfilesource, true
-		if err.number<>0 then
+		fs.deletefile globals("SITE_PATH") & "/" & strfilesource, TRUE
+		if err.number <> 0 then
 			trapError
 			exit function
 		end if	
-		delete_file=true
+		delete_file = TRUE
 	end function
 
-	public function move_file(byval strfilesource,byval strfilename,byval strcontent,byval collisionResolution)
-		if write_file(strfilename, strcontent, collisionResolution)=true then
-			move_file=delete_file(strfilesource)
+	public function move_file(byval strfilesource, byval strfilename, byval strcontent, byval collisionResolution)
+		if write_file(strfilename, strcontent, collisionResolution) = TRUE then
+			move_file = delete_file(strfilesource)
 		else
-			move_file=false
+			move_file = FALSE
 		end if
 	end function
 
-	public function write_file(byval strfilename,byval strcontent,byval collisionResolution)
-		write_file=false
+	public function write_file(byval strfilename, byval strcontent, byval collisionResolution)
+		write_file = FALSE
 		'--------------------------------[error checking]--------------------------------
 		' error checking!!!!...
-		if strfilename = "" or isnull(strfilename) then
-		AddError("File source path is required when calling this function")
-		exit function
+		if strfilename = "" or isNull(strfilename) then
+			AddError("File source path is required when calling this function")
+			exit function
 		end if
 		' error checking!!!!...
-		if strcontent = "" or isnull(strcontent) then
-		AddError("File destination path is required when calling this function")
-		exit function
+		if strcontent = "" or isNull(strcontent) then
+			AddError("File destination path is required when calling this function")
+			exit function
 		end if
-		if collisionResolution = "" or isnull(collisionResolution) then
-		AddError("Parameter overwrite must be true or false")
-		exit function
+		if collisionResolution = "" or isNull(collisionResolution) then
+			AddError("Parameter overwrite must be true or false")
+			exit function
 		end if
 		'--------------------------------[/error checking]--------------------------------
 		dim tfile, exist
 		on error resume next
-		exist=fs.FileExists(strfilename)
-		if exist=true and collisionResolution = adFileIgnore then
+		exist = fs.FileExists(strfilename)
+		if exist = TRUE and collisionResolution = adFileIgnore then
 			AddError("The file'"&strfilename&"' already exists")
 			exit function
-		elseif exist=true and collisionresolution = adFileAppend then
-			set tfile=fs.OpenTextFile(strfilename,8,true)
+		elseif exist = TRUE and collisionresolution = adFileAppend then
+			set tfile = fs.OpenTextFile(strfilename, 8, TRUE)
 			tfile.WriteLine(strcontent)
 			tfile.Close
 			if err.number<>0 then
@@ -391,7 +406,7 @@ class SiteFile
 				exit function
 			end if	
 			else
-				set tfile=fs.CreateTextFile(strfilename)
+				set tfile = fs.CreateTextFile(strfilename)
 				tfile.WriteLine(strcontent)
 				tfile.close
 				if err.number<>0 then
@@ -399,8 +414,8 @@ class SiteFile
 					exit function
 				end if	
 			end if
-		write_file=true
-		debugInfo("Created '"&strfilename&"'")
+		write_file = TRUE
+		debugInfo("Created '"& strfilename &"'")
 	end function
 	
 	
@@ -411,9 +426,9 @@ class SiteFile
 	'*
 	function getFiles(byval fileExtensions)
 		dim folder, item, url, resultDict, fileTypes, bIncludeExtensions
-		fileTypes = split(fileExtensions,",")
-		bIncludeExtensions = (ubound(fileTypes)<>0)
-		debug("class.file.getFilesInFolder: absolute folder path is " &AbsolutePath )
+		fileTypes = split(fileExtensions, ",")
+		bIncludeExtensions = (ubound(fileTypes) <> 0)
+		debug("class.file.getFilesInFolder: absolute folder path is " & AbsolutePath )
 		on error resume next
 		set folder = fs.GetFolder(AbsolutePath)
 		if err.number > 0 then 
@@ -426,18 +441,18 @@ class SiteFile
 		for each item in folder.Files	
 			for i = 0 to ubound(fileTypes)
 				ext = trim(fileTypes(i))
-				if (len(ext)>0) and (len(item.Name) > len(ext)) then
-					if (instr(item.Name,ext)=len(item.name)-len(ext)+1) then 
+				if (len(ext) > 0) and (len(item.Name) > len(ext)) then
+					if (instr(item.Name, ext) = len(item.name) - len(ext) + 1) then 
 						if not bIncludeExtensions then
-							trace(" [ " &replace(item.Name,ext,"")&" => "&item.path & " ]" )
-							resultDict.add replace(item.Name,ext,""),  item.path
+							trace(" [ " & replace(item.Name, ext, "") & " => " & item.path & " ]")
+							resultDict.add replace(item.Name, ext, ""), item.path
 						else
-							trace(" [ " &item.Name&" => "&item.path & " ]" )
+							trace(" [ " & item.Name & " => " & item.path & " ]")
 							resultDict.add item.Name, item.path
 						end if
 					end if
 				else
-					trace(" [ " &item.Name&" => "&item.path & " ]" )
+					trace(" [ " & item.Name & " => " & item.path & " ]" )
 					resultDict.add item.Name, item.path
 				end if
 				traperror
@@ -460,17 +475,24 @@ class SiteFile
 		readAll = result.value
 		set result = nothing
 	end function
-
-
 end class
 
-function getFilesInFolder(strPath,fileExtensions)
+'* Retrieve a listing of files of the specified type at the specified path.
+'* 
+'* @param strPath
+'*   The path to the folder.
+'* @param fileExtensions
+'*   The three or four letter file extensions to look for. Separate multiple
+'*   extensions by a comma.
+'* @return Dictionary
+'*   A Scripting.Dictionary object of each file's path, stored as a string.
+function getFilesInFolder(strPath, fileExtensions)
 	dim folder, file, item, url, resultDict, fileTypes, bIncludeExtensions
 	set file = new SiteFile
 	file.path = strPath
-	fileTypes = split(fileExtensions,",")
-	bIncludeExtensions = (ubound(fileTypes)<>0)
-	debug("class.file.getFilesInFolder: absolute folder path is " &file.absolutePath )
+	fileTypes = split(fileExtensions, ",")
+	bIncludeExtensions = (ubound(fileTypes) <> 0)
+	debug("class.file.getFilesInFolder: absolute folder path is " & file.absolutePath)
 	on error resume next
 	set folder = fs.GetFolder(file.absolutePath)
 	if err.number > 0 then 
@@ -484,18 +506,18 @@ function getFilesInFolder(strPath,fileExtensions)
 		for i = 0 to ubound(fileTypes)
 			
 			ext = trim(fileTypes(i))
-			if (len(ext)>0) and (len(item.Name) > len(ext)) then
-				if (instr(item.Name,ext)=len(item.name)-len(ext)+1) then 
+			if (len(ext) > 0) and (len(item.Name) > len(ext)) then
+				if (instr(item.Name, ext) = len(item.name) - len(ext) + 1) then 
 					if not bIncludeExtensions then
-						trace(" [ " &replace(item.Name,ext,"")&" => "&item.path & " ]" )
-						resultDict.add replace(item.Name,ext,""),  item.path
+						trace(" [ " & replace(item.Name, ext, "") & " => " & item.path & " ]")
+						resultDict.add replace(item.Name, ext, ""), item.path
 					else
-						trace(" [ " &item.Name&" => "&item.path & " ]" )
+						trace(" [ " & item.Name & " => " & item.path & " ]")
 						resultDict.add item.Name, item.path
 					end if
 				end if
 			else
-				trace(" [ " &item.Name&" => "&item.path & " ]" )
+				trace(" [ " & item.Name & " => " & item.path & " ]")
 				resultDict.add item.Name, item.path
 			end if
 			traperror

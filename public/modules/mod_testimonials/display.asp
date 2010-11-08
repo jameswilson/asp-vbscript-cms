@@ -1,4 +1,4 @@
-<!--#include file="../../core/include/global.asp" -->
+<!--#include file="../../../core/include/bootstrap.asp" -->
 <!--#include file="functions.asp" -->
 <%
 strDebugHTML.clear

@@ -1,6 +1,6 @@
 #testimonials .testimonial {
 padding:1em 24px;
-background:url(<%=objLinks("SITEURL")%>/images/quote.gif) no-repeat left top;
+background:url(<%=globals("SITEURL")%>/images/quote.gif) no-repeat left top;
 margin:1em 3em;
 }
 #testimonials .comment {

@@ -79,7 +79,7 @@ class ClsDatabase
 		if m_bConnected and isObject(m_objConnection) then
 			ConnectClose
 			set m_objConnection = nothing
-		end if		
+		end if
 		if instr(strDBName,":") = 2 then
 			strDBFile = strDBName
 		else 
@@ -97,12 +97,15 @@ class ClsDatabase
 			m_bConnected = False
 			ConnectOpen = False
 			m_isWritable = False
+			AddError("The database "&strDBName&" could not be found.")
 			debugError("class.db.connectOpen: The database "&strDBName&" could not be found.")
 		else
 			debug("class.db.ConnectOpen: The database  "&strDBName&" was opened successfully.")
 			m_bConnected = True
 			m_bExists = True
-			m_isWritable = True 'for all we know the db is writable until someone actually tries to write to it!
+			' for all we know the db is writable until someone actually tries to write to it!
+			' TODO
+			m_isWritable = True 
 			ConnectOpen = True
 		end if
 	end function
@@ -122,7 +125,7 @@ class ClsDatabase
 	'* @return true if the databse is writable
 	public function isWritable()
 	isWritable = m_isWritable
-	end function 
+	end function
 
 	'* Create dictionary variable
 	'* notice: refVarDic(0) or ("tablename") will store table name
@@ -145,7 +148,7 @@ class ClsDatabase
 		refVarDic.Add "tablename", strTable
 		
 		set rs = Server.CreateObject("ADODB.Recordset")
-		if rsOpen( rs, "SELECT * FROM `"&strTable&"`", null, null) = true then 
+		if rsOpen( rs, "SELECT * FROM `"& strTable &"`", null, null) = true then 
 		
 			' Step 1: Get fields information
 			
@@ -436,7 +439,7 @@ class ClsDatabase
 	
 		set rs = Server.CreateObject("ADODB.Recordset")
 	
-		on error resume next	
+		on error resume next
 		
 		if not rsOpen(rs, strSQL, adOpenKeyset, adLockPessimistic) then
 			Add = false
@@ -668,7 +671,7 @@ class ClsDatabase
 		on error goto 0
 		
 		Execute = bOK
-	end function	
+	end function
 	
 	
 	
@@ -708,7 +711,7 @@ class ClsDatabase
 		on error goto 0
 	
 		Delete = bOK
-	end function	
+	end function
 	
 	
 	'* Count record number according to the specified condition
@@ -738,7 +741,7 @@ class ClsDatabase
 		rsOpen rs, strSQL, null, null	
 		
 		nCount = rs(0)	
-		if IsNull(nCount) then nCount = 0
+		if isNull(nCount) then nCount = 0
 		Count = nCount
 		
 		rs.Close
@@ -767,7 +770,7 @@ class ClsDatabase
 		rsOpen rs, strSQL, adOpenKeyset, adLockPessimistic	
 		
 		nTotalSize = rs("totalsize")	
-		if IsNull(nTotalSize) then nTotalSize = 0
+		if isNull(nTotalSize) then nTotalSize = 0
 		Space = nTotalSize
 		
 		rs.Close
@@ -929,7 +932,7 @@ class ClsDatabase
 		on error resume next
 			err.clear
 			trace("class.db.rsOpen '"&str_sql&"' CursorType:"&intCursorType&" LockType:"&intLockType)
-			if isnull(intCursorType) and isnull(intLockType) then 
+			if isNull(intCursorType) and isNull(intLockType) then 
 				record_set.open str_sql, m_objConnection
 			else
 				record_set.open str_sql, m_objConnection, intCursorType, intLockType
@@ -971,7 +974,7 @@ class ClsDatabase
 		if err.number <> 0 Then
 			trapDBError = true
 			addError err
-			debugError("VBScript ERROR [" &  Err.number & "] (Ox"& Hex(Err.number) & "): " & Err.description & vbcrlf _
+			debugError("VBScript ERROR [" &  Err.number & "] (Ox"& Hex(Err.number) & "): " & Err.description & vbCrLf _
 				& "<br/>URL: "&request.ServerVariables("URL") _
 				& "<br/>SOURCE: "&Err.source)
 			err.clear
@@ -984,7 +987,7 @@ class ClsDatabase
 				for i = 0 To m_objConnection.Errors.Count
 					with m_objConnection.Errors(i)
 						addError m_objConnection.Errors(i)
-						debugError(.source&" [Ox"& Hex(.number)& "]: " &.description & vbcrlf _
+						debugError(.source&" [Ox"& Hex(.number)& "]: " &.description & vbCrLf _
 							& "<br/>URL: "&request.ServerVariables("URL") _
 							& "<br/>SQL STATE: "&.SQLState _
 							& "<br/>Native Error: "&.NativeError )

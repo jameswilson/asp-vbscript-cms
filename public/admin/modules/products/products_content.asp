@@ -18,10 +18,10 @@
 	const strIdField = "ProductName" 'name of the field that uniquely identifies a row from the database
 	const strUploadPath = "/images/products"
 	const strFileFormats = "image/gif,image/jpeg,image/jpg,image/pjpeg"
-	dim maxFileSize: maxFileSize = ""& (1024 * 25) ' 25 Kilobytes max file size
+	dim maxFileSize : maxFileSize = cstr(1024 * 25) ' 25 Kilobytes max file size
 	
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Creator"
+	myForm.Name = Pcase(strContent) &"Creator"
 	myForm.isForNewContent = false
 	myForm.uploadPath = strUploadPath
 
@@ -35,15 +35,15 @@
 	strWarn = ""	
 
 	
-	if instr(Request.QueryString(),"edit")=1 then
+	if instr(Request.QueryString(), "edit") = 1 then
 		formContents = contentEdit()
-	elseif instr(Request.QueryString(),"update")=1 then
+	elseif instr(Request.QueryString(), "update") = 1 then
 		formContents = contentUpdate()
-	elseif instr(Request.QueryString(),"add")=1 then
+	elseif instr(Request.QueryString(), "add") = 1 then
 		formContents = contentAdd()
-	elseif instr(Request.QueryString(),"create")=1 then
+	elseif instr(Request.QueryString(), "create") = 1 then
 		formContents = contentCreate()
-	elseif instr(Request.QueryString(),"delete")=1 then
+	elseif instr(Request.QueryString(), "delete") = 1 then
 		formContents = contentDelete()
 	else
 		formContents = contentView()

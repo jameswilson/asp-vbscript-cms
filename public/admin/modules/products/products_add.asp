@@ -5,13 +5,13 @@ function contentAdd()
 	if myForm.wasSubmitted() = true then
 		myForm.storeFormToSession()
 		
-		dim pImage1 : pImage1 = myForm.fileUp("Image1",null,strFileFormats,maxFileSize)
-		debug("saving file1 as '"&pImage1&"'")
-		dim pImage2 : pImage2 = myForm.fileUp("Image2",null,strFileFormats,maxFileSize)
-		debug("saving file2 as '"&pImage2&"'")
+		dim pImage1 : pImage1 = myForm.fileUp("Image1", null,strFileFormats,maxFileSize)
+		debug("saving file1 as '"& pImage1 &"'")
+		dim pImage2 : pImage2 = myForm.fileUp("Image2", null,strFileFormats,maxFileSize)
+		debug("saving file2 as '"& pImage2 &"'")
 		set formErrors = myForm.getFormErrors()
 		if formErrors.count > 0 then
-			strError = "there were errors in the add "&strContent&" form"
+			strError = "there were errors in the add "& strContent &" form"
 			contentAdd = buildFormContents(null)
 			debugError(strError)
 		else
@@ -36,18 +36,18 @@ function contentAdd()
 			insertImage2 = ""
 			if pImage1 <> "" then 
 				insertImage1 = " Image1,"
-				pImage1 = "'"&pImage1&"',"
+				pImage1 = "'"& pImage1 &"',"
 			end if
 			if pImage2 <> "" then 
 				insertImage2 = " Image2,"
-				pImage2 = "'"&pImage2&"',"
+				pImage2 = "'"& pImage2 &"',"
 			end if
 			page.setName(pName)
-			page.setTitle("New "&Pcase(strContent)&": "&pName)
+			page.setTitle("New "& Pcase(strContent) &": "& pName)
 			'add new record into content table 
-			strSQL = "INSERT INTO "&strTableName&" (PID, Category, Brand, ProductLine, "&strIdField&", Options, ShortDescription, LongDescription, RetailPrice, WholesalePrice, "&insertImage1& insertImage2 &" Recommended, Active) " & vbcrlf & _			
-			"VALUES ('"&pid&"','"&category&"','"&brand&"','"&pLine&"','"&pName&"','"&pOptions&"','"&pShortDesc&"','"&pLongDesc&"','"&pRetail&"','"&pWholesale&"',"&pImage1&pImage2&pRecommended&","&pActive&")" 			
-			if debugMode() then strWarn = "Debug Mode SQL Statement:"&codeblock(strSQL)
+			strSQL = "INSERT INTO "& strTableName &" (PID, Category, Brand, ProductLine, "& strIdField &", Options, ShortDescription, LongDescription, RetailPrice, WholesalePrice, "& insertImage1 & insertImage2 &" Recommended, Active) " & vbCrLf & _			
+			"VALUES ('"& pid &"','"& category &"','"& brand &"','"& pLine &"','"& pName &"','"& pOptions &"','"& pShortDesc &"','"& pLongDesc &"','"& pRetail &"','"& pWholesale &"',"& pImage1 &pImage2&pRecommended&","& pActive &")" 			
+			if debugMode() then strWarn = "Debug Mode SQL Statement:"& codeblock(strSQL)
 			db.execute(strSQL)
 			if db.hasErrors() = true then 
 				dim dbErr
@@ -55,8 +55,8 @@ function contentAdd()
 					strError = strError & p(dbErr.description)
 				next
 			else
-				strStatus = "The "&strContent&" was added successfully.<br/>" & vbcrlf & _
-					"Would you like to  <a href='?view'>view the list</a> of "&strContentPL & vbcrlf & _
+				strStatus = "The "& strContent &" was added successfully.<br/>" & vbCrLf & _
+					"Would you like to  <a href='?view'>view the list</a> of "& strContentPL & vbCrLf & _
 					"or <a href='?create'>create a new one</a>?"
 				strError = ""
 				contentAdd = "" 'only display formContents if there was an error

@@ -1,20 +1,20 @@
-<!--#include file="../../core/include/global.asp"-->
+<!--#include file="../../core/include/bootstrap.asp"-->
 <%
 function copy_file(byval strfilesource,byval strfiledestination,byval stroverwrite)
 copy_file=false
 '--------------------------------[error checking]--------------------------------
 ' error checking!!!!...
-if strfilesource = "" or isnull(strfilesource) then
+if strfilesource = "" or isNull(strfilesource) then
 debugError("sorry but a file source path is required when calling this function")
 exit function
 end if
 ' error checking!!!!...
-if strfiledestination = "" or isnull(strfiledestination) then
+if strfiledestination = "" or isNull(strfiledestination) then
 debugError("sorry but a file destination path is required when calling this function")
 exit function
 end if
 ' error checking!!!!...[true - false]
-if stroverwrite = "" or isnull(stroverwrite) then
+if stroverwrite = "" or isNull(stroverwrite) then
 debugError("parameter overwrite must be true or false")
 exit function
 end if
@@ -30,20 +30,20 @@ path_write=""
 for i=0 to max-1
 if len(path(i))>0 then
 	path_write = path_write &"\"& path(i)
-	if fs.FolderExists(objLinks("SITE_PATH")& path_write)=false then
+	if fs.FolderExists(globals("SITE_PATH")& path_write)=false then
 		debugError("Folder created!")
-			set f=fs.CreateFolder(objLinks("SITE_PATH")& path_write)
+			set f=fs.CreateFolder(globals("SITE_PATH")& path_write)
 			set f=nothing
 			set fs=nothing
 	else
 		debugError("Folder exist!")
 	end if
-	debugError(objLinks("SITE_PATH")& path_write& "<br>")
+	debugError(globals("SITE_PATH")& path_write& "<br>")
 end if
 next
-debugError(objLinks("SITE_PATH")& path_write&"\"&path(max))
+debugError(globals("SITE_PATH")& path_write&"\"&path(max))
 on error resume next
-	fs.CopyFile objLinks("SITE_PATH")&"/"&strfilesource, objLinks("SITE_PATH")& path_write&"\"&path(max),stroverwrite
+	fs.CopyFile globals("SITE_PATH")&"/"&strfilesource, globals("SITE_PATH")& path_write&"\"&path(max),stroverwrite
 if err.number<>0 then
 	trapError
 	exit function
@@ -53,12 +53,12 @@ end function
 
 function delete_file(byval strfilesource)
 delete_file = false
-if strfilesource = "" or isnull(strfilesource) then
+if strfilesource = "" or isNull(strfilesource) then
 	debugerror("sorry but a file source path is required when calling this function") 
 	exit function
 end if
 on error resume next
-	fs.deletefile objLinks("SITE_PATH")&"/"&strfilesource, true
+	fs.deletefile globals("SITE_PATH")&"/"&strfilesource, true
 if err.number<>0 then
 	trapError
 	exit function

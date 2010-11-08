@@ -22,35 +22,35 @@
 	set strHeader = new FastString
 	set pageContent = new FastString
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent)&"Creator"
+	myForm.Name = Pcase(strContent) &"Creator"
 
 	
 	'* Custom strings for File Manager
-	const FILE_FOLDER = "assets"
+	const FILE_FOLDER = "files"
 	const CONTENT_TYPE = "image/gif,image/jpeg,image/jpg,image/pjpeg"
-	dim MAX_FILE_SIZE:MAX_FILE_SIZE = ""& (1024 * 25) ' 25 Kilobytes max file size
+	dim MAX_FILE_SIZE:MAX_FILE_SIZE = "" & (1024 * 25) ' 25 Kilobytes max file size
 
 
 	'*  Custom settings for File Manager
 	myForm.isForNewContent = false
-	myForm.uploadPath = "/"&FILE_FOLDER
+	myForm.uploadPath = "/"& FILE_FOLDER
 
 	
-	if instr(Request.QueryString(),"edit")=1 then 
+	if instr(Request.QueryString(), "edit") = 1 then 
 		contentEdit()
-	elseif instr(Request.QueryString(),"update")=1 then 
+	elseif instr(Request.QueryString(), "update") = 1 then 
 		contentUpdate()
-	elseif instr(Request.QueryString(),"add")=1 then 
+	elseif instr(Request.QueryString(), "add") = 1 then 
 		contentAdd()
-	elseif instr(Request.QueryString(),"create")=1 then 
+	elseif instr(Request.QueryString(), "create") = 1 then 
 		contentCreate()
-	elseif instr(Request.QueryString(),"delete")=1 then 
+	elseif instr(Request.QueryString(), "delete") = 1 then 
 		contentDelete()
 	else 
 		contentView()
 	end if	
 		
-	writeln(h1(a(objLinks.item("ADMINURL")&"/docs/docs.asp","File Manager",null,null) & connector & strHeader.value))
+	writeln(h1(a(globals("ADMINURL") &"/docs/docs.asp","File Manager", null, null) & connector & strHeader.value))
 	checkPageForErrors()
 	myForm.printFormErrors()
 	writeln(pageContent.value)

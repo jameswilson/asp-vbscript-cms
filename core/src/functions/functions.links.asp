@@ -4,12 +4,12 @@
 ' formulate page links for the navigation bar if the url 
 ' matches the current fileName, the link gets <strong>.
 function createNavLink(byval url,byval content,byval title,byval liclass)
-	content = globalVarFill(content)
-	url = globalVarFill(url)
+	content = token_replace(content)
+	url = token_replace(url)
 	if isNull(title) then 
 		title = PCase(content)
 	else
-		title = globalVarFill(title)
+		title = token_replace(title)
 	end if
 	debug("url:" &url& " request:" &request.servervariables("url") & " page.filename:" & page.getFileName() &" page.filepath:"&page.getfilepath)
 	if (lcase(page.getFilePath()) = lcase(url)) then
@@ -32,7 +32,7 @@ end function
 'convert a relative path to an absolute path
 function urlRelToAbs(relativePath)
 'TODO: fix this function to work with real relative paths (eg ../../file.asp)
-	if InStr(relativePath,objLinks.item("SITEURL")) > 0 then 
+	if InStr(relativePath,globals("SITEURL")) > 0 then 
 		debugWarning("urlRelToAbs(): path '"&relativePath&"' is already absolute")
 	elseif InStr(relativePath,"http") = 1 then
 		debugWarning("urlRelToAbs(): path '"&relativePath&"' is already absolute")	
@@ -40,7 +40,7 @@ function urlRelToAbs(relativePath)
 		debugError("urlRelToAbs(): relative paths using './' or '../' have not yet been implemented!!!!")
 	else
 		if left(relativePath,1) <> "/" then relativePath = "/" & relativePath
-		relativePath = objLinks.item("SITEURL")&relativePath
+		relativePath = globals("SITEURL")&relativePath
 	end if
 	if instrrev(lcase(relativePath),"/default.asp")=len(relativePath)-11 then relativePath = replace(lcase(relativePath),"/default.asp","/")
 	urlRelToAbs = relativePath
@@ -51,16 +51,16 @@ function adminEditLink(linkUrl, linkText, linkHoverText)
 	if user.isAdministrator then
 		trace("adminEditLink: user has active admin session... adding link '"&linkText&"'")
 		dim url : url = replace(linkUrl,"\","/")
-		if InStr(url,objLinks.item("ADMINURL"))> 0 then
+		if InStr(url,globals("ADMINURL"))> 0 then
 			trace("adminEditLink: ["&url&"] an absolute link was provided, no modifications applied")
 			'do nothing to modify the link
 		elseif InStr(url,"http://")>0 then
-			debugError("adminEditLink:  ["&url&"] absolute link provided does not link to current admin area ["&objLinks.item("ADMINURL")&"]")
+			debugError("adminEditLink:  ["&url&"] absolute link provided does not link to current admin area ["&globals("ADMINURL")&"]")
 		else
 			if not InStr(url,"/") = 1 then
 				url = "/"&url
 			end if
-			url = objLinks.item("ADMINURL")&url
+			url = globals("ADMINURL")&url
 		end if
 		adminEditLink = "<div class=""adminedit"">"&a(url, "<span>"&linkText&"</span>", linkHoverText, null)&"</div>"
 	end if

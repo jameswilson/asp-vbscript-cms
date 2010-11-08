@@ -1,6 +1,6 @@
 <%@ Language=VBScript %>
 <%Option Explicit%>
-<!--#include file = "../core/include/bootstrap.asp"-->
+<!--#include file = "../../core/include/bootstrap.asp"-->
 <% 
 session(CUSTOM_MESSAGE) = getContent()
 
@@ -15,4 +15,4 @@ function getContent()
 	getContent = token_replace(sf.readAll())
 end function
 %>
-<!--#include file = "../core/include/template.asp"-->
+<!--#include file = "../../core/include/template.asp"-->

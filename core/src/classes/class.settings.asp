@@ -1,6 +1,12 @@
 <%
-const KEYWORD_PREFIX = "{"
-const KEYWORD_SUFFIX = "}"
+const TOKEN_PREFIX = "{"
+const TOKEN_SUFFIX = "}"
+
+'* Regular expression for detecting tokens.
+dim TOKEN_REGEX : set TOKEN_REGEX = new RegExp
+TOKEN_REGEX.pattern = TOKEN_PREFIX & "([\w_ ]+)" & TOKEN_SUFFIX
+TOKEN_REGEX.global = true
+
 
 class SiteSettings
 	private sdNamedSettings 'cached scripting dictionary of site settings by name
@@ -66,20 +72,20 @@ class SiteSettings
 			trace("class.settings.init:  SETTINGS:")
 			rs.movefirst
 			do until rs.eof
-				id=""&rs("SettingId")
-				key=""&rs("SettingName")
-				val=""&rs("SettingValue")
-				if isEmpty(val) or val ="" then
+				sid = cstr(rs("SettingId"))
+				key = cstr(rs("SettingName"))
+				val = cstr(rs("SettingValue"))
+				if isEmpty(val) or val = "" then
 					trace(" [ "&key&" -> UNDEFINED ]")
 				else
-					trace(" [ "&key&" -> "&Server.HTMLEncode(""&val)&" ]")
+					trace(" [ "&key&" -> "&Server.HTMLEncode(val)&" ]")
 				end if
 				if not sdNamedSettings.exists(key) then
 					sdNamedSettings.add key, val
-					sdIndexedSettings.add id, val
-					'trace("class.settings.init: key="&key&" id="&id&" val="&val)
+					sdIndexedSettings.add sid, val
+					'trace("class.settings.init: key="&key&" sid="&sid&" val="&val)
 				else
-					debugError("class.settings.init: expected '"&key&"' to be a unique setting but encountered a second.")
+					debugError("class.settings.init: expected '"& key &"' to be a unique setting but encountered a second.")
 				end if
 				trapError
 				rs.movenext
@@ -90,53 +96,52 @@ class SiteSettings
 	end sub
 end class
 
-' Add a global variable to the globals object.
-' Overwritting any current variable if it already
-' exists.
-function addGlobal(strKey, strVal, strFallBack)
-	strVal = token_replace(cstr(strVal))
-	if strVal = "" then
-		if token_replace(strFallBack) <> "" then
-			strVal = token_replace(strFallBack)
+'**
+'* Add a global variable to the globals object, overwritting the current value
+'* if the variable already exists.
+'*
+'* @param name
+'*   the name of the global variable.
+'* @param value
+'*   the value to assign to the global
+'* @param fallback
+'*   the default value, used when value is empty
+sub addGlobal(name, value, fallback)
+	value = token_replace(cstr(value))
+	if value = "" then
+		if token_replace(fallback) <> "" then
+			value = token_replace(fallback)
 		end if
 	end if
-	if globals.exists(strKey) then
-		globals.remove(strKey)
+	if globals.exists(name) then
+		globals.remove(name)
 	end if
-	globals.add strKey, strVal
-end function
-
-' Process the provided string, filling in any
-' global variables denoted by {}. For example,
-' {SITERURL} would be converted to the real
-' site's url.
-dim regex_globalVar : set regex_globalVar = new RegExp
-regex_globalVar.pattern = KEYWORD_PREFIX & "([\w_ ]+)" & KEYWORD_SUFFIX
-regex_globalVar.global = true
-
-
+	globals.add name, value
+end sub
 
 '**
 '* Search the specified string for global strings, and replace them with their value.
-'* Currently global strings are denoted between currly brackets, eg, {SITEURL} or {Company Name}
+'* Currently global strings are denoted between currly brackets.
+'*   eg, {SITEURL} or {Company Name}
+'*
 '* @param str the string to replace global variables
 '* @return a string with all global variables replaced.
 function token_replace(byval str)
 	if (str <> "") and (not isNull(str)) then
-	  str = replace(str, server.urlencode(KEYWORD_PREFIX), KEYWORD_PREFIX)
-	  str = replace(str, server.urlencode(KEYWORD_SUFFIX), KEYWORD_SUFFIX)
-		if instr(str, KEYWORD_PREFIX) > 0 then
+	  str = replace(str, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
+	  str = replace(str, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
+		if instr(str, TOKEN_PREFIX) > 0 then
 			dim expr, matched, variableName
-			set matched = regex_globalVar.execute(str)
+			set matched = TOKEN_REGEX.execute(str)
 			if matched.count > 0 then
 				for each expr in matched
-					variableName = Mid(expr.value, 2, len(expr.value)-2)
+					variableName = Mid(expr.value, 2, len(expr.value) - 2)
 					trace("class.settings.token_replace: '" & variableName & "'")
 					if globals.exists("" & variableName) then
 						str = replace(str, expr.value, globals("" & variableName))
 					elseif not settings is nothing then
 							if settings.exists(PrettyText(variableName)) = true then
-								str = replace(str,expr.value, settings.getItem(PrettyText(variableName)))
+								str = replace(str, expr.value, settings.getItem(PrettyText(variableName)))
 							'else
 							'	if Execute(eval(""&variableName)) then
 							'	str = eval(""&variableName)
@@ -159,16 +164,16 @@ function GlobalVarDecode(byval str, byval varList)
 		exit function
 	end if
 	trace("class.settings.globalVarDecode: '"& varList &"'")
-	varList = split(varList,",")
-	trace("class.settings.globalVarDecode: list has "&ubound(varList)&"  items")
-	str = replace(str,server.urlencode(KEYWORD_PREFIX),KEYWORD_PREFIX)
-	str = replace(str,server.urlencode(KEYWORD_SUFFIX),KEYWORD_SUFFIX)
-	dim i : i=0
+	varList = split(varList, ",")
+	trace("class.settings.globalVarDecode: list has "& ubound(varList) &"  items")
+	str = replace(str,server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
+	str = replace(str,server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
+	dim i : i = 0
 	do
-		trace("class.settings.globalVarDecode: decoding '"&varList(i)&"'")
-		trace("class.settings.globalVarDecode: replaceing '"&varList(i)&"' with '"&globals(""&varList(i)) & "'" )
-		str = replace(str,KEYWORD_PREFIX&varList(i)&KEYWORD_SUFFIX,globals(""&varList(i)))
-	loop until i=ubound(varList)
+		trace("class.settings.globalVarDecode: decoding '"& varList(i) &"'")
+		trace("class.settings.globalVarDecode: replaceing '"& varList(i) &"' with '"& globals(cstr(varList(i))) & "'")
+		str = replace(str, TOKEN_PREFIX & varList(i) & TOKEN_SUFFIX, globals(cstr(varList(i))))
+	loop until i = ubound(varList)
 	trapError
 	GlobalVarDecode = str
 end function
@@ -178,14 +183,14 @@ function GlobalVarEncode(byval str, byval varList)
 		GlobalVarEncode = ""
 		exit function
 	end if
-	trace("class.settings.GlobalVarEncode: '"&varList&"'")
-	varList = split(varList,",")
-	trace("class.settings.GlobalVarEncode: list has "&ubound(varList)&"  items")
-	str = replace(str,server.urlencode(KEYWORD_PREFIX),KEYWORD_PREFIX)
-	str = replace(str,server.urlencode(KEYWORD_SUFFIX),KEYWORD_SUFFIX)
+	trace("class.settings.GlobalVarEncode: '"& varList &"'")
+	varList = split(varList, ",")
+	trace("class.settings.GlobalVarEncode: list has "& ubound(varList) &"  items")
+	str = replace(str,server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
+	str = replace(str,server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 	dim i
-	for i=0 to ubound(varList)
-		str = replace(str,globals(""&varList(i)),KEYWORD_PREFIX&varList(i)&KEYWORD_SUFFIX)
+	for i = 0 to ubound(varList)
+		str = replace(str, globals(cstr(varList(i))), TOKEN_PREFIX & varList(i) & TOKEN_SUFFIX)
 	next
 	GlobalVarEncode = str
 end function

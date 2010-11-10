@@ -395,11 +395,15 @@ class AspPage
 		dim divClose : divClose = vbCrLf &"<br clear=""all""/>"& vbCrLf &"</div></div></div>"& vbCrLf
 		dim a, msg, cnt 
 		set a = New FastString
-		on error resume next
 		msg = ""&session.contents(CUSTOM_MESSAGE) 'has page provided a custom message?
 		cnt = ""&session.contents("main") 'has page provided session contents for current section?
+		
+		' This hack ensures that this try/catch clause never gets deactivated in a global/search replace
+		on _
+		error resume next
 		cnt = customContent("main") 'has page implemented the customContent() function?
 		on error goto 0
+		
 		session.contents.remove("main")
 		session.contents.remove(CUSTOM_MESSAGE)'clear custom message once its been grabbed
 		if len(msg) > 0 then 
@@ -477,7 +481,7 @@ class AspPage
 	
 	'returns true if the ADMIN_DIR is included in the file path of the current page
 	public function isAdminPage()
-		dim result : result = cbool(instr(getFilePath,globals("ADMIN_DIR")) > 0)
+		dim result : result = cbool(instr(getFilePath, globals("ADMIN_DIR")) > 0)
 		trace("class.page.isAdminPage: getfilepath="& getFilePath)
 		trace("class.page.isAdminPage: adminDir="& globals("ADMIN_DIR"))
 		trace("class.page.isAdminPage: "& result)

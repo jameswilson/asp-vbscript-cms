@@ -1,69 +1,75 @@
 <%
+'**
+'* @file
+'*   String functions for the CMS Application.
+'*
 
-'************************************************************
-' This function takes a string and removes file extensions, 
-' converts underscores to spaces and un-does CamelCase
-' Prototyped by: Brian Shamblen on 3/18/99
-' This version by: ASP 101 Sample Code - http://www.asp101.com/
-'************************************************************
-function PrettyText(strInput) 
+
+'**
+'* This function takes a string and removes file extensions, converts 
+'* underscores to spaces and un-does CamelCase.
+'* 
+'* @param text (string)
+'*   The string to prettify.
+'* @return String
+'*   A prettified version of the provided text string.
+function PrettyText(text) 
 	dim anExtension : set anExtension = new RegExp
-	dim a : a = ""&strInput
+	dim a : a = cstr(text)
 	anExtension.pattern = "(\.asp|\.txt|\.htm|\.html|\.inc|\.jpg|\.jpeg|\.gif|\.png|\.zip|\.gz|\.tar)"
 	anExtension.global = true
-	dim camelCase : set camelCase = new RegExp
-	camelCase.pattern = "([a-z]?)([0-9]+)([A-Z])|([a-z])([A-Z])"
-	camelCase.global = true
+	dim camel_case : set camel_case = new RegExp
+	camel_case.pattern = "([a-z]?)([0-9]+)([A-Z])|([a-z])([A-Z])"
+	camel_case.global = true
 	
-	a = replace(a,"_"," ")
-	a = anExtension.replace(a,"")
-	a = camelCase.replace(a,"$1$4 $2 $3$5")
+	a = replace(a, "_", " ")
+	a = anExtension.replace(a, "")
+	a = camel_case.replace(a, "$1$4 $2 $3$5")
 	
 	set anExtension = nothing
-	set camelCase = nothing
-	prettyText = a
+	set camel_case = nothing
+	PrettyText = a
 end function
 
-'************************************************************
-' convert a string into CamelCase (capitalize each word and
-' remove spaces). this is useful for creating and referencing
-' Anchor tags within a document based off of a regular Text 
-' heading.
-'************************************************************
-function CamelCase(strPhrase)
-	if (not isNull(strPhrase) and  ( not strPhrase = "")) then
-		strPhrase = replace(PCase(strPhrase), " ", "")
+'**
+'* Convert a string into CamelCase (capitalize each word and remove spaces). 
+'* This is useful for creating and referencing Anchor tags within a document 
+'* based off of a regular Text heading.
+'*
+function CamelCase(byval text)
+	if (not isnull(text) and (not text = "")) then
+		text = replace(pcase(text), " ", "")
 	end if
-	CamelCase = strPhrase
+	CamelCase = text
 end function
 
 
-'************************************************************
-' This function takes a string and converts to Proper Case.
-' Prototyped by: Brian Shamblen on 3/18/99
-' This version by: ASP 101 Sample Code - http://www.asp101.com/
-'************************************************************
-function PCase(strInput)
-	Dim iPosition  ' Our current position in the string (First character = 1)
-	Dim iSpace     ' The position of the next space after our iPosition
-	Dim strOutput  ' Our temporary string used to build the function's output
+'*
+'* This function takes a string and converts to Proper Case.
+'* Prototyped by: Brian Shamblen on 3/18/99
+'* This version by: ASP 101 Sample Code - http://www.asp101.com/
+'*
+function PCase(text)
+	dim iPosition  ' Our current position in the string (First character = 1)
+	dim iSpace     ' The position of the next space after our iPosition
+	dim result  ' Our temporary string used to build the function's output
 
 	' Set our position variable to the start of the string.
 	iPosition = 1
 	
 	' We loop through the string checking for spaces.
 	' If there are unhandled spaces left, we handle them...
-	Do While InStr(iPosition, strInput, " ", 1) <> 0
+	do while InStr(iPosition, text, " ", 1) <> 0
 		' To begin with, we find the position of the offending space.
-		iSpace = InStr(iPosition, strInput, " ", 1)
+		iSpace = InStr(iPosition, text, " ", 1)
 		
 		' We uppercase (and append to our output) the first character after
 		' the space which was handled by the previous run through the loop.
-		strOutput = strOutput & UCase(Mid(strInput, iPosition, 1))
+		result = result & UCase(Mid(text, iPosition, 1))
 		
 		' We lowercase (and append to our output) the rest of the string
 		' up to and including the current space.
-		strOutput = strOutput & LCase(Mid(strInput, iPosition + 1, iSpace - iPosition))
+		result = result & LCase(Mid(text, iPosition + 1, iSpace - iPosition))
 
 		' Note:
 		' The above line is something you may wish to change to not convert
@@ -77,90 +83,100 @@ function PCase(strInput)
 		' Set our location to start looking for spaces to the
 		' position immediately after the last space.
 		iPosition = iSpace + 1
-	Loop
+	loop
 
 	' Because we loop until there are no more spaces, it leaves us
 	' with the last word uncapitalized so we handle that here.
 	' This also takes care of capitalizing single word strings.
 	' It's the same as the two lines inside the loop except the
 	' second line LCase's to the end and not to the next space.
-	strOutput = strOutput & UCase(Mid(strInput, iPosition, 1))
-	strOutput = strOutput & LCase(Mid(strInput, iPosition + 1))
+	result = result & UCase(Mid(text, iPosition, 1))
+	result = result & LCase(Mid(text, iPosition + 1))
 
 	' That's it - Set our return value and exit
-	PCase = strOutput
+	PCase = result
 end function
 
-
-'************************************************************
-' This function takes a string and converts to Proper Case.
-' by: James Wilson on 10/18/07
-'************************************************************
-function SCase(byval strInput)
-	if not isNull(strInput) and len(strInput)>0 then 
-		dim rgxSentence,m : set rgxSentence = new RegExp
+'**
+'* Convert a string of text to Proper Case (aka, Title Case), capitalizing the
+'* first letter of each word.
+'* by: <james@elementalidad.com> 10/18/07
+function scase(byval text)
+	if not isNull(text) and len(text) > 0 then 
+		dim rgxSentence, m : set rgxSentence = new RegExp
 		rgxSentence.pattern = "[.]\s+?\b([a-z])"
 		rgxSentence.ignoreCase = true
 		rgxSentence.global = true
-		strInput = UCase(Mid(strInput, 1, 1))&LCase(Mid(strInput,2,len(strInput)))
-		for each m in rgxSentence.execute(strInput)
-			strInput = replace(strInput,m.value,replace(m.value,m.submatches(0),ucase(m.submatches(0))))
+		text = UCase(Mid(text, 1, 1)) & LCase(Mid(text, 2, len(text)))
+		for each m in rgxSentence.execute(text)
+			text = replace(text, m.value, replace(m.value, m.submatches(0), ucase(m.submatches(0))))
 		next
 	end if
-	SCase = strInput
+	scase = text
 end function
-'-------------------------------------------
-' Fast String Class:  Use this when you want 
-' to concatenate strings (implemented by an 
-' internal array).
-'-------------------------------------------
-' Written by Marcus Tucker, July 2004
-' http://marcustucker.com
-'-------------------------------------------
+
+'! @class FastString
+'! 
+'! Fast String Class:  Use this when you want 
+'! to concatenate strings (implemented by an 
+'! internal array).
+'!
+'! Written by Marcus Tucker, July 2004
+'! http://marcustucker.com
+'!
 class FastString
-	private StringCounter
-	private StringArray()
-	private StringLength
-	private InitStringLength
-	
-	'called at creation of instance
-	private sub class_Initialize()
-		StringCounter = 0
-		InitStringLength = 128
-		redim StringArray(InitStringLength - 1)
-		StringLength = InitStringLength
+	private m_counter
+	private m_array()
+	private m_length
+	private m_initial_length
+
+	'**
+	'* Constructor initializes the class and its variables.
+	private sub class_initialize()
+		m_counter = 0
+		m_initial_length = 128
+		redim m_array(m_initial_length - 1)
+		m_length = m_initial_length
 	end sub
 	
-	private sub class_Terminate()
-		erase StringArray
+	'**
+	'* Destructor removes an instance from memory.
+	private sub class_terminate()
+		erase m_array
 	end sub
 
-	'add new string to array
-	public sub Add(byref NewString)
-		StringArray(StringCounter) = NewString
-		StringCounter = StringCounter + 1
+	'**
+	'* Concatenation function adds a new string to the end of the existing one.
+	'* 
+	'* @param text (string)
+	'*   The text string to add.
+	public sub add(byref text)
+		m_array(m_counter) = text
+		m_counter = m_counter + 1
 		
-		'ReDim array if necessary
-		if StringCounter MOD StringLength = 0 Then
+		' redim the array if necessary
+		if m_counter mod m_length = 0 then
 			'redimension
-			redim Preserve StringArray(StringCounter + StringLength - 1)
+			redim Preserve m_array(m_counter + m_length - 1)
 			
 			'double the size of the array next time
-			StringLength = StringLength * 2
+			m_length = m_length * 2
 		end if
 	end sub
-	
-	'return the concatenated string
-	public Property Get Value
-		Value = Join(StringArray, "")
-	end Property 
-	
-	'resets array
-	public function Clear()
-		StringCounter = 0
+
+	'**
+	'* Return the concatenated string.
+	public property get value
+		value = join(m_array, "")
+	end property 
+
+	'**
+	'* Reset the string to an empty string.
+	public function clear()
+		m_counter = 0
 		
-		Redim StringArray(InitStringLength - 1)
-		StringLength = InitStringLength
+		Redim m_array(m_initial_length - 1)
+		m_length = m_initial_length
 	end function
 end class 
 

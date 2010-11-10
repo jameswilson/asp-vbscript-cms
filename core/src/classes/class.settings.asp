@@ -58,7 +58,7 @@ class SiteSettings
 	end function
 
 	private sub initializeSiteSettings()
-		dim rs, id, key, val, counter, i
+		dim rs, sid, key, val, counter, i
 		set sdNamedSettings = Server.CreateObject("Scripting.Dictionary")
 		set sdIndexedSettings = Server.CreateObject("Scripting.Dictionary")
 		on error resume next

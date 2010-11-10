@@ -20,8 +20,8 @@ emlformat.global = True
 '*
 '* @param the text/html string to write to the response buffer.
 '*
-function writeln(byval str)
-	response.write EmailObfuscate(""& str & vbCrLf)
+function writeln(byval text)
+	response.write EmailObfuscate(cstr(text) & vbCrLf)
 end function
 
 '**
@@ -53,7 +53,7 @@ end function
 '* @todo improve functionality of strAttributes to send a list of 
 '*       key/value pairs and do the attribute creation here
 '*
-function createTag(byval strTag, byval strAttributes,byval strContent)
+function createTag(byval strTag, byval strAttributes, byval strContent)
 	dim result : set result = new FastString
 	result.add "<"&lcase(strTag)&strAttributes
 	if not isNull(strContent) and (strContent <> "") then 
@@ -75,7 +75,7 @@ end function
 '* @param strClass a custom class attribute to apply to the anchor. 
 '* @return an xHTML anchor tag containing the specified url, title, class, and content 
 '*
-function anchor(byval strURL,byval strContent,byval strTitleText,byval strClass)
+function anchor(byval strURL, byval strContent, byval strTitleText, byval strClass)
 	if not isNull(strURL) and (strURL <> "") then strURL = " href="""&strURL&""""
 	if not isNull(strTitleText) and (strTitleText <> "") then strTitleText = " title="""&strTitleText&""""
 	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
@@ -91,7 +91,7 @@ end function
 '* @param strClass a custom class attribute to apply to the image  tag. 
 '* @return an xHTML image tag containing the specified url, title, alt and class.  
 '*
-function image(byval strURL,byval strAlternateText,byval strTitleText,byval strClass)
+function image(byval strURL, byval strAlternateText, byval strTitleText, byval strClass)
 	'check image source for relative URL
 	if instr(strURL,"http") <> 1 then 
 		if instr(strURL,"/") = 1 then
@@ -120,7 +120,7 @@ end function
 '* @param strClass (optional) a string of class(es) to apply to the tag.
 '* @return a string wrapped in xHTML p tag
 '*
-function paragraph(byval strText,byval strTitle,byval strId,byval strClass)
+function paragraph(byval strText, byval strTitle, byval strId, byval strClass)
 	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
 	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
 	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
@@ -138,7 +138,7 @@ end function
 '* @param strClass (optional) a string of class(es) to apply to the tag.
 '* @return a string wrapped in xHTML div tag
 '*
-function division(byval strText,byval strTitle,byval strId,byval strClass)
+function division(byval strText, byval strTitle, byval strId, byval strClass)
 	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
 	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
 	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
@@ -156,7 +156,7 @@ end function
 '* @param strClass (optional) a string of class(es) to apply to the tag.
 '* @return a string wrapped in xHTML div tag
 '*
-function UnorderedList(byval strText,byval strTitle,byval strId,byval strClass)
+function UnorderedList(byval strText, byval strTitle, byval strId, byval strClass)
 	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
 	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
 	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
@@ -174,7 +174,7 @@ end function
 '* @param strClass (optional) a string of class(es) to apply to the tag.
 '* @return a string wrapped in xHTML div tag
 '*
-function OrderedList(byval strText,byval strTitle,byval strId,byval strClass)
+function OrderedList(byval strText, byval strTitle, byval strId, byval strClass)
 	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
 	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
 	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
@@ -190,7 +190,7 @@ end function
 '* @param strMessageTypeClass the type of message to display (error, info, success, warning, etc)
 '* @return a string wrapped in xHTML message box
 '*
-function Message(byval strText,byval strMessageTypeClass)
+function Message(byval strText, byval strMessageTypeClass)
 	if len(trim(strText)) > 0 then Message = division(strText & brClearAll, null, null, strMessageTypeClass &" message")
 end function
 
@@ -472,8 +472,8 @@ end function
 '* @param strRelation the relation to the current document (eg, stylesheet,next,previous,etc)
 '* @param strType the MIME-type of the linked file (eg, text/css)
 '*
-function link(byval strURL,byval strRelation,byval strType)
-	link = "<link rel="""&strRelation&""" type="""&strType&""" href="""&strURL&""" />"& vbCrLf
+function link(byval strURL, byval strRelation, byval strType)
+	link = "<link rel="""& strRelation &""" type="""& strType &""" href="""& strURL &""" />"& vbCrLf
 end function
 
 '**
@@ -492,17 +492,17 @@ end function
 '* @param strWidth the width that the media file should ocupy in the document.
 '* @return an xHTML markup and supporting javascripts for displaying the specified media file 
 '*
-function mediaFile(byval strFileName,byval strTitle,byval strClass,byval strWidth,byval strHeight)
+function mediaFile(byval strFileName, byval strTitle, byval strClass, byval strWidth, byval strHeight)
 	dim result : set result = new FastString
-	debug("mediaFile: inserting media file '"&strFileName&"'")
-	if instrrev(strFileName, ".swf")=len(strFileName)-3 then
-		result.add flash(strFileName,strTitle,strClass,strWidth,strHeight)	
-	elseif instrrev(strFileName, ".jpg")=len(strFileName)-3 or instrrev(strFileName, ".jepg")=len(strFileName)-4 or instrrev(strFileName, ".gif")=len(strFileName)-3 or instrrev(strFileName, ".png")=len(strFileName)-3 then
+	debug("mediaFile: inserting media file '"& strFileName &"'")
+	if instrrev(strFileName, ".swf") = len(strFileName)-3 then
+		result.add flash(strFileName, strTitle, strClass, strWidth, strHeight)	
+	elseif instrrev(strFileName, ".jpg") = len(strFileName) - 3 or instrrev(strFileName, ".jepg") = len(strFileName) - 4 or instrrev(strFileName, ".gif") = len(strFileName) - 3 or instrrev(strFileName, ".png") = len(strFileName) - 3 then
 		 result.add img(strFileName,strTitle,strTitle,strClass)
-	elseif instrrev(strFileName, "/")=len(strFileName) then 
-		result.add slideshow(strFileName,strTitle,strClass,strWidth,strHeight)
+	elseif instrrev(strFileName, "/") = len(strFileName) then 
+		result.add slideshow(strFileName, strTitle, strClass, strWidth, strHeight)
 	else
-		debugError("mediaFile: unknown media type '"&strFileName&"'")
+		debugError("mediaFile: unknown media type '"& strFileName &"'")
 	end if
 	mediaFile = result.value
 	set result = nothing
@@ -524,7 +524,7 @@ end function
 '* @param strWidth (required) the width that the flash file should ocupy in the document.
 '* @return an xHTML markup and supporting javascripts for displaying the specified flash movie
 '*
-function flash(byval strFileName,byval strTitle,byval strClass,byval strWidth,byval strHeight)
+function flash(byval strFileName, byval strTitle, byval strClass, byval strWidth, byval strHeight)
 	dim strFileNoExtension : strFileNoExtension = replace(strFileName,".swf","")
 	dim result : set result = new FastString
 	strWidth = ""&strWidth
@@ -603,46 +603,47 @@ end function
 '* @param strWidth (required) the width that the flash file should ocupy in the document.
 '* @return an xHTML markup and supporting javascripts for displaying the slideshow
 '*
-function slideshow(byval strFolderName,byval strTitle,byval strClass,byval strWidth,byval strHeight)
-	if strTitle = "" or isNull(strTitle) then strTitle = "A "& globals("SHORTNAME") & " Slideshow."
-	strClass = "slideshow "&strClass
+function slideshow(byval strFolderName, byval strTitle, byval strClass, byval strWidth, byval strHeight)
 	dim result : set result = new FastString
-	debug("slideshow: inserting slideshow file '"&strFileName&"'")
-	result.add "<script src="""&globals("SITEURL")&"/core/assets/scripts/slideshow/mootools.js"" type=""text/javascript""></script>" & vbCrLf
-	result.add "<script src="""&globals("SITEURL")&"/core/assets/scripts/slideshow/slideshow.js"" type=""text/javascript""></script>" & vbCrLf
+	if strTitle = "" or isNull(strTitle) then 
+		strTitle = "A "& globals("SHORTNAME") &" Slideshow."
+	end if
+	strClass = "slideshow "& strClass
+	debug("slideshow: inserting slideshow file '"& strFileName &"'")
+	result.add "<script src="""& globals("SITEURL") &"/core/assets/scripts/slideshow/mootools.js"" type=""text/javascript""></script>" & vbCrLf
+	result.add "<script src="""& globals("SITEURL") &"/core/assets/scripts/slideshow/slideshow.js"" type=""text/javascript""></script>" & vbCrLf
 	'Slideshow expects an HTML image <img> wrapped by a block element, such as a <div>. 
 	'Following is an example of how this might appear in your HTML document: 
 	result.add "<div id=""js_slideshow"" class=""slideshow"">" & vbCrLf
 
-  dim myFileList : set myFileList = getFilesInFolder(strFolderName,".jpg")
+	dim myFileList : set myFileList = getFilesInFolder(strFolderName, ".jpg")
 	if myFileList.count = 0 then 
 		debugError("html.slideshow:  there are no images in folder '"&strFolderName&"'")
-		result.add "<!--  Slideshow disabled! '"&strFolderName&"' contains no images! "& vbCrLf
+		result.add "<!--  Slideshow disabled! '"& strFolderName &"' contains no images! "& vbCrLf
 	else 
 		randomize
-		dim random: random =int(rnd * myFileList.count)
-		result.add "<img src="""&strFolderName&myFileList.keys()(random)&".jpg"""
-		if strWidth <> "" and not isNull(strWidth) then result.add " width="""&strWidth&""""
-		if strHeight <> "" and not isNull(strHeight) then result.add " height="""&strHeight&""""
-		if strTitle <> "" and not isNull(strTitle) then result.add " alt="""&strTitle&""""
-		if strClass <> "" and not isNull(strClass) then result.add " class=""slideshow "&strClass&""""
+		dim random : random = int(rnd * myFileList.count)
+		result.add "<img src="""& strFolderName & myFileList.keys()(random) &".jpg"""
+		if strWidth <> "" and not isNull(strWidth) then result.add " width="""& strWidth &""""
+		if strHeight <> "" and not isNull(strHeight) then result.add " height="""& strHeight &""""
+		if strTitle <> "" and not isNull(strTitle) then result.add " alt="""& strTitle &""""
+		if strClass <> "" and not isNull(strClass) then result.add " class=""slideshow "& strClass &""""
 		result.add "/>" & vbCrLf
 	end if
 	result.add "</div>" & vbCrLf
-	
 	result.add "<script type=""text/javascript"">" & vbCrLf
-	strFolderName = replace(strFolderName,globals("SITEURL")&"/","")
-  result.add "myShow = new Slideshow('js_slideshow', {hu: '"&globals("SITEROOT")&"/"&strFolderName&"', duration: [700,5000], images: ["
-	separator=""
+	strFolderName = replace(strFolderName, globals("SITEURL") & "/", "")
+  result.add "myShow = new Slideshow('js_slideshow', {hu: '"& globals("SITEROOT") & "/" & strFolderName &"', duration: [700,5000], images: ["
+	separator = ""
 	dim imageFile
 	for each imageFile in myFileList
-		result.add separator&"'"&imageFile&".jpg'"
-		separator=","
-		trace("html.slideshow:  added image '"&imageFile&"' to slideshow")
+		result.add separator &"'"& imageFile &".jpg'"
+		separator = ","
+		trace("html.slideshow:  added image '"& imageFile &"' to slideshow")
 	next
 	result.add "]});" & vbCrLf
 	result.add "</script>" & vbCrLf
-	if myFileList.count = 0 then result.add "-->"  & vbCrLf
+	if myFileList.count = 0 then result.add "-->" & vbCrLf
 	slideshow = result.value
 	set result = nothing
 end function
@@ -650,53 +651,57 @@ end function
 '**
 '* Retrieve the original value of a url-encoded string.
 '* 
-'* @param sConvert the url string to decode
+'* @param text the url string to decode
 '* @return the decoded string
 '*
-function URLDecode(byval sConvert)
-    dim aSplit
-    dim sOutput
-    dim I
-    if isNull(sConvert) or sConvert="" then
+function URLDecode(byval text)
+    dim i, tokens, result
+    if isNull(text) or text = "" then
        URLDecode = ""
        exit function
     end if
-    sOutput = replace(sConvert, "+", " ") ' convert all pluses to spaces
-    aSplit = split(sOutput, "%")' next convert %hexdigits to the character
-    if isArray(aSplit) then
-      sOutput = aSplit(0)
-      for I = 0 to UBound(aSplit) - 1
-        sOutput = sOutput & _
-          chr("&H" & left(aSplit(i + 1), 2)) &_
-          right(aSplit(i + 1), len(aSplit(i + 1)) - 2)
+	
+	' Convert plus characters (+) into space characters.
+    result = replace(text, "+", " ")
+	
+	' Convert hex-encoded ascii (%NN) into their associated character. This is
+	' done by tokenizing the string at every percent sign (%) and converting
+	' the first two digits (NN) of each token into a character.
+    tokens = split(result, "%")
+    if isArray(tokens) then
+      result = tokens(0)
+      for i = 0 to ubound(tokens) - 1
+        result = result _
+          & chr("&H" & left(tokens(i + 1), 2)) _
+          & right(tokens(i + 1), len(tokens(i + 1)) - 2)
       next
     end if
-    URLDecode = sOutput
+    URLDecode = result
 end function
 
 
 '**
-'* Retrieve the original value of an html-encoded string.
-'* Special characters and html codes are returned to their original values.
+'* Retrieve the original value of an HTML-encoded string.
+'* Special characters and HTML codes are returned to their original values.
 '* 
 '* @param sText the string to decode
 '* @return the decoded text string
 '*
 function HTMLDecode(byval sText)
-    dim I
-		if isNull(sText) or sText="" then
+    dim i
+	if isNull(sText) or sText = "" then
        HTMLDecode = ""
        exit function
     end if
-		' convert basic string codes to the real character
+	' Convert basic HTML entities to their ASCII character representation.
     sText = replace(sText, "&quot;", chr(34))
     sText = replace(sText, "&lt;"  , chr(60))
     sText = replace(sText, "&gt;"  , chr(62))
     sText = replace(sText, "&amp;" , chr(38))
     sText = replace(sText, "&nbsp;", chr(32))
-		' next convert %hexdigits to the character
-    for I = 1 to 255
-        sText = Replace(sText, "&#" & I & ";", Chr(I))
+	' Convert %hexdigits to the character
+    for i = 1 to 255
+        sText = replace(sText, "&#"& i &";", chr(i))
     next
     HTMLDecode = sText
 end function
@@ -709,21 +714,21 @@ end function
 '* @return the html-encoded version of the string
 '*
 function encode(str)
-  str = replace(str,"'","&rsquo;")
-	str = replace(str,"""","&#34;")
-	str = replace(str,"& ","&amp; ")
-	str = replace(str,"<","&lt;")
-	str = replace(str,">","&gt;")
+  str = replace(str, "'", "&rsquo;")
+	str = replace(str, """", "&#34;")
+	str = replace(str, "& ", "&amp; ")
+	str = replace(str, "<", "&lt;")
+	str = replace(str, ">", "&gt;")
 	encode = str
 end function
 
 function EmailObfuscate(str)
-	dim result, m
+	dim match, result
 	result = str
 
-	for each m in emlformat.execute(str)
-		debug( "function.html.emailObfuscate:" & m.value & " was matched at position " & m.FirstIndex)
-		result = replace(result,m.value,Obfuscate(m.value))
+	for each match in emlformat.execute(str)
+		debug( "function.html.emailObfuscate:" & match.value & " was matched at position " & match.FirstIndex)
+		result = replace(result, match.value, Obfuscate(match.value))
 	next
 	EmailObfuscate = result
 end function
@@ -736,14 +741,14 @@ end function
 '*
 function Obfuscate(str)
 	randomize
-	dim seed,result,ascii,i
+	dim seed, result, ascii, i
 	for i = 1 to len(str)
-		seed=int(rnd * 10)
-		ascii=int(Asc(Mid(str, i, 1)))
-		if ascii<256 and seed>5 then
-			result = result&"&#x"&CStr(Hex(int(ascii)))&";" 
+		seed = int(rnd * 10)
+		ascii = int(asc(mid(str, i, 1)))
+		if ascii < 256 and seed > 5 then
+			result = result & "&#x" & cstr(hex(int(ascii))) & ";"
 		else
-			result = result&"&#"&ascii&";"
+			result = result & "&#" & ascii & ";"
 		end if
 	next
 	Obfuscate = result
@@ -755,7 +760,7 @@ end function
 function AsciiDecEncode(str)
 	dim result
 	for i = 1 to len(str)
-		result = result&"&#"&Asc(Mid(str, i, 1))&";"
+		result = result & "&#" & asc(mid(str, i, 1)) & ";"
 	next
 	AsciiDecEncode = result
 end function
@@ -767,11 +772,11 @@ end function
 function AsciiHexEncode(str)
 	dim result, ascii
 	for i = 1 to len(str)
-		ascii = int(Asc(Mid(str, i, 1)))
-		if ascii<256 then
-			result = result&"&#x"&CStr(Hex(int(ascii)))&";"
+		ascii = int(asc(mid(str, i, 1)))
+		if ascii < 256 then
+			result = result & "&#x" & cstr(hex(int(ascii))) & ";"
 		else
-			result = result&"&#"&ascii&";"
+			result = result & "&#" & ascii & ";"
 		end if
 	next
 	AsciiHexEncode = result
@@ -805,21 +810,21 @@ function toXHTML(str)
 	dim result 
 	for each h in html.execute(str)
 		'response.write("<blockqoute>")
-		'response.write(p("'"&server.htmlencode(h.value) & "' is an html tag"))
+		'response.write(p("'"& server.htmlencode(h.value) &"' is an html tag"))
 		result = h.value
 		for each t in tag.execute(h.value)
-			'response.write("<blockquote>'"&server.htmlencode(t.value) & "' matches html tag profile</blockquote>")
-			'response.write("<blockquote>'"&server.htmlencode(t.submatches(0)) & "' is the tag name</blockquote>")
-		  result = replace(result,t.value,lcase(t.value))
+			'response.write("<blockquote>'"& server.htmlencode(t.value) &"' matches html tag profile</blockquote>")
+			'response.write("<blockquote>'"& server.htmlencode(t.submatches(0))  "' is the tag name</blockquote>")
+		  result = replace(result, t.value, lcase(t.value))
 		next
 		for each a in attr.execute(h.value)
-			'response.write("<blockquote>'"&server.htmlencode(a.value) & "'  matches html tag attribute profile</blockquote>")
-			'response.write("<blockquote>'"&server.htmlencode(a.submatches(0)) & "' is the attribute name</blockquote>")
-			result = replace(result,a.value,replace(a.value,a.submatches(0),lcase(a.submatches(0))))
+			'response.write("<blockquote>'"& server.htmlencode(a.value) & "'  matches html tag attribute profile</blockquote>")
+			'response.write("<blockquote>'"& server.htmlencode(a.submatches(0)) & "' is the attribute name</blockquote>")
+			result = replace(result, a.value, replace(a.value, a.submatches(0), lcase(a.submatches(0))))
 		next		
-		'response.write("<blockquote>Resulting XHTML '"&server.htmlencode(result) & "'</blockquote>")		
+		'response.write("<blockquote>Resulting XHTML '"& server.htmlencode(result) &"'</blockquote>")		
 		'response.write("</blockquote>")	
-		str = replace(str,h.value,result)
+		str = replace(str, h.value, result)
 	next
 	toXHTML = str
 end function

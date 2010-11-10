@@ -1,18 +1,12 @@
-<%@ Language=VBScript %>
-<%Option Explicit%>
+<!--#include file="bootstrap.asp"-->
 <%
 '**
 '* @file 
-'*   Application bootstrap file.
+'*   Load the CMS application.
 '*
 '* This file is responsible for running the full appliation,  processing the 
 '* client request, and styling the page output.
 '* 
-
-'**
-'* Bootstrap the application.
-'* 
-%><!--#include file="bootstrap.asp"--><%
 
 '**
 '* Include router file to handle the client request.

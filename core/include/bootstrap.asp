@@ -1,3 +1,5 @@
+<% @Language = VBScript %>
+<% Option Explicit %>
 <%
 '**
 '* @file 

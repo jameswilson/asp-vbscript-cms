@@ -4,6 +4,68 @@
 '*   String functions for the CMS Application.
 '*
 
+'**
+'* Repeat a string x times
+'*
+function strx(byval x, byval str)
+ dim r,i
+ r = str
+ if isNumeric(x) and r <> "" then
+ 	if x > 0 then 
+		for i = 1 to x
+			r = r & str
+		next
+	end if
+ end if
+ strx = r
+end function
+
+'**
+'* Construct a string from the message and array of parameters to fill the 
+'* message similar to syntax of ruby's build_message() function, similar to C's
+'* prints() function.
+'*
+'* @usage \code  
+'*   build_message("Hello <?>",Array["world"])
+'*   build_message("Hello <?>, its <?>!",Array["world",Year]) ' prints Hello world, its 1999!
+'* \endcode
+function build_message(byval message, byref arr)
+	'writeln "build_message(message='"&message&"',arr="&dprint_r(arr)
+	dim val
+	for each val in arr
+		select case varType(val)
+			case 0'Empty (uninitialized)
+				val = "[undefined]"
+			case 1'Null (no valid data)
+				val = "[null]"
+			case 2'Integer
+			case 3'Long integer
+			case 4,5'Single/Double precision floating-point number
+				val = iif(val Mod 1 = 0, val & ".0", val)
+			case 6'Currency				
+			case 7'Date
+			case 8'String
+			case 9'Automation object
+				val = "["& iif(try(val, ".name"), evaluate(val, ".name"), TypeName(val)) &" Object]"
+			case 10'Error
+				val = val.source
+			case 11'Boolean
+			case 12'Variant (used only with arrays of Variants)
+				val = "[Variant Array]"
+			case 13'Data-access object
+				val = "[Data-access Object]"
+			case 17'Byte
+			case 8192'Array
+			case 8204'Variant Array
+				val = "[Array]"
+			case else
+				val = "[unknown type:"& varType(val) &"]"
+		end select
+		message = replace(message, "<"&"?"&">", val, 1, 1)
+	next
+	build_message = message
+end function
+
 
 '**
 '* This function takes a string and removes file extensions, converts 

@@ -2,9 +2,9 @@
 <!--#include file="../../../core/src/classes/class.rss-content-feed.asp" -->
 <%
 dim myForm
-strDebugHTML.clear
+logger.clear
 getContent()
-'printDebugHTML()
+'logger.debug_dump
 function getContent()
 	dim settings, feed_url
 	CreateDictionary settings,session("ModuleCustomSettings"),CUSTOMSETTINGS_RECORD_DELIMITER,CUSTOMSETTINGS_FIELD_DELIMITER,adDictOverwrite

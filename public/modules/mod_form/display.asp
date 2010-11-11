@@ -4,9 +4,9 @@
 <!--#include file="subscribe.asp"-->
 <%
 dim myForm
-strDebugHTML.clear
+logger.clear
 getForm()
-'printDebugHTML()
+'logger.debug_dump
 
 function getForm()
 

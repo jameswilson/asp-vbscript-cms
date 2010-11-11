@@ -50,21 +50,6 @@ function debugError(strErrorMessage)
 	logger.log "<p class='error'>ERROR: " & strErrorMessage & "</p>", ERROR_LEVEL
 end function
 
-function printDebugHTML()
-	debugInfo("Number of Database Operations: "& db.getCallCount())
-	debugInfo("Total Program Execution Time: "& getProgramTime())
-	if isDebugMode() and user.isAdministrator() then 
-		writeln(getDebugHTML())
-	end if
-end function
-
-function getDebugHTML()
-	if isDebugMode() then 
-		getDebugHTML = "<div id=""debug"" class=""clearfix"">" & vbCrLf _
-		& logger.debug_dump & "</div> <!--end debug-->"
-	end if
-end function
-
 public function debugMode() 
 	debugMode = (globals("DEBUG") = "1")
 end function

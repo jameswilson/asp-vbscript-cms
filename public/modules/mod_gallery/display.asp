@@ -2,9 +2,9 @@
 <!--#include file="../../../core/src/classes/class.form.asp" -->
 <%
 dim myForm
-strDebugHTML.clear
+logger.clear
 getContent()
-'printDebugHTML()
+'logger.debug_dump
 
 function getContent()
 	dim settings, content

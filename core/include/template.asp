@@ -48,7 +48,7 @@ trace("Applying HTML template 'template.asp'...")
  </div>
  <div id="footer" class="clearfix"> 
   <% ExecTimer "page.display(""footer"")"%>
-  <% printDebugHTML()  'only prints if debug.asp was included somewhere on the page, and if site DEBUG is "ON" %>
+  <% logger.debug_dump %>
  </div>
 </div>
 <div id="extra1"><% ExecTimer "page.display(""extra1"")"%></div>

@@ -1,9 +1,9 @@
 <!--#include file="../../../core/include/bootstrap.asp" -->
 <!--#include file="../../../core/src/classes/class.form.asp" -->
 <%
-strDebugHTML.clear
+'logger.clear
 writeln getBanner()
-'printDebugHTML()
+'logger.debug_dump
 
 function getBanner()
 	dim a,i,ts,bannerFile,bannerFileName,banners,content,line,settings

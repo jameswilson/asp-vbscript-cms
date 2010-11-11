@@ -1,8 +1,8 @@
 <!--#include file="../../../core/include/bootstrap.asp" -->
 <%
-strDebugHTML.clear
+logger.clear
 getProducts()
-'printDebugHTML()
+'logger.debug_dump
 
 
 function getProducts()

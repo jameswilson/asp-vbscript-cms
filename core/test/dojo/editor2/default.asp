@@ -28,8 +28,8 @@ frm.addFormInput "optional", "Your Phone", "phone", "text", "phone", "", "", "En
 frm.addFormInput "optional", "Your Birthday", "birth", "text", "date", "", "", "Enter your message, must be at least 10 and no more than 1000 characters."
 frm.addFormSubmission "left","Submit &raquo;","Cancel","",""
 frm.endFieldset
-writeln frm.getContents
-writeln printDebugHTML()
+writeln(frm.getContents)
+logger.debug_dump
 %>
 </body>
 </html>

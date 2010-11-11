@@ -7,9 +7,9 @@
 <!--#include file="../../../core/src/classes/class.strings.asp" -->
 <!--#include file="../../../core/src/classes/class.db.asp" -->
 <%
-strDebugHTML.clear
+logger.clear
 getRandomContent()
-'printDebugHTML()
+'logger.debug_dump
 
 function getRandomContent()
 	Randomize

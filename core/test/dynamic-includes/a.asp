@@ -24,7 +24,7 @@ if f.fileExists() then
 	debug("file be contents are: "&content)
 	Execute content
 end if
-printDebugHTML()
+logger.debug_dump
 %>
 
 </body>

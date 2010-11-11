@@ -4,7 +4,7 @@ const MESSAGE_SIMULATE = "DEVELOPERS! On the live site, the message would look l
 const MESSAGE_FAILED = "Your message failed to be sent."
 const TEST_MAIL_WARNING = "NOTE: This email message was sent from someone as a test and therefore was not sent onward to the website's company contact {Contact Email}! "
 
-function sendMail(mail_to,mail_from,mail_subject,mail_Dict,mail_BodyHTML, mail_BodyTEXT)
+function sendMail(mail_to, mail_from, mail_subject, mail_Dict, mail_BodyHTML, mail_BodyTEXT)
 	dim result : set result = new FastString
 	dim bodyHTML : set bodyHTML = New FastString
 	dim bodyText : set bodyText = New FastString
@@ -14,7 +14,7 @@ function sendMail(mail_to,mail_from,mail_subject,mail_Dict,mail_BodyHTML, mail_B
 		dim flds : set flds = objConfig.Fields
 		flds.Item("http://schemas.microsoft.com/cdo/configuration/sendusing") = 2
 		flds.Item("http://schemas.microsoft.com/cdo/configuration/smtpserver") = globals("SMTPHOST")
-		debugInfo("mod_form.email: SMTP HOST: "&globals("SMTPHOST"))
+		debugInfo("mod_form.email: SMTP HOST: "& globals("SMTPHOST"))
 		flds.update
 		set oMail.Configuration = objConfig
 	end if
@@ -73,7 +73,7 @@ function sendMail(mail_to,mail_from,mail_subject,mail_Dict,mail_BodyHTML, mail_B
 	on error resume next
 	oMail.Send
 	if err.number <> 0 then
-		result.add AlertMessage(iif(debugMode(),MESSAGE_FAILED&"Error Was: "& err.description & ".</br> Message Was: "&debugEmail(oMail),MESSAGE_FAILED))
+		result.add AlertMessage(iif(debugMode(), MESSAGE_FAILED &"Error Was: "& err.description & ".</br> Message Was: "& debugEmail(oMail),MESSAGE_FAILED))
 		err.clear
 	else
 		if debugMode() = true then

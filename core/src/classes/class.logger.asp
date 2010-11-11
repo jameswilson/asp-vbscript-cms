@@ -84,6 +84,13 @@ class CmsLogger
 		to_string = regex.replace(m_log.value, regex.HTML_TAGS, "")
 	end function
 
+	'**
+	'* Dump the log buffer to the screen, formatted with HTML, and then clear
+	'* the buffer.  Calling this method only produces a dump when DEBUG is 
+	'* enabled, and the user is logged in as an Administrator.
+	'* 
+	'* @return (String)
+	'*   The current log buffer 
 	public function debug_dump()
 		if globals("DEBUG") = "1" and user.isAdministrator() then
 			close

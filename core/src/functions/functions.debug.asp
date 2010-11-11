@@ -10,7 +10,6 @@
 '**
 '* Application log levels.
 '* 
-const DEBUG_OFF = 0
 const TRACE_LEVEL = 1
 const DEBUG_LEVEL = 2
 const INFO_LEVEL = 3
@@ -18,55 +17,52 @@ const WARN_LEVEL = 4
 const ERROR_LEVEL = 5
 
 '**
-'* Set the global log level to refine how much information is logged.
+'* Application debugging.
 '*
-dim debugLevel : debugLevel = TRACE_LEVEL
+const DISABLED = 0
+const ENABLED = 1
 
-'**
-'* 
-'*
-dim strDebugHTML : set strDebugHTML = new FastString
 
-'**
-'*
-'*
-function logMessage(strMessage, intLevel)
-	logMessage = false
-	if not (intLevel < debugLevel) then 
-		strDebugHTML.add strMessage & vbCrLf
-		'response.write(strMessage & vbCrLf)
-		logMessage = true
+function logMessage(message, severity)
+	if not isObject(logger) then
+		set logger = new CmsLogger
 	end if
+	call logger.log(message, severity)
 end function
 
 function trace(strMessage)
-	logMessage "<p class='debug'>TRACE: " & strMessage & "</p>",TRACE_LEVEL
+	logger.log "<p class='debug'>TRACE: " & strMessage & "</p>", TRACE_LEVEL
 end function
 
 function debug(strMessage)
-	logMessage "<p class='debug'>DEBUG: " & strMessage & "</p>",DEBUG_LEVEL
+	logger.log "<p class='debug'>DEBUG: " & strMessage & "</p>", DEBUG_LEVEL
 end function
 
 function debugInfo(strInfoMessage)
-	logMessage "<p class='info'>INFO: " & strInfoMessage & "</p>",INFO_LEVEL
+	logger.log "<p class='info'>INFO: " & strInfoMessage & "</p>", INFO_LEVEL
 end function
 
 function debugWarning(strWarnMessage)
-	logMessage "<p class='warning'>WARNING: " & strWarnMessage & "</p>",WARN_LEVEL
+	logger.log "<p class='warning'>WARNING: " & strWarnMessage & "</p>", WARN_LEVEL
 end function
 
 function debugError(strErrorMessage)
-	logMessage "<p class='error'>ERROR: " & strErrorMessage & "</p>",ERROR_LEVEL
+	logger.log "<p class='error'>ERROR: " & strErrorMessage & "</p>", ERROR_LEVEL
 end function
 
 function printDebugHTML()
-	debugInfo("Number of Database Operations: "&db.getCallCount())
-	debugInfo("Total Program Execution Time: "&getProgramTime())
-	if isDebugMode() and user.isAdministrator() then writeln(getDebugHTML())
+	debugInfo("Number of Database Operations: "& db.getCallCount())
+	debugInfo("Total Program Execution Time: "& getProgramTime())
+	if isDebugMode() and user.isAdministrator() then 
+		writeln(getDebugHTML())
+	end if
 end function
 
 function getDebugHTML()
-	if isDebugMode() then getDebugHTML = "<div id=""debug"" class=""clearfix"">"& vbCrLf & strDebugHTML.value & "</div><!--end debug-->"
+	if isDebugMode() then 
+		getDebugHTML = "<div id=""debug"" class=""clearfix"">" & vbCrLf _
+		& logger.debug_dump & "</div> <!--end debug-->"
+	end if
 end function
 
 public function debugMode() 

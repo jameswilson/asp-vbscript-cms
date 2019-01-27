@@ -6,13 +6,13 @@
 '**
 '* CMS product specifications.
 const PRODUCT_BRANDING = "ASP VBScript CMS"
-const PRODUCT_VERSION = "0.5"
+const PRODUCT_VERSION = "0.6"
 
 '**
 '* CMS branding.
-const PRODUCT_URL = "http://asp-vbscript.cms/googlecode.com"
+const PRODUCT_URL = "https://github.com/jameswilson/asp-vbscript-cms"
 const PRODUCT_LOGO = "{ADMINURL}/images/cms_logo_transparent.gif"
-const PRODUCT_FAVICON = "http://asp-vbscript-cms.googlecode.com/files/favicon.ico"
+const PRODUCT_FAVICON = "https://raw.githubusercontent.com/wiki/jameswilson/asp-vbscript-cms/files/favicon.ico"
 const PRODUCT_DESCRIPTION = "Powered by <a href=""{PRODUCT_URL}"" title=""{PRODUCT_BRANDING} {PRODUCT_VERSION}"">{PRODUCT_BRANDING}</a>"
 
 

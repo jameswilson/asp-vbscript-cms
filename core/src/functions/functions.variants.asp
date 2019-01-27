@@ -2,7 +2,7 @@
 '**
 '* @file
 '*   Variant helper functions.
-'* 
+'*
 
 '**
 '* Cast a variable to another variant type.
@@ -54,12 +54,12 @@ function cast(byval thing, byval vartyp)
 		case 8204'Variant Array
 			cast = Array(thing)
 		case else
-			cast = "unknown vartype: "& vartyp &""
+			cast = "unknown vartype: " & vartyp & ""
 			unsafe = true
 	end select
 	if err.number <> 0 then
 		on error goto 0
-		err.raise 6, "Cast Error", build_message("unable to convert <"&"?"&"> to vartype <"&"?"&">", Array(thing, vartyp))
+		err.raise 6, "Cast Error", build_message("unable to convert <" & "?" & "> to vartype <" & "?" & ">", Array(thing, vartyp))
 	elseif unsafe = true then
 		on error goto 0
 		err.raise 6, "Cast Error", cast

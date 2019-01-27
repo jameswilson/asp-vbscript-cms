@@ -1,4 +1,4 @@
-<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
+<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -17,32 +17,31 @@ dt,dd {
 </head>
 
 <body>
-<% 
-
-if len(request("name"))>0 then response.write "<p>Name is "&request("name")
-if len(request("email"))>0 then response.write "<p>Email is "&request("email")
+<%
+if len(Request("name")) > 0 then
+  Response.Write "<p>Name is " & Request("name")
+end if
+if len(Request("email")) > 0 then
+  Response.Write "<p>Email is " & Request("email")
+end if
 %>
 <p>Form submission test.</p>
 <form id="form1" name="form1" method="post" action="">
   <table width="500" border="0" cellspacing="4" cellpadding="0">
   <tr>
-    <td width="94"><label for="name">
-      <div align="right">Text To Send</div>
-    </label></td>
+    <td width="94"><label for="name"><div align="right">Text To Send</div></label></td>
     <td width="348"><input type="name" name="name" id="text" accesskey="t" tabindex="1" /></td>
   </tr>
   <tr>
-    <td><label for="email">
-    <div align="right">Email</div>
-    </label></td>
+    <td><label for="email"><div align="right">Email</div></label></td>
     <td><span id="emailValidate">
-        <input type="text" name="email" id="email" accesskey="e" tabindex="2" />
-        <span class="textfieldRequiredMsg">A value is required.</span>
-        <span class="textfieldInvalidFormatMsg">Invalid format.</span>  		</span></td>
+      <input type="text" name="email" id="email" accesskey="e" tabindex="2" />
+      <span class="textfieldRequiredMsg">A value is required.</span>
+      <span class="textfieldInvalidFormatMsg">Invalid format.</span>  		</span></td>
   </tr>
   <tr>
-    <td><div align="right"></div></td>
-    <td><label for="submit"></label>
+    <td><div align="right"><label for="submit"></label></div></td>
+    <td>
       <input type="submit" name="submit" id="submit" value="Submit" accesskey="s" tabindex="3" /></td>
   </tr>
 </table>

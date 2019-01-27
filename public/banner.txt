@@ -18,9 +18,9 @@
 #  "width" is the width of the file (this is required if the file is a
 #         flash archive).
 #  "height"is the height of the file (this is required if the file is
-#         a flash archive). 
+#         a flash archive).
 #   ;(semi-colon)  used to separate the three possible values.
-#   #(numeral) used to signify lines in the file that should not be 
+#   #(numeral) used to signify lines in the file that should not be
 #         processed, for comments such as this ;)
 #
 #   EXAMPES:
@@ -42,11 +42,6 @@
 #
 # A local flash file, no alt text, with a specified width and height
 #/images/flash1.swf;;;400x500
-
-                         
-
-
-
 
 /images/banners/banner01.jpg
 /images/banners/banner02.jpg

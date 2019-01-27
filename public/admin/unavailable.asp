@@ -9,13 +9,13 @@
 <link rel="shortcut icon" href="<%=token_replace("{PRODUCT_FAVICON}")%>"/>
 </head>
 <body>
-<div id="page"> 
-  <div id="header" class="clearfix"> 
+<div id="page">
+  <div id="header" class="clearfix">
     <!--#include file="./include/header.asp"-->
   </div>
-  <div id="content" class="clearfix"> 
-    <div id="main" class="clearfix"> 
-      <div class="login"> 
+  <div id="content" class="clearfix">
+    <div id="main" class="clearfix">
+      <div class="login">
         <h1><%=globals("SHORTNAME")%> Online Maintenance System</h1>
         <h2><%=globals("ADMIN_SITE_OFFLINE_MESSAGE")%></h2>
         <p>&nbsp;<%=session("CustomMessage")%>&nbsp;</p>

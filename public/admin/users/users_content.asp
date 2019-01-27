@@ -9,8 +9,8 @@
 <%
 	dim strSQL, strActive, strMainMenu, strFormAction, strStatus, strError, strWarn, strSuccess, strHeader
 	dim variableList, strEven
-	dim formContents, formErrors 
-	
+	dim formContents, formErrors
+
 	const strContent = "user" 'word that identifies the content we are administrating
 	const strContentPL = "users"	'text string for plural content
 	const strTableName = "tblUsers" 'name of the principle database table to modify
@@ -18,7 +18,7 @@
 	const strIdField = "UserID" 'name of the field that uniquely identifies a row from the database
 	dim myForm : set myForm = new WebForm
 	myForm.Name = Pcase(strContent) &"Creator"
-	
+
 	strActive = ""
 	strMainMenu = ""
 	strFormAction = ""
@@ -35,7 +35,7 @@
 	if instr(Request.QueryString(),"create")=1 then	formContents = contentCreate()
 	if instr(Request.QueryString(),"delete")=1 then	formContents = contentDelete()
 	if instr(Request.QueryString(),"view")=1 or len(Request.QueryString())=0 then formContents = contentView()
-	
+
 	writeln(h1(strHeader))
 	checkPageForErrors()
 	myForm.printFormErrors()
@@ -44,7 +44,7 @@
 <%
 '========================================================
 '       FUNCTIONS
-'========================================================	
+'========================================================
 function checkPageForErrors()
 	' Error processing and debug
 	if bolErrors then	processErrors

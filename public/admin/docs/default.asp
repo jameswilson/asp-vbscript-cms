@@ -1,2 +1,2 @@
 <%@ Language=VBScript %>
-<% server.Transfer("docs.asp") %>
+<% Server.Transfer("docs.asp") %>

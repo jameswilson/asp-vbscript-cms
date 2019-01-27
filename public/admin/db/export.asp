@@ -1,67 +1,68 @@
 <%@ Language=VBScript %>
-<%Option Explicit%>
+<% Option Explicit %>
 <!--#include file="../../../core/include/bootstrap.asp"-->
 <% page.setSecurityLevel(USER_ADMINISTRATOR)%>
 <!--#include file = "../../../core/include/secure.asp"-->
 <%
 dim dbPath, tableName, tableExists, cat, conn, dbCreate
 dim tbl, col, pkey, grp, rs, i, j, k
-dim tblName : tblName = request.querystring("tbl")
-dim sortBy : sortBy = request.querystring("sort_by")
+dim tblName : tblName = Request.QueryString("tbl")
+dim sortBy : sortBy = Request.QueryString("sort_by")
 page.setName("Database Browser &raquo; Export DB")
-if len(tblName)>0 then page.setName("Database Export &raquo; "& tblName)
-
+if len(tblName) > 0 then
+	page.setName("Database Export &raquo; " & tblName)
+end if
 
 '==============================================================
-' Summary: Display a list of all tables in the database. If a 
+' Summary: Display a list of all tables in the database. If a
 '          specific table is chosen, export its contents to SQL/DDL.
 '
-' Notice:  template.inc calls method getContent(), place all content  
+' Notice:  template.inc calls method getContent(), place all content
 '          to be displayed in here...
-' 
+'
 '---------------------------------------------------------------
 function getContent()
 	on error goto 0
-	set cat = server.createObject("ADOX.Catalog")
-	set conn = server.createObject("ADODB.Connection")
+	set cat = Server.CreateObject("ADOX.Catalog")
+	set conn = Server.CreateObject("ADODB.Connection")
 	dbPath = token_replace("{DB_LOCATION}\{PROJECT_NAME}.mdb")
-	debugInfo("db path: "& dbPath)
-	dbCreate = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" &dbPath
+	debugInfo("db path: " & dbPath)
+	dbCreate = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & dbPath
 	err.clear
-	conn.open dbCreate 
+	conn.open dbCreate
 	cat.activeConnection = conn
 	if err.number <> 0 then
-		debugError("there was an error in opening the connection to database '"& dbPath &"'")
-		debugError("error in "& Err.source &" error code "& err.number &": "& err.description)
+		debugError("there was an error in opening the connection to database '" & dbPath & "'")
+		debugError("error in " & err.source & " error code " & err.number & ": " & err.description)
 	end if
-	
-	if not len(request.QueryString()) > 0 then
+
+	if not len(Request.QueryString()) > 0 then
 		writeln(h2(page.getName()))
 		writeln(p("Select one of the following tables to export.  Currently tables may only be exported in the DDL format."))
 		writeln("<ul>")
 		for each tbl in cat.tables
 			if tbl.type = "TABLE" then
-				writeln("<li>"& strong(anchor("?tbl="& tbl.name,tbl.name, null, null)) &"</li>")
+				writeln("<li>" & strong(anchor("?tbl=" & tbl.name, tbl.name, null, null)) & "</li>")
 			end if
 		next
 		writeln("</ul>")
-	elseif len(tblName)>0 then
-		writeln(h2(anchor(globals("ADMINURL") &"/db/","Database Browser", null, null) &" &raquo; "& anchor(globals("ADMINURL") &"/db/export.asp","Export DB", null, null) &" &raquo; "& tblName)) 
-		debug("executing table '"& tblName &"'")
+	elseif len(tblName) > 0 then
+		writeln(h2(anchor(globals("ADMINURL") & "/db/", "Database Browser", null, null) & " &raquo; " & anchor(globals("ADMINURL") & "/db/export.asp","Export DB", null, null) & " &raquo; " & tblName))
+		debug("executing table '" & tblName & "'")
 		executeGetDDL(tblName)
 	end if
 
-	conn.close 
-	set conn = nothing 
-	set cat = nothing 
+	conn.close
+	set conn = nothing
+	set cat = nothing
 end function
 
 function executeGetDDL(byVal tableName)
 	for each tbl in cat.tables
 		if tbl.type = "TABLE" and lcase(tbl.name) = lcase(tableName) then
-			debug("getting table DDL string for table '"& tableName &"' ...")
-			writeln("<code>"& getTableDdl(tbl) &"</code>")
-			writeln("<code>"& GetTableContentDdl(tbl) &"</code>")
+			debug("getting table DDL string for table '" & tableName & "' ...")
+			writeln("<code>" & getTableDdl(tbl) & "</code>")
+			writeln("<code>" & GetTableContentDdl(tbl) & "</code>")
 			'for each indx in tbl.indexes
 			'	writeln(GetIndexDdl(tbl, indx))
 			'next
@@ -71,20 +72,20 @@ end function
 
 public function GetTableDdl(mytdef) 'As TableDef) 'As String
 		dim myfld, sql
-		dim Seperator, a 
+		dim Seperator, a
 		dim myFields
 		set sql = new FastString
-		set rs = server.createObject("ADODB.RecordSet")
+		set rs = Server.CreateObject("ADODB.RecordSet")
 		rs.ActiveConnection = conn
-		rs.open cstr(mytdef.name), conn 
+		rs.open cstr(mytdef.name), conn
 		sql.add "CREATE TABLE " & QuoteObjectName(mytdef.Name) & " ("
 		Seperator = vbCrLf
 		for each myfld in mytdef.columns
 			 sql.add Seperator & " " & QuoteObjectName(myfld.Name) & " "
 			 select case myfld.Type
-			 case adBoolean   'Boolean
+			 case adBoolean 'Boolean
 					sql.add "BIT"
-			 case adUnsignedTinyInt, adTinyInt   'Byte
+			 case adUnsignedTinyInt, adTinyInt 'Byte
 					sql.add "BYTE"
 			 case adCurrency  'Currency
 					sql.add "MONEY"
@@ -92,10 +93,10 @@ public function GetTableDdl(mytdef) 'As TableDef) 'As String
 					sql.add "DATE"
 			 case adDBTimeStamp
 					sql.add "DATETIME"
-			 case adDouble    'Double
+			 case adDouble 'Double
 					sql.add "DOUBLE"
-			 case adInteger, adSmallInt   'Integer
-					if rs.Fields(cstr(myfld.name)).properties("IsAutoIncrement") then 
+			 case adInteger, adSmallInt 'Integer
+					if rs.Fields(cstr(myfld.name)).properties("IsAutoIncrement") then
 						sql.add "COUNTER "
 					else
 						sql.add "INTEGER"
@@ -120,18 +121,18 @@ public function GetTableDdl(mytdef) 'As TableDef) 'As String
 		for each myfld in mytdef.keys
 			if myfld.columns.count = 1 then
 				sql.add Seperator & " "
-				sql.add "CONSTRAINT "& myfld.Name &" "
+				sql.add "CONSTRAINT " & myfld.Name & " "
 				select case myfld.Type
 					case adKeyPrimary
-						sql.add " PRIMARY KEY ("& myfld.columns(0) &")"
+						sql.add " PRIMARY KEY (" & myfld.columns(0) & ")"
 					case adKeyForeign
-						sql.add " FOREIGN KEY ("& myfld.columns(0) &") REFERENCES "& QuoteObjectName(myFld.RelatedTable) 
+						sql.add " FOREIGN KEY (" & myfld.columns(0) & ") REFERENCES " & QuoteObjectName(myFld.RelatedTable)
 					case adKeyUnique
-						sql.add " UNIQUE ("& myfld.columns(0) &")"
+						sql.add " UNIQUE (" & myfld.columns(0) & ")"
 					case else
-						MsgBox " An unsupported key type '"& myfld.Type &"' was found for key: "& myFld.name
+						MsgBox " An unsupported key type '" & myfld.Type & "' was found for key: " & myFld.name
 				end select
-				select case myfld.UpdateRule 
+				select case myfld.UpdateRule
 					case adRINone
 						'do nothing this is default
 					case adRISetNull
@@ -141,9 +142,9 @@ public function GetTableDdl(mytdef) 'As TableDef) 'As String
 					case adRICascade
 						sql.add " ON UPDATE CASCADE"
 					case else
-						MsgBox " An unsupported update rule '"& myfld.UpdateRule &"' was found for key: "& myFld.name
+						MsgBox " An unsupported update rule '" & myfld.UpdateRule & "' was found for key: " & myFld.name
 				end select
-				select case myfld.DeleteRule 
+				select case myfld.DeleteRule
 					case adRINone
 						'do nothing this is default
 					case adRISetNull
@@ -153,10 +154,10 @@ public function GetTableDdl(mytdef) 'As TableDef) 'As String
 					case adRICascade
 						sql.add " ON DELETE CASCADE"
 					case else
-						MsgBox " An unsupported update rule '"& myfld.UpdateRule &"' was found for key: "& myFld.name
+						MsgBox " An unsupported update rule '" & myfld.UpdateRule & "' was found for key: " & myFld.name
 				end select
 			else
-				response.write(" columns count: "& myfld.columns.count)
+				Response.Write(" columns count: " & myfld.columns.count)
 			end if
 			Seperator = ", " & vbCrLf
 		next
@@ -168,71 +169,71 @@ end function
 
 public function GetTableContentDdl(mytdef) 'As TableDef) 'As String
 	dim myfld, sql
-	dim Separator, Divider, a 
+	dim Separator, Divider, a
 	dim myFields, sqlFields, sqlContents
 	set sql = new FastString
-	
-	set rs = server.createObject("ADODB.RecordSet")
+
+	set rs = Server.CreateObject("ADODB.RecordSet")
 	rs.ActiveConnection = conn
-	rs.open "SELECT * FROM "& mytdef.name, conn 
-	if rs.state>0 then 
-		
+	rs.open "SELECT * FROM " & mytdef.name, conn
+	if rs.state > 0 then
+
 		Divider = vbCrLf
 		do until rs.EOF
-			sql.add Divider & "INSERT INTO "& mytdef.name
+			sql.add Divider & "INSERT INTO " & mytdef.name
 			sqlFields = ""
 			sqlContents = ""
 			Separator = ""
 for each myfld in mytdef.columns
 		skip = false
 		sqlValue = rs(myfld.Name)
-		debug("db.admin.functions.CreateSQL: field "& myfld &" has value "& sqlValue)
-		if isNull(sqlValue) or sqlValue <> "" or myfld.name <> strPKid then 
+		debug("db.admin.functions.CreateSQL: field " & myfld & " has value " & sqlValue)
+		if isNull(sqlValue) or sqlValue <> "" or myfld.name <> strPKid then
 			skip = true
 		else
 			select case myfld.Type
 				case adBoolean   'Boolean
-					if (len(sqlValue)>0) and (CStr(sqlValue) <> Cstr(0)) and (CStr(sqlValue) <> CStr(false)) then 
+					if (len(sqlValue)>0) and (CStr(sqlValue) <> Cstr(0)) and (CStr(sqlValue) <> CStr(false)) then
 						sqlValue = "1"
 					else
 						sqlValue = "0"
 					end if
-					
-					
+
+
 				case adDate, adDBTimeStamp 'Date / Time
-					if isDate(sqlValue) = true then 
-						sqlValue = "#"& Date(sqlValue) &"#"
+					if isDate(sqlValue) = true then
+						sqlValue = "#" & Date(sqlValue) & "#"
 					else
-						strError = strError & "The "& myfld.Name &" field value '"& sqlValue &"' is not a valid date format."
+						strError = strError & "The " & myfld.Name & " field value '" & sqlValue & "' is not a valid date format."
 						exit function
 					end if
-				
-									
+
+
 				case adLongVarChar, adLongVarWChar, adVarChar, adVarWChar 'Memo and Text fields
-					sqlValue = "'" & replace(sqlValue,"'","''") & "'"		
-					
-							
+					sqlValue = "'" & replace(sqlValue, "'", "''") & "'"
+
+
 				case adUnsignedTinyInt, adTinyInt,adCurrency, adDouble, adSingle, adInteger, adSmallInt
 					if not isNumeric(sqlValue) then
-						strError = strError & "The value '"& sqlValue &"' for field "& myfld.Name &" is not numeric."
+						strError = strError & "The value '" & sqlValue & "' for field " & myfld.Name & " is not numeric."
 						exit function
-					end if			
-					
-							
+					end if
+
+
 				case else
-					strError = strError & "The value '"& sqlValue &"' for for field "& myfld.Name &"  could not be processed due to an unknown field type '"& myfld.Type &"'"
+					strError = strError & "The value '" & sqlValue & "' for for field " & myfld.Name & " could not be processed due to an unknown field type '" & myfld.Type & "'"
 					exit function
-					
+
 			end select
 			if not skip then
 				sqlFields.add    separator & quot(myfld.Name)
 				sqlContents.add  separator & sqlValue
 				separator = ", "
-			end if 
+			end if
 		end if
 	next
-			sql.add "("& sqlFields.value &")"
-			sql.add " VALUES ("& sqlContents.value &")"
+			sql.add "(" & sqlFields.value & ")"
+			sql.add " VALUES (" & sqlContents.value & ")"
 			Divider = ";" & vbCrLf
 			rs.movenext
 		loop

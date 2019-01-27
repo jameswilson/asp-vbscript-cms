@@ -22,9 +22,9 @@
 	set strHeader = new FastString
 	set pageContent = new FastString
 	dim myForm : set myForm = new WebForm
-	myForm.Name = Pcase(strContent) &"Administrator"
+	myForm.Name = Pcase(strContent) & "Administrator"
 
-	
+
 	'* Custom strings for File Manager
 	const FILE_FOLDER = "assets"
 	const CONTENT_TYPE = "image/gif,image/jpeg,image/jpg,image/pjpeg"
@@ -35,22 +35,22 @@
 	myForm.isForNewContent = false
 	myForm.uploadPath = "/"& FILE_FOLDER
 
-	
-	if instr(Request.QueryString(),"edit")=1 then 
+
+	if instr(Request.QueryString(), "edit") = 1 then
 		contentEdit()
-	elseif instr(Request.QueryString(),"update")=1 then 
+	elseif instr(Request.QueryString(), "update") = 1 then
 		contentUpdate()
-	elseif instr(Request.QueryString(),"add")=1 then 
+	elseif instr(Request.QueryString(), "add") = 1 then
 		contentAdd()
-	elseif instr(Request.QueryString(),"create")=1 then 
+	elseif instr(Request.QueryString(), "create") = 1 then
 		contentCreate()
-	elseif instr(Request.QueryString(),"delete")=1 then 
+	elseif instr(Request.QueryString(), "delete") = 1 then
 		contentDelete()
-	else 
+	else
 		contentView()
-	end if	
-		
-	writeln(h1(a(globals("ADMINURL") &"/modules/admin/", "Module Administrator", null, null) & connector & strHeader.value))
+	end if
+
+	writeln(h1(a(globals("ADMINURL") & "/modules/admin/", "Module Administrator", null, null) & connector & strHeader.value))
 	checkPageForErrors()
 	myForm.printFormErrors()
 	writeln(pageContent.value)

@@ -1,4 +1,4 @@
-<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%><%
+<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %><%
 option explicit
 dim sFile, sRoot, sDir, sExt, objShell, objFSO, sMIME, objStream
 
@@ -17,7 +17,7 @@ sFile = Request("file")
 ' order to get this we need to know the file's extension.
 ' We could use string functions to get the file extension but we've going
 ' to be lazy and use FileSystemObject
-set objFSO = server.CreateObject("Scripting.FileSystemObject")
+set objFSO = Server.CreateObject("Scripting.FileSystemObject")
 sExt = objFSO.GetExtensionName (sFile)
 set objFSO = nothing
 

@@ -10,8 +10,8 @@ active = ""
 checked = ""
 selected = ""
 
-if len(id)> 0 then 
-	debug("admin.mod.buildFormContents: id supplied was "& id)
+if len(id)> 0 then
+	debug("admin.mod.buildFormContents: id supplied was " & id)
 	set modules = new SiteModules
 	set sd = modules.getModuleById(id)
 else
@@ -21,13 +21,13 @@ else
 	sd.add "Location", "main"
 end if
 
-if len(modType) > 0 then 
+if len(modType) > 0 then
 	set modules = new SiteModules
 	set sd = modules.getModuleByType(modType)
 	sd.add "Type", cstr(modType)
 	dim mods : set mods = modules.getActiveModules()
 	debug("Modhandler is " & mods.item(cstr(modType)))
-	
+
 	sd.add "ModHandler", mods(cstr(modType))
 	sd.add "Active", cstr(TRUE)
 	sd.add "Location", "main"
@@ -50,23 +50,23 @@ if cstr(sd("Active")) = cstr(TRUE) then checked = "checked"
 .addFormInput  "optional", "This module is active?", "Active", "checkbox", "", "1", checked, ""
 
 'process and insert modules custom settings
-dim moduleHandler : moduleHandler = MODULE_FOLDER & sd("ModHandler") &"/"& MODULE_CUSTOM_FIELDS
+dim moduleHandler : moduleHandler = MODULE_FOLDER & sd("ModHandler") & "/" & MODULE_CUSTOM_FIELDS
 dim custModuleResults : custModuleResults = executeFile(moduleHandler, getVariableDefinitionScript(sd))
-debug("admin.mod.buildFormContents: file execution returned: "& custModuleResults)
+debug("admin.mod.buildFormContents: file execution returned: " & custModuleResults)
 .addFormSubmission "left", "Submit &raquo;", "", "", ""
-.endFieldset 
+.endFieldset
 
 .addFieldset "Module Location",""
 .addFormSelect "required", "Location", "Location", "selectOne", ""
 for each location in split(MODULE_LOCATIONS, ",")
 	selected = ""
-	debug("module location is '"& sd("Location") &"'")
+	debug("module location is '" & sd("Location") & "'")
 	if lcase(trim(location)) = lcase(trim(sd("Location"))) then selected = "selected"
 	.addFormOption "Location", lcase(trim(location)), lcase(trim(location)), selected
 next
 .endFormSelect("Select the location on the page to display the content. These names refer to the available layout divs for your site.")
 
-if .isForNewContent then 
+if .isForNewContent then
 	set rs = db.getRecordSet("SELECT Max(SortOrder) AS SortOrder FROM tblModules WHERE Location='main'")
 	intSortOrder = rs("SortOrder") + 1
 else
@@ -93,14 +93,14 @@ end if
 .endFormSelect("Select the pages on the which to display this module.")
 
 .addFormSubmission "left","Submit &raquo;","","",""
-.endFieldset 
+.endFieldset
 
 .addFieldset "Presentation",""
 .addFormInput  "optional", "Module ID", "StyleID",  "text", "", sd("StyleID"), " maxsize=""50""","A unique identifier for this module, that may be user for custom css styling on the wrapper div."
 .addFormInput  "optional", "Custom Class", "StyleClass",  "text", "", sd("StyleClass"), " maxsize=""50""","You may provide a space-separated list of classes to be applied to the class attribute of the module's wrapper div for custom css styling."
-.addFormInput  "optional", "Inline CSS", "StyleInline",  "textarea", "simple", sd("StyleInline"), DBMEMO&" rows=""10""","You may provide custom valid css to be applied inline to the style attribute of the module's containing div."
+.addFormInput  "optional", "Inline CSS", "StyleInline",  "textarea", "simple", sd("StyleInline"), DBMEMO & " rows=""10""","You may provide custom valid css to be applied inline to the style attribute of the module's containing div."
 .addFormSubmission "left","Submit &raquo;","","",""
-.endFieldset 
+.endFieldset
 
 
 
@@ -110,37 +110,37 @@ end function
 
 
 function executeFile(byval virtualPathToModule, byval pretext)
-	const forReading = 1 
+	const forReading = 1
 	executeFile = false
 	dim f : set f = new SiteFile
 	f.Path = virtualPathToModule
 	if f.fileExists() then
-		debug("admin.mod.executeFile: file absolute path is "& f.absolutePath)
+		debug("admin.mod.executeFile: file absolute path is " & f.absolutePath)
 		dim ts : set ts = fs.openTextFile(f.absolutePath, forReading)
-		dim content : content = pretext & vbCrLf & replace(replace(ts.readAll, "<"&"%", ""), "%"&">", "")
-		debug("admin.mod.executeFile: file contents are: "& codeblock(content))
+		dim content : content = pretext & vbCrLf & replace(replace(ts.readAll, "<" & "%", ""), "%" & ">", "")
+		debug("admin.mod.executeFile: file contents are: " & codeblock(content))
 		err.clear
 		on error resume next
 		Execute(content)
 
-		if err.number <> 0 then 
-			debugError("there was an error executing "& codeblock(content))
+		if err.number <> 0 then
+			debugError("there was an error executing " & codeblock(content))
 			trapError
-		else 
-			executeFile = true		
-		end if 
-		
+		else
+			executeFile = true
+		end if
+
 	end if
 end function
 
 function getVariableDefinitionScript(sd)
 	dim key, result
-	
+
 	for each key in sd.keys
 		' All module Variables are prefixed with  m_ to avoid runtime compile
 		' errors upon execution, if the field name from the database happens
 		' to be a reserved keyword.
-		result = result & "dim m_"& key &" : m_"& key &" = """& replace(replace(replace(replace(sd(key), """", """"""), vbCrLf,"""& vbCrLf &"""), vbcr, """& vbcr &"""), vbLf, """& vblf &""") &""" : debug(""m_"& key &" is '""& server.HTMLEncode(m_"& key &") &""'"")" & vbCrLf
+		result = result & "dim m_" & key & " : m_" & key & " = """ & replace(replace(replace(replace(sd(key), """", """"""), vbCrLf, """& vbCrLf &"""), vbcr, """& vbcr &"""), vbLf, """& vblf &""") & """ : debug(""m_" & key &" is '""& Server.HtmlEncode(m_" & key & ") &""'"")" & vbCrLf
 	next
 	getVariableDefinitionScript = result
 end function

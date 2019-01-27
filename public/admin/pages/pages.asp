@@ -2,7 +2,7 @@
 <!--#include file = "../../../core/include/secure.asp"-->
 <!--#include file = "pages_content.asp"-->
 <%
-page.setFile(request.ServerVariables("URL"))
+page.setFile(Request.ServerVariables("URL"))
 page.setTitle("Static Pages")
 page.addBreadcrumb "Static Pages", globals("ADMINURL") & "/pages"
 %>

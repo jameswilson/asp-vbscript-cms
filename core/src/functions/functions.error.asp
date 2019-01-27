@@ -40,14 +40,14 @@ function TrapError()
 			' Handle application errors:
 			case ""
 				foundError = TRUE
-				errString = globals("PRODUCT_BRANDING") &" ERROR: "& err.description &"  SOURCE: "& Err.source
- 			
+				errString = globals("PRODUCT_BRANDING") & " ERROR: " & err.description &"  SOURCE: " & Err.source
+
 			' Handle general ASP runtime errors.
 			case else
 				foundError = TRUE
-				errString = "VBScript ERROR ["& err.number &"] (Ox"& Hex(err.number) &"): "& vbCrLf _
+				errString = "VBScript ERROR [" & err.number & "] (Ox" & Hex(err.number) & "): " & vbCrLf _
 					& "DESCRIPTION:" & err.description & vbCrLf _
-					& "URL: " & request.ServerVariables("URL") & vbCrLf _
+					& "URL: " & Request.ServerVariables("URL") & vbCrLf _
 					& "SOURCE: " & Err.source
 				if isObject(db) then
 					dim errCount : errCount = db.Errors.Count
@@ -58,7 +58,7 @@ function TrapError()
 								errString = errString & separator & "Database ERROR [" _
 									& .number & "] (Ox" & Hex(.number) & "): " & vbCrLf _
 									& .description & vbCrLf _
-									& "URL: " & request.ServerVariables("URL") & vbCrLf _
+									& "URL: " & Request.ServerVariables("URL") & vbCrLf _
 									& "SOURCE: " & .source & vbCrLf _
 									& "SQL STATE: " & .SQLState & vbCrLf _
 									& "Native Error: " & .NativeError
@@ -86,7 +86,7 @@ end function
 '*   The error message to add
 sub storeRuntimeError(byval message)
 	debugError(replace(replace(message, ERROR_STRING_SEPARATOR, "<br/><br/>"), vbCrLf, "<br/>"))
-	'response.write(p(message))
+	'Response.Write(p(message))
 	runtimeErrors = runtimeErrors & message & ", "
 end sub
 
@@ -99,11 +99,11 @@ function ProcessErrors()
 	if bolErrors = TRUE and runtimeErrors <> "" then
 		debug("Runtime errors were encountered.")
 		dim status : status = getRuntimeErrors
-		
+
 		' Clear the global errors after processing.
 		bolErrors = FALSE
 		runtimeErrors = ""
-		
+
 		' Return the status message.
 		ProcessErrors = status
 	end if

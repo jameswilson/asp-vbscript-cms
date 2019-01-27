@@ -229,12 +229,12 @@ class RegularExpression
 		m_regex.ignorecase = TRUE
 		itest = this.test(pattern, subject)
 	end function
-	
+
 	'**
 	'* An enhanced implementation of RegExp.Execute(). This function executes
 	'* a regular expression returning a collection of all matching instances
-	'* within the provided subject string. With the colleciton you can count 
-	'* the number of matches found and at which position in the string the 
+	'* within the provided subject string. With the colleciton you can count
+	'* the number of matches found and at which position in the string the
 	'* match(es) were made.
 	'*
 	'* @param subject (string)
@@ -250,7 +250,7 @@ class RegularExpression
 	'* @usage
 	'* \code
 	'* matches = regex.match("Th\w+", "This & That")
-	'* writeln("Found "& matches.count & " matches.<br />")
+	'* writeln("Found " & matches.count & " matches.<br />")
 	'* for each match in matches
 	'*     writeln(expressionmatched.Value _
 	'*         & " was matched at position " _
@@ -268,8 +268,8 @@ class RegularExpression
 	'**
 	'* An enhanced implementation of RegExp.Execute(). This function executes
 	'* a regular expression returning a collection of all matching instances
-	'* within the provided subject string. With the colleciton you can count 
-	'* the number of matches found and at which position in the string the 
+	'* within the provided subject string. With the colleciton you can count
+	'* the number of matches found and at which position in the string the
 	'* match(es) were made.
 	'*
 	'* @param subject (string)
@@ -285,7 +285,7 @@ class RegularExpression
 	'* @usage
 	'* \code
 	'* matches = regex.match("Th\w+", "This & That")
-	'* writeln("Found "& matches.count & " matches.<br />")
+	'* writeln("Found " & matches.count & " matches.<br />")
 	'* for each match in matches
 	'*     writeln(expressionmatched.Value _
 	'*         & " was matched at position " _

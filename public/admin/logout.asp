@@ -1,4 +1,4 @@
-<%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
+<%@ LANGUAGE="VBSCRIPT" CODEPAGE="1252" %>
 <!--#include file = "../../core/include/bootstrap.asp"-->
 <%
 		user.logout()

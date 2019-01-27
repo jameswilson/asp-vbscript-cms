@@ -1,13 +1,13 @@
 <%
-if request.ServerVariables("SERVER_NAME")<>"localhost" then 
-	response.write "<script src=""http://www.google-analytics.com/urchin.js"" type=""text/javascript""></script>" & vbCrLf
-	response.write "<script type=""text/javascript"">"& vbCrLf
-	response.write "_uacct='"
-	if isobject(globals) then 
-	 response.write globals("GOOGLE_ANALYTICS")
+if Request.ServerVariables("SERVER_NAME") <> "localhost" then
+	Response.Write "<script src=""http://www.google-analytics.com/urchin.js"" type=""text/javascript""></script>" & vbCrLf
+	Response.Write "<script type=""text/javascript"">" & vbCrLf
+	Response.Write "_uacct='"
+	if isObject(globals) then
+		Response.Write globals("GOOGLE_ANALYTICS")
 	else
-	 response.write GA_ACCOUNT_ID
+		Response.Write GA_ACCOUNT_ID
 	end if
-	response.write "';"& vbCrLf &"urchinTracker();"& vbCrLf &"</script>"
+	Response.Write "';" & vbCrLf & "urchinTracker();" & vbCrLf & "</script>"
 end if
 %>

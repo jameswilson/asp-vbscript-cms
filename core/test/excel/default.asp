@@ -19,7 +19,7 @@ Set objConn = Server.CreateObject("ADODB.Connection")
 
 'Change the Line below to point to the location of the database
 
-strCon = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source="&server.mappath("sampleDB.mdb")
+strCon = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.MapPath("sampleDB.mdb")
 objConn.connectionstring = strCon
 objConn.Open
 Set objRS = Server.CreateObject("ADODB.Recordset")
@@ -73,4 +73,4 @@ Loop%>
 </table>
 <br>
 <br>
-<b>So as you can see we can export the data quite easily into Excel from <br>Access on the Fly and format it using standard HTML!</b> 
+<b>So as you can see we can export the data quite easily into Excel from <br>Access on the Fly and format it using standard HTML!</b>

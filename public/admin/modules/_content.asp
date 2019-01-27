@@ -29,8 +29,8 @@ if instr(Request.QueryString(),"add")=1 then contentAdd()
 if instr(Request.QueryString(),"create")=1 then contentCreate()
 if instr(Request.QueryString(),"delete")=1 then contentDelete()
 if instr(Request.QueryString(),"view")=1 or len(Request.QueryString())=0 then contentView()
-	
-	
+
+
 	writeln(h1(a(globals("ADMINURL") &"/modules/modules.asp","Site Modules", null, null) & connector & strHeader.value))
 	checkPageForErrors()
 	myForm.printFormErrors()

@@ -20,10 +20,10 @@
 	const strKey = "PageID"  'name of the primary key field in the database
 	const strIdField = "PageName" 'name of the field that uniquely identifies a row from the database
 	dim myForm : set myForm = new WebForm
-	
+
 	const CSS_FOLDER = "/styles/"
 
-function customContent()	
+function customContent()
 	strActive = ""
 	strMainMenu = ""
 	strFormAction = ""
@@ -35,20 +35,20 @@ function customContent()
 	myForm.Name = Pcase(strContent) & "Creator"
 	myForm.isForNewContent = FALSE
 
-	if instr(Request.QueryString(), "edit") = 1 then 
+	if instr(Request.QueryString(), "edit") = 1 then
 		contentEdit()
-	elseif instr(Request.QueryString(), "update") = 1 then 
+	elseif instr(Request.QueryString(), "update") = 1 then
 		contentUpdate()
-	elseif instr(Request.QueryString(), "add") = 1 then 
+	elseif instr(Request.QueryString(), "add") = 1 then
 		contentAdd()
-	elseif instr(Request.QueryString(), "create") = 1 then 
+	elseif instr(Request.QueryString(), "create") = 1 then
 		contentCreate()
-	elseif instr(Request.QueryString(), "delete") = 1 then 
+	elseif instr(Request.QueryString(), "delete") = 1 then
 		contentDelete()
-	else 
+	else
 		contentView()
 	end if
-	
+
 	writeln(h1(page.getBreadcrumbs))
 	checkPageForErrors()
 	myForm.printFormErrors()
@@ -58,8 +58,8 @@ end function
 <%
 '========================================================
 '       FUNCTIONS
-'========================================================	
-	
+'========================================================
+
 function checkPageForErrors()
 	' Error processing and debug
 	if bolErrors then	processErrors

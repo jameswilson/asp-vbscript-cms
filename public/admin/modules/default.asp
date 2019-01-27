@@ -1,2 +1,2 @@
-<%@Language="VBScript"%>
-<%response.redirect("modules.asp")%>
+<%@ Language=VBScript %>
+<% Response.Redirect("modules.asp") %>

@@ -1,25 +1,26 @@
 The basic usage of util files should following these guidelines:
 
 1) FUNCTIONALITY:
-  The construction of util files should be to execute some sort of function and
-  add the result to the page in the main content area.  To do this, simply add 
-  the content to the Session variable called "CUSTOM_MESSAGE" as follows:
+  The construction of util files should be to execute some sort of function
+  and add the result to the page in the main content area.  To do this,
+  simply add the content to the Session variable called "CUSTOM_MESSAGE"
+  as follows:
 
   <%
   '**
-  '* This example prints '<h1>HELLO WORLD</h1>' in the main content area of the 
-  '* a fully-styled themed CMS page.
+  '* This example prints '<h1>HELLO WORLD</h1>' in the main content area of
+  '* the a fully-styled themed CMS page.
   '*
-  session.contents(CUSTOM_MESSAGE) = h1(Ucase("hello world"))
+  Session.Contents(CUSTOM_MESSAGE) = h1(Ucase("hello world"))
   %>
 
 
 ====== ADVANCED =========
 
-Utilities are simple ASP documents, built to be included and used in other 
+Utilities are simple ASP documents, built to be included and used in other
 pages.
 
-There are two possible ways to employ a utility file. 
+There are two possible ways to employ a utility file.
 
 1) Additional computations + text/html inserted into other pages. For example,
 a calendar block to be included on a page that has data stored in the database.
@@ -30,49 +31,49 @@ However, if the utility provides functionality that stands apart, eg, a "new"
 page with its own content, so to speak, then the calling file must transfer
 execution to the util.
 
-In which case, the util must include the following two files: 
+In which case, the util must include the following two files:
 
 1) bootstrap.asp at the top to get access to other program obects.
 
-	<!--#include file="../bootstrap.asp"-->
-  
-2) template.asp at the bottom of the page to render the page.
-	<!--#include file="../template.asp"-->
-  
-3) and implement the customContent() method that is executed when the page is
-  rendering the 'main' content section.
+  <!--#include file="../bootstrap.asp"-->
 
-    
+2) template.asp at the bottom of the page to render the page.
+  <!--#include file="../template.asp"-->
+
+3) and implement the customContent() method that is executed when the page is
+   rendering the 'main' content section.
+
+
 ====== USAGE =========
 
-Files in the util folder can be executed, or transfered to by other parts of 
+Files in the util folder can be executed, or transfered to by other parts of
 the program.
 
-	Execute Example: 
-  	Execute the 404 helper utility when page not found.
-  
-  <%' (excerpt adapted from core/application/router.asp) %>
-  <!--#include file="core/application/bootstrap.asp"-->
-  <%
-    if not setFile OR page.exists = false then
-      server.execute("core/include/utils/error404.asp")
-    else
-  %>
-  <!--#include file="core/include/template.asp"-->
+  Execute Example:
+    Execute the 404 helper utility when page not found.
+
+    <%' (excerpt adapted from core/application/router.asp) %>
+    <!--#include file="core/application/bootstrap.asp"-->
+    <%
+      if not setFile OR page.exists = false then
+        Server.Execute("core/include/utils/error404.asp")
+      else
+    %>
+    <!--#include file="core/include/template.asp"-->
 
 
-  Transfer Example: 
-  	Transfer to the sitemap util page if "?sitemap" or "?sitemap.xml" is 
-	requested.
-    
-    Note that neither the bootstrap.asp or template.asp is included in this 
-	example because the transfer makes all execution go to the sitemap.asp, 
-	therefore, those includes must be located in the utility file.
+  Transfer Example:
+    Transfer to the sitemap util page if "?sitemap" or "?sitemap.xml" is
+    requested.
+
+    Note that neither the bootstrap.asp or template.asp is included in this
+    example because the transfer makes all execution go to the sitemap.asp,
+    therefore, those includes must be located in the utility file.
 
 
-  <%' (excerpt from 404.asp)
-    if myQueryString = "sitemap" or myQueryString = "sitemap.xml" then 
-      ' Show the sitemap if requested by get or post data
-      server.transfer("core/include/utils/sitemap.asp") 
-    end if
-  %>
+    <%' (excerpt from 404.asp)
+      if myQueryString = "sitemap" or myQueryString = "sitemap.xml" then
+        ' Show the sitemap if requested by get or post data
+        Server.Transfer("core/include/utils/sitemap.asp")
+      end if
+    %>

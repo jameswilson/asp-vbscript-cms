@@ -1,4 +1,4 @@
-<%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%><%option explicit%>
+<%@ LANGUAGE="VBSCRIPT" CODEPAGE="65001" %><% Option Explicit %>
 <!--#include file="../../core/include/bootstrap.asp"-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -48,12 +48,12 @@ Response.Write "<table border=""1"">"
 
 ' Give a link to the parent folder.  This is just a link to this page only pssing in
 ' the new folder as a parameter
-Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.URLEncode(sParent) & """>Parent folder</a></td></tr>" & vbCrLf
+Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.UrlEncode(sParent) & """>Parent folder</a></td></tr>" & vbCrLf
 
 ' Now we want to loop through the subfolders in this folder
 For Each objSubFolder In objFolder.SubFolders
     ' And provide a link to them
-    Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.URLEncode(sDir & objSubFolder.Name) & """>" & objSubFolder.Name & "</a></td></tr>" & vbCrLf
+    Response.Write "<tr><td colspan=3><a href=""browse.asp?dir=" & Server.UrlEncode(sDir & objSubFolder.Name) & """>" & objSubFolder.Name & "</a></td></tr>" & vbCrLf
 Next
 
 ' Now we want to loop through the files in this folder
@@ -65,7 +65,7 @@ For Each objFile In objFolder.Files
     end if
     ' And provide a link to view them.  This is a link to show.asp passing in the directory and the file
     ' as parameters
-    Response.Write "<tr><td><a href=""show.asp?file=" & server.URLEncode(objFile.Name) & "&dir=" & server.URLEncode (sDir) & """>" & objFile.Name & "</a></td><td>" & sSize & "</td><td>" & objFile.Type & "</td></tr>" & vbCrLf
+    Response.Write "<tr><td><a href=""show.asp?file=" & Server.UrlEncode(objFile.Name) & "&dir=" & Server.UrlEncode (sDir) & """>" & objFile.Name & "</a></td><td>" & sSize & "</td><td>" & objFile.Type & "</td></tr>" & vbCrLf
 Next
 
 Response.Write "</table>"

@@ -1,6 +1,6 @@
 <%@ Language=VBScript %>
-<%Option Explicit%>
-<%response.clear%>
+<% Option Explicit %>
+<% Response.Clear %>
 <!--#include file="core/include/bootstrap.asp"-->
 <!--#include file="core/src/classes/class.form.asp"-->
 
@@ -18,15 +18,15 @@
 writeln( p("The server encountered the following critical error:"))
 dim ASPErr : set ASPErr = Server.GetLastError()
 dim myForm : set myForm = new WebForm
-writeln( p("Error Description: "&  ASPErr.ASPDescription ))
-writeln( p("Error Code: "& AspErr.ASPCode ))
-writeln( p("Error Number: "&AspErr.Number))
-writeln( p("Error Source: "&AspErr.Source))
-writeln( p("File: "&Server.MapPath(Request.ServerVariables("URL"))))
-writeln( p("Category: "&AspErr.Category))
-writeln( p("File: "&AspErr.File))
-writeln( p("Line: "&AspErr.Line))
-writeln( p("Column: "&AspErr.Line))
+writeln( p("Error Description: " & ASPErr.ASPDescription ))
+writeln( p("Error Code: " & AspErr.ASPCode ))
+writeln( p("Error Number: " & AspErr.Number))
+writeln( p("Error Source: " & AspErr.Source))
+writeln( p("File: " & Server.MapPath(Request.ServerVariables("URL"))))
+writeln( p("Category: " & AspErr.Category))
+writeln( p("File: " & AspErr.File))
+writeln( p("Line: " & AspErr.Line))
+writeln( p("Column: " & AspErr.Line))
 LogErrorToDatabase()
 
 
@@ -51,49 +51,49 @@ LogErrorToDatabase()
 '  18. Column
 '  19. Description
 '  20. ASPDescription
-'  21. The date and time the error occurred. 
+'  21. The date and time the error occurred.
 sub LogErrorToDatabase()
 	dim con
 	dim rs
 	dim strErr
-	
+
 	set ASPErr = Server.GetLastError()
 	set con = Server.CreateObject("ADODB.Connection")
 	set rs = Server.CreateObject("ADODB.Recordset")
-	
+
 	con.open globals("DB_MAIN")
 	Set rs.ActiveConnection = con
 	on error resume next
 	rs.Open "Select * From tblErrors",,adOpenStatic,adLockOptimistic '3, 3
 	if err.number <> 0 	then
-		strErr = "VBScript Runtime Error [" & Err.number & "] (Ox"& Hex(Err.number) & "): " & Err.description
+		strErr = "VBScript Runtime Error [" & Err.number & "] (Ox" & Hex(Err.number) & "): " & Err.description
 		debug(strErr)
 		if err.number = -2147217865 then
 			dim sql, ts 'SQL string , text stream
 			if fileExists("/core/src/install/create_tblErrors.ddl") then
-				response.write("tblErrors doesnt exist!  Creating table...")
+				Response.Write("tblErrors doesnt exist!  Creating table...")
 				set ts = fs.OpenTextFile("/core/src/install/create_tblErrors.ddl",1,0) 'forReading,TristateFalse
 				sql = ts.ReadAll
 				con.execute(sql)
 			else
-				response.write("tblErrors doesnt exist!  Cannot find creation scripts so writing debug to log file...")
-								
+				Response.Write("tblErrors doesnt exist!  Cannot find creation scripts so writing debug to log file...")
+
 				'TODO: write error log file here
 				set ts = fs.openTextFile("error.log")
-				
-				
+
+
 			end if
 		else
-			response.write(strErr)
-		end if	
+			Response.Write(strErr)
+		end if
 	elseif rs.state = 0 then
-		response.write("Error recordset is empty...")
-		
+		Response.Write("Error recordset is empty...")
+
 		'TODO: put the create table code here...
 	else
-	
+
 		rs.AddNew
-		
+
 		with rs
 			.Fields("SessionID") = Session.SessionID
 			.Fields("RequestMethod").Value = Request.ServerVariables("REQUEST_METHOD")
@@ -119,17 +119,17 @@ sub LogErrorToDatabase()
 		end with
 		dim fld
 		for each fld in rs.Fields
-			response.write fld.Name &": " & fld.Value
+			Response.Write fld.Name & ": " & fld.Value
 		next
 		rs.Update
-	end if		
+	end if
 	rs.Close
 	con.Close
 	set rs = nothing
 	set con = nothing
 end sub
-	
-	
+
+
 %>
 </body>
 </html>

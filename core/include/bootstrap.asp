@@ -2,10 +2,10 @@
 <% Option Explicit %>
 <%
 '**
-'* @file 
+'* @file
 '*   Application bootstrap file.
 '*
-'* This file is responsible for including all the required classes and 
+'* This file is responsible for including all the required classes and
 '* functions and initializing the application's global variables. It is also
 '* responsible for blocking requests to pages if the site is disabled.
 '*
@@ -33,7 +33,7 @@
 
 '**
 '* Include site settings.
-'* 
+'*
 %><!--#include file="../configuration.asp"--><%
 
 '**
@@ -45,13 +45,13 @@ initializeGlobals()
 '* Prevent content from being displayed if site is offline.
 '*
 if globals("SITE_OFFLINE") = "YES" and lcase(page.getName()) <> "unavailable" then
-	if page.isAdminPage() = true then 
+	if page.isAdminPage() = true then
 		'writeln(globals("ADMIN_UNAVAILABLE_URL"))
-		server.transfer(globals("ADMIN_UNAVAILABLE_URL"))
+		Server.Transfer(globals("ADMIN_UNAVAILABLE_URL"))
 	else
 		'writeln(globals("UNAVAILABLE_URL"))
-		server.transfer(globals("UNAVAILABLE_URL"))
+		Server.Transfer(globals("UNAVAILABLE_URL"))
 	end if
-	response.end
+	Response.End
 end if
 %>

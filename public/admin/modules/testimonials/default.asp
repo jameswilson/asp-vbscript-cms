@@ -1,2 +1,2 @@
 <%@ Language=VBScript %>
-<% response.redirect("testimonials.asp") %>
+<% Response.Redirect("testimonials.asp") %>

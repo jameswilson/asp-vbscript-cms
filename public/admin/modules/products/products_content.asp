@@ -9,8 +9,8 @@
 <%
 	dim strSQL, strActive, strRecommended, strFormAction, strStatus, strError, strWarn, strSuccess
 	dim variableList, strEven
-	dim formContents, formErrors 
-		
+	dim formContents, formErrors
+
 	const strContent = "product" 'word that identifies the content we are administrating
 	const strContentPL = "products"	'text string for plural content
 	const strTableName = "tblProducts" 'name of the principle database table to modify
@@ -19,22 +19,22 @@
 	const strUploadPath = "/images/products"
 	const strFileFormats = "image/gif,image/jpeg,image/jpg,image/pjpeg"
 	dim maxFileSize : maxFileSize = cstr(1024 * 25) ' 25 Kilobytes max file size
-	
+
 	dim myForm : set myForm = new WebForm
 	myForm.Name = Pcase(strContent) &"Creator"
 	myForm.isForNewContent = false
 	myForm.uploadPath = strUploadPath
 
-	
+
 	strActive = ""
 	strRecommended = ""
 	strFormAction = ""
 	strSuccess = ""
 	strStatus = ""
 	strError = ""
-	strWarn = ""	
+	strWarn = ""
 
-	
+
 	if instr(Request.QueryString(), "edit") = 1 then
 		formContents = contentEdit()
 	elseif instr(Request.QueryString(), "update") = 1 then
@@ -56,7 +56,7 @@
 <%
 '========================================================
 '       FUNCTIONS
-'========================================================	
+'========================================================
 function checkPageForErrors()
 	' Error processing and debug
 	if bolErrors then	processErrors

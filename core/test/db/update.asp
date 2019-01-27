@@ -1,14 +1,14 @@
 <%@ Language=VBScript %>
-<%Option Explicit%>
+<% Option Explicit %>
 <!--#include file = "../../core/include/bootstrap.asp"-->
 <%
-addGlobal "DEBUG","1","1"
+addGlobal "DEBUG", "1", "1"
 
 function customContent(str)
-if str="main" then 
-user.login "admin", "password"
-customContent =  "DB is " &iif(db.isWritable(),"","not")&" Writable."
-end if
+  if str = "main" then
+    user.login "admin", "password"
+    customContent =  "DB is " & iif(db.isWritable(), "", "not") & " Writable."
+  end if
 end function
 
 %>

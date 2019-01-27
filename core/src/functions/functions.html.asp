@@ -3,7 +3,6 @@
 ' FUNCTIONS FOR WRITING VALID XHTML FROM VBSCRIPT
 '------------------------------------------------
 
-
 '**
 '* Define the global indentation character for printing xHTML to the Response object
 '* Possible values could be one (or more) space or tab characters.
@@ -15,25 +14,25 @@ emlformat.ignoreCase = True
 emlformat.global = True
 
 '**
-'* Write a line of text/html to the response object. A shorthand wrapper 
-'* for VBScript `response.write` with trailing VBScript linebreak.
+'* Write a line of text/html to the response object. A shorthand wrapper
+'* for VBScript `Response.Write` with trailing VBScript linebreak.
 '*
 '* @param the text/html string to write to the response buffer.
 '*
 function writeln(byval text)
-	response.write EmailObfuscate(cstr(text) & vbCrLf)
+	Response.Write EmailObfuscate(cstr(text) & vbCrLf)
 end function
 
 '**
 '* Apply the specified indent levels to improve legibility of generated HTML.
 '* @param int n the number of indentations to insert
-'* @return the number of indentations specified as a chain of VBTAB, or space characters. 
+'* @return the number of indentations specified as a chain of VBTAB, or space characters.
 '*
 function indent(byval n)
 	dim i, a
 	set a = new FastString
 	a.add ""
-	for i = 0 to n-1
+	for i = 0 to n - 1
 		a.add "" & HTML_INDENT
 	next
 	indent = a.value
@@ -41,23 +40,23 @@ function indent(byval n)
 end function
 
 '**
-'* Apply the specified xHTML tag around the specified string of text. 
+'* Apply the specified xHTML tag around the specified string of text.
 '* The optional parameters will not be included if they are empty string or null.
 '*
 '* @param strTag the name of the xHTML tag to create
 '* @param strAttributes the string of preformatted attributes to apply to the tag.
 '* @param strContent the contents to appear inside the tag.
 '* @return a string wrapped in the specified xHTML tag
-'* 
 '*
-'* @todo improve functionality of strAttributes to send a list of 
+'*
+'* @todo improve functionality of strAttributes to send a list of
 '*       key/value pairs and do the attribute creation here
 '*
 function createTag(byval strTag, byval strAttributes, byval strContent)
 	dim result : set result = new FastString
-	result.add "<"&lcase(strTag)&strAttributes
-	if not isNull(strContent) and (strContent <> "") then 
-		result.add ">"&token_replace(strContent)&"</"&lcase(strTag)&">"
+	result.add "<" & lcase(strTag) & strAttributes
+	if not isNull(strContent) and (strContent <> "") then
+		result.add ">" & token_replace(strContent) & "</" & lcase(strTag) & ">"
 	else
 		result.add "/>"
 	end if
@@ -69,49 +68,59 @@ end function
 '**
 '* Create an xHTML Anchor <a> tag with the specified url, title, class, and content
 '*
-'* @param strURL the relative or absolute url of the image file 
-'* @param strContent the visible text/html string contained by the anchor. 
-'* @param strTitleText a string description of the anchor used to populate title/alt attributes. 
-'* @param strClass a custom class attribute to apply to the anchor. 
-'* @return an xHTML anchor tag containing the specified url, title, class, and content 
+'* @param strURL the relative or absolute url of the image file
+'* @param strContent the visible text/html string contained by the anchor.
+'* @param strTitleText a string description of the anchor used to populate title/alt attributes.
+'* @param strClass a custom class attribute to apply to the anchor.
+'* @return an xHTML anchor tag containing the specified url, title, class, and content
 '*
 function anchor(byval strURL, byval strContent, byval strTitleText, byval strClass)
-	if not isNull(strURL) and (strURL <> "") then strURL = " href="""&strURL&""""
-	if not isNull(strTitleText) and (strTitleText <> "") then strTitleText = " title="""&strTitleText&""""
-	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
-	anchor = createTag("a",strURL&strTitleText&strClass,strContent)
+	if not isNull(strURL) and (strURL <> "") then
+		strURL = " href=""" & strURL & """"
+	end if
+	if not isNull(strTitleText) and (strTitleText <> "") then
+		strTitleText = " title=""" & strTitleText & """"
+	end if
+	if not isNull(strClass) and (strClass <> "") then
+		strClass = " class=""" & strClass & """"
+	end if
+	anchor = createTag("a", strURL & strTitleText & strClass, strContent)
 end function
 
 '**
 '* Create an xHTML Image <img> tag with the specified source, alt, title, and class attributes.
 '*
-'* @param strURL the relative or absolute url of the image file 
-'* @param strAlternateText a string description of the media file/folder used to populate title/alt attributes. 
-'* @param strTitleText a string description of the media file/folder used to populate title/alt attributes. 
-'* @param strClass a custom class attribute to apply to the image  tag. 
-'* @return an xHTML image tag containing the specified url, title, alt and class.  
+'* @param strURL the relative or absolute url of the image file
+'* @param strAlternateText a string description of the media file/folder used to populate title/alt attributes.
+'* @param strTitleText a string description of the media file/folder used to populate title/alt attributes.
+'* @param strClass a custom class attribute to apply to the image  tag.
+'* @return an xHTML image tag containing the specified url, title, alt and class.
 '*
 function image(byval strURL, byval strAlternateText, byval strTitleText, byval strClass)
 	'check image source for relative URL
-	if instr(strURL,"http") <> 1 then 
-		if instr(strURL,"/") = 1 then
+	if instr(strURL, "http") <> 1 then
+		if instr(strURL, "/") = 1 then
 			'apply siteurl root to image
 			strURL = globals("SITEURL") & strURL
 		else
 			'leave relative links alone
 		end if
 	end if
-	if not isNull(strURL) and (strURL <> "") then strURL = " src="""& strURL &""""
-	'if not isNull(altAttribute) and (altAttribute <> "") then 
-	strAlternateText = " alt="""& strAlternateText &""""
-	'if not isNull(titleAttribute) and (titleAttribute <> "") then 
-	strTitleText = " title="""& strTitleText &""""
-	if not isNull(strClass) and (strClass <> "") then strClass = " class="""& strClass &""""
+	if not isNull(strURL) and (strURL <> "") then
+		strURL = " src=""" & strURL & """"
+	end if
+	'if not isNull(altAttribute) and (altAttribute <> "") then
+	strAlternateText = " alt=""" & strAlternateText & """"
+	'if not isNull(titleAttribute) and (titleAttribute <> "") then
+	strTitleText = " title=""" & strTitleText & """"
+	if not isNull(strClass) and (strClass <> "") then
+		strClass = " class=""" & strClass & """"
+	end if
 	image = createTag("img", strClass & strURL & strAlternateText & strTitleText, null)
 end function
 
 '**
-'* Apply the xHTML paragraph tag around the specified string of text. 
+'* Apply the xHTML paragraph tag around the specified string of text.
 '* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
@@ -121,15 +130,20 @@ end function
 '* @return a string wrapped in xHTML p tag
 '*
 function paragraph(byval strText, byval strTitle, byval strId, byval strClass)
-	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
-	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
-	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
-	paragraph = createTag("p",strClass&strId&strTitle,strText)
+	if not isNull(strClass) and (strClass <> "") then
+		strClass = " class=""" & strClass & """"
+	end if
+	if not isNull(strId) and (strId <> "") then
+		strId = " id=""" & strId & """"
+	end if
+	if not isNull(strTitle) and (strTitle <> "") then
+		strTitle = " title=""" & strTitle & """"
+	end if
+	paragraph = createTag("p", strClass & strId & strTitle, strText)
 end function
 
-
 '**
-'* Apply the xHTML division tag around the specified string of text. 
+'* Apply the xHTML division tag around the specified string of text.
 '* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
@@ -139,15 +153,21 @@ end function
 '* @return a string wrapped in xHTML div tag
 '*
 function division(byval strText, byval strTitle, byval strId, byval strClass)
-	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
-	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
-	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
-	division = createTag("div",strClass&strId&strTitle,strText)
+	if not isNull(strClass) and (strClass <> "") then
+		strClass = " class=""" & strClass & """"
+	end if
+	if not isNull(strId) and (strId <> "") then
+		strId = " id=""" & strId & """"
+	end if
+	if not isNull(strTitle) and (strTitle <> "") then
+		strTitle = " title=""" & strTitle & """"
+	end if
+	division = createTag("div", strClass & strId & strTitle, strText)
 end function
 
 '**
 '* Apply the xHTML unordered list tag around the specified string of text --
-'* preferably a string of list items <li>. 
+'* preferably a string of list items <li>.
 '* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
@@ -157,15 +177,21 @@ end function
 '* @return a string wrapped in xHTML div tag
 '*
 function UnorderedList(byval strText, byval strTitle, byval strId, byval strClass)
-	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
-	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
-	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
-	UnorderedList = createTag("ul",strClass&strId&strTitle,strText)
+	if not isNull(strClass) and (strClass <> "") then
+		strClass = " class=""" & strClass & """"
+	end if
+	if not isNull(strId) and (strId <> "") then
+		strId = " id=""" & strId & """"
+	end if
+	if not isNull(strTitle) and (strTitle <> "") then
+		strTitle = " title=""" & strTitle & """"
+	end if
+	UnorderedList = createTag("ul", strClass & strId & strTitle, strText)
 end function
 
 '**
 '* Apply the xHTML unordered list tag around the specified string of text --
-'* preferably a string of list items <li>. 
+'* preferably a string of list items <li>.
 '* The optional parameters are not included if they are empty string or null.
 '*
 '* @param strText the contents to appear inside the tag.
@@ -175,35 +201,43 @@ end function
 '* @return a string wrapped in xHTML div tag
 '*
 function OrderedList(byval strText, byval strTitle, byval strId, byval strClass)
-	if not isNull(strClass) and (strClass <> "") then strClass = " class="""&strClass&""""
-	if not isNull(strId) and (strId <> "") then strId = " id="""&strId&""""
-	if not isNull(strTitle) and (strTitle <> "") then strTitle = " title="""&strTitle&""""
-	OrderedList = createTag("ol",strClass&strId&strTitle,strText)
+	if not isNull(strClass) and (strClass <> "") then
+		strClass = " class=""" & strClass & """"
+	end if
+	if not isNull(strId) and (strId <> "") then
+		strId = " id=""" & strId & """"
+	end if
+	if not isNull(strTitle) and (strTitle <> "") then
+		strTitle = " title=""" & strTitle & """"
+	end if
+	OrderedList = createTag("ol", strClass & strId & strTitle, strText)
 end function
 
 
 
 '**
-'* Create an xHTML-formatted message box for the specified string of text. 
+'* Create an xHTML-formatted message box for the specified string of text.
 '*
 '* @param strText the contents to appear inside the tag.
 '* @param strMessageTypeClass the type of message to display (error, info, success, warning, etc)
 '* @return a string wrapped in xHTML message box
 '*
 function Message(byval strText, byval strMessageTypeClass)
-	if len(trim(strText)) > 0 then Message = division(strText & brClearAll, null, null, strMessageTypeClass &" message")
+	if len(trim(strText)) > 0 then
+		Message = division(strText & brClearAll, null, null, strMessageTypeClass & " message")
+	end if
 end function
 
 
 '**
 '* Create an xHTML-formatted codeblock for the specified string of text. The text will appear
-'* as a unified block of preformatted (mono-spaced) programing code. 
+'* as a unified block of preformatted (mono-spaced) programing code.
 '*
 '* @param strText the contents to appear inside the tag.
 '* @return a string wrapped in xHTML formatted code block
 '*
 function CodeBlock(byval strText)
-	if len(trim(strText)) > 0 then CodeBlock = createTag("blockquote", null, createTag("code", null, server.htmlencode(strText)))
+	if len(trim(strText)) > 0 then CodeBlock = createTag("blockquote", null, createTag("code", null, Server.HtmlEncode(strText)))
 end function
 
 '**
@@ -218,11 +252,11 @@ end function
 '**
 '* A shorthand wrapper for the xHTML Image tag.
 '*
-'* @param strURL the relative or absolute url of the image file 
-'* @param strAlternateText a string description of the media file/folder used to populate title/alt attributes. 
-'* @param strTitleText a string description of the media file/folder used to populate title/alt attributes. 
-'* @param strClass a custom class attribute to apply to the media file tag. 
-'* @return an xHTML markup and supporting javascripts for displaying the specified media file 
+'* @param strURL the relative or absolute url of the image file
+'* @param strAlternateText a string description of the media file/folder used to populate title/alt attributes.
+'* @param strTitleText a string description of the media file/folder used to populate title/alt attributes.
+'* @param strClass a custom class attribute to apply to the media file tag.
+'* @return an xHTML markup and supporting javascripts for displaying the specified media file
 '* @see image()
 '*
 function img(byval strURL, byval strAlternateText, byval strTitleText, byval strClass)
@@ -352,7 +386,7 @@ end function
 '* @return a string wrapped in xHTML pre tag
 '*
 function pre(byval str)
-	pre = ("<pre>"& str &"</pre>"& vbCrLf)
+	pre = ("<pre>" & str & "</pre>" & vbCrLf)
 end function
 
 '**
@@ -361,52 +395,52 @@ end function
 '* @return a string wrapped in xHTML Heading 1
 '*
 function h1(byval str)
-	h1 = ("<h1>"&str&"</h1>"& vbCrLf)
+	h1 = ("<h1>" & str & "</h1>" & vbCrLf)
 end function
 
 '**
 '* Apply the xHTML Heading 2 tag around the specified string.
 '* @param the string contents to appear inside the tag.
-'* @return a string wrapped in  xHTML heading 2 
+'* @return a string wrapped in  xHTML heading 2
 '*
 function h2(byval str)
-	h2 = ("<h2>"&str&"</h2>"& vbCrLf)
+	h2 = ("<h2>" & str & "</h2>" & vbCrLf)
 end function
 
 '**
 '* Apply the xHTML Heading 3 tag around the specified string.
 '* @param the string contents to appear inside the tag.
-'* @return an xHTML heading 3 
-'* 
+'* @return an xHTML heading 3
+'*
 function h3(byval str)
-	h3 = ("<h3>"&str&"</h3>"& vbCrLf)
+	h3 = ("<h3>" & str & "</h3>" &  vbCrLf)
 end function
 
 '**
 '* Apply the xHTML Heading 4 tag around the specified string.
 '* @param the string contents to appear inside the tag.
-'* @return an xHTML heading 4 
-'* 
+'* @return an xHTML heading 4
+'*
 function h4(byval str)
-	h4 = ("<h4>"&str&"</h4>"& vbCrLf)
+	h4 = ("<h4>" & str & "</h4>" & vbCrLf)
 end function
 
 '**
 '* Apply the xHTML Heading 5 tag around the specified string.
 '* @param the string contents to appear inside the tag.
-'* @return an xHTML heading 5 
-'* 
+'* @return an xHTML heading 5
+'*
 function h5(byval str)
-	h5 = ("<h5>"&str&"</h5>"& vbCrLf)
+	h5 = ("<h5>" & str & "</h5>" & vbCrLf)
 end function
 
 '**
 '* Apply the xHTML Heading 6 tag around the specified string.
 '* @param the string contents to appear inside the tag.
-'* @return an xHTML heading 6 
-'* 
+'* @return an xHTML heading 6
+'*
 function h6(byval str)
-	h6 = ("<h6>"&str&"</h6>"& vbCrLf)
+	h6 = ("<h6>" & str & "</h6>" & vbCrLf)
 end function
 
 '**
@@ -415,7 +449,7 @@ end function
 '* @return a string wrapped in xHTML definition list
 '*
 function dl(byval str)
-	dl = ("<dl>"&str&"</dl>"& vbCrLf)
+	dl = ("<dl>" & str & "</dl>" & vbCrLf)
 end function
 
 '**
@@ -424,16 +458,16 @@ end function
 '* @return a string wrapped in xHTML definition term
 '*
 function dt(byval str)
-	dt = ("<dt>"&str&"</dt>"& vbCrLf)
+	dt = ("<dt>" & str & "</dt>" & vbCrLf)
 end function
 
 '**
-'* Apply the xHTML Definition Definition tag around the specified string. 
+'* Apply the xHTML Definition Definition tag around the specified string.
 '* @param the string contents to appear inside the tag.
-'* @return a string wrapped in  xHTML definition 
+'* @return a string wrapped in  xHTML definition
 '*
 function dd(byval str)
-	dd = ("<dd>"&str&"</dd>"& vbCrLf)
+	dd = ("<dd>" & str & "</dd>" & vbCrLf)
 end function
 
 '**
@@ -442,7 +476,7 @@ end function
 '* @return an html-formatted string with xHTML strong tag (ie, "bold" font)
 '*
 function strong(byval str)
- strong = ("<strong>"&str&"</strong>")
+ strong = ("<strong>" & str & "</strong>")
 end function
 
 
@@ -473,36 +507,36 @@ end function
 '* @param strType the MIME-type of the linked file (eg, text/css)
 '*
 function link(byval strURL, byval strRelation, byval strType)
-	link = "<link rel="""& strRelation &""" type="""& strType &""" href="""& strURL &""" />"& vbCrLf
+	link = "<link rel=""" & strRelation & """ type=""" & strType & """ href=""" & strURL & """ />" & vbCrLf
 end function
 
 '**
-'* Generate valid xHTML code for inserting a media file into an xHTML document.  Media content 
-'* and supporting javascripts are created based on the file extension of the specified file/folder name. 
+'* Generate valid xHTML code for inserting a media file into an xHTML document.  Media content
+'* and supporting javascripts are created based on the file extension of the specified file/folder name.
 '* Current possibile media content formats include:
-'* 
+'*
 '*   - FLASH movie: specify a path to a flash FILE. Supported extensions are (swf).
 '*   - SINGLE image : specify a relative or absolute path to the IMAGE FILE. Supported file extensions are (jpg|jpeg|gif|png)
-'*   - JPG SLIDESHOW: specify a (relative or absolute) path to the IMAGES FOLDER containing jpg images 
+'*   - JPG SLIDESHOW: specify a (relative or absolute) path to the IMAGES FOLDER containing jpg images
 '*
-'* @param strFileName the path to the media file/folder 
-'* @param strTitle a string description of the media file/folder used to populate title/alt attributes. 
-'* @param strClass a custom class attribute to apply to the media file tag. 
+'* @param strFileName the path to the media file/folder
+'* @param strTitle a string description of the media file/folder used to populate title/alt attributes.
+'* @param strClass a custom class attribute to apply to the media file tag.
 '* @param strWidth the height that the media file should ocupy in the document.
 '* @param strWidth the width that the media file should ocupy in the document.
-'* @return an xHTML markup and supporting javascripts for displaying the specified media file 
+'* @return an xHTML markup and supporting javascripts for displaying the specified media file
 '*
 function mediaFile(byval strFileName, byval strTitle, byval strClass, byval strWidth, byval strHeight)
 	dim result : set result = new FastString
-	debug("mediaFile: inserting media file '"& strFileName &"'")
+	debug("mediaFile: inserting media file '" & strFileName & "'")
 	if instrrev(strFileName, ".swf") = len(strFileName)-3 then
-		result.add flash(strFileName, strTitle, strClass, strWidth, strHeight)	
+		result.add flash(strFileName, strTitle, strClass, strWidth, strHeight)
 	elseif instrrev(strFileName, ".jpg") = len(strFileName) - 3 or instrrev(strFileName, ".jepg") = len(strFileName) - 4 or instrrev(strFileName, ".gif") = len(strFileName) - 3 or instrrev(strFileName, ".png") = len(strFileName) - 3 then
 		 result.add img(strFileName,strTitle,strTitle,strClass)
-	elseif instrrev(strFileName, "/") = len(strFileName) then 
+	elseif instrrev(strFileName, "/") = len(strFileName) then
 		result.add slideshow(strFileName, strTitle, strClass, strWidth, strHeight)
 	else
-		debugError("mediaFile: unknown media type '"& strFileName &"'")
+		debugError("mediaFile: unknown media type '" & strFileName & "'")
 	end if
 	mediaFile = result.value
 	set result = nothing
@@ -510,16 +544,16 @@ end function
 
 
 '**
-'* Generate valid xHTML code for inserting a flash movie into an xHTML 
-'* document.  Supports dynamic flash OBJECT insertion with javascript 
-'* to avoid annoying popups from Internet Explorer, as well as NOSCRIPT 
+'* Generate valid xHTML code for inserting a flash movie into an xHTML
+'* document.  Supports dynamic flash OBJECT insertion with javascript
+'* to avoid annoying popups from Internet Explorer, as well as NOSCRIPT
 '* support for non-javascript-enabled browsers.
-'* 
+'*
 '* Note: dynamic insertion depends on presence of scripts/active_content.js!
 '*
-'* @param strFileName the path to the media file/folder 
-'* @param strTitle a string description of the media file/folder used to populate title/alt attributes. 
-'* @param strClass a custom class attribute to apply to the media file tag. 
+'* @param strFileName the path to the media file/folder
+'* @param strTitle a string description of the media file/folder used to populate title/alt attributes.
+'* @param strClass a custom class attribute to apply to the media file tag.
 '* @param strWidth (required) the height that the flash file should ocupy in the document.
 '* @param strWidth (required) the width that the flash file should ocupy in the document.
 '* @return an xHTML markup and supporting javascripts for displaying the specified flash movie
@@ -527,52 +561,52 @@ end function
 function flash(byval strFileName, byval strTitle, byval strClass, byval strWidth, byval strHeight)
 	dim strFileNoExtension : strFileNoExtension = replace(strFileName,".swf","")
 	dim result : set result = new FastString
-	strWidth = ""&strWidth
-	strHeight= ""&strHeight
-	strTitle= ""&strTitle
-	strClass= ""&strClass
+	strWidth = "" & strWidth
+	strHeight = "" & strHeight
+	strTitle = "" & strTitle
+	strClass = "" & strClass
 	'do flash stuff here
-	result.add "<script src="""&globals("SITEURL")&"/core/assets/scripts/active_content.js"" type=""text/javascript""></script>" & vbCrLf
+	result.add "<script src=""" & globals("SITEURL") & "/core/assets/scripts/active_content.js"" type=""text/javascript""></script>" & vbCrLf
 	result.add "<script type=""text/javascript"">" & vbCrLf
 	result.add "<!--" & vbCrLf
-	result.add "AC_FL_RunContent( 'codebase','"&FLASH_CODEBASE&"',"
-	if len(strWidth)>0 then result.add "'width','"&strWidth&"',"
-	if len(strHeight)>0 then result.add "'height','"&strHeight&"',"
-	result.add "'title', '"&strTitle&"',"
-	result.add "'class', '"&strClass&"',"
-	result.add "'src','"&strFileNoExtension&"',"
-	result.add "'id','"&strFileNoExtension&"',"
+	result.add "AC_FL_RunContent( 'codebase','" & FLASH_CODEBASE & "',"
+	if len(strWidth)>0 then result.add "'width','" & strWidth & "',"
+	if len(strHeight)>0 then result.add "'height','" & strHeight & "',"
+	result.add "'title', '" & strTitle & "',"
+	result.add "'class', '" & strClass & "',"
+	result.add "'src','" & strFileNoExtension & "',"
+	result.add "'id','" & strFileNoExtension & "',"
 	result.add "'quality','high',"
 	result.add "'wmode','transparent',"
 	result.add "'pluginspage','http://www.macromedia.com/go/getflashplayer',"
-	result.add "'movie','"&strFileNoExtension&"'"
+	result.add "'movie','" & strFileNoExtension & "'"
 	result.add " );" & vbCrLf
 	result.add "-->" & vbCrLf
 	result.add "</script><noscript>" & vbCrLf
-	result.add  "<object classid="""&FLASH_CLASSID&""" codebase="""&FLASH_CODEBASE&""""
-	result.add " id="""&strFileNoExtension&""""
-	if len(strWidth)>0 then result.add " width="""&strWidth&""""
-	if len(strHeight)>0 then result.add " height="""&strHeight&""""
-	if len(strTitle)>0 then result.add " title="""&strTitle&""""
-	if len(strClass)>0 then result.add " class="""&strClass&""""
-	result.add ">" 
-	result.add "<param name=""movie"" value="""&strFileName&""" />" & vbCrLf
+	result.add  "<object classid=""" & FLASH_CLASSID & """ codebase=""" RequestLASH_CODEBASE & """"
+	result.add " id=""" & strFileNoExtension & """"
+	if len(strWidth)>0 then result.add " width=""" & strWidth & """"
+	if len(strHeight)>0 then result.add " height=""" & strHeight & """"
+	if len(strTitle)>0 then result.add " title=""" & strTitle & """"
+	if len(strClass)>0 then result.add " class=""" & strClass & """"
+	result.add ">"
+	result.add "<param name=""movie"" value=""" & strFileName & """ />" & vbCrLf
 	result.add "<param name=""quality"" value=""high"" />" & vbCrLf
 	result.add "<param name=""wmode"" value=""transparent"" />" & vbCrLf
-	result.add "<embed src="""&strFileName&""" quality=""high"" pluginspage=""http://www.macromedia.com/go/getflashplayer"" type=""application/x-shockwave-flash"""
-	if len(strWidth)>0 then result.add " width="""&strWidth&""""
-	if len(strHeight)>0 then result.add " height="""&strHeight&""""
-	result.add "></embed></object></noscript>" & vbCrLf 
+	result.add "<embed src=""" & strFileName & """ quality=""high"" pluginspage=""http://www.macromedia.com/go/getflashplayer"" type=""application/x-shockwave-flash"""
+	if len(strWidth)>0 then result.add " width=""" & strWidth & """"
+	if len(strHeight)>0 then result.add " height=""" & strHeight & """"
+	result.add "></embed></object></noscript>" & vbCrLf
 	flash = result.value
 	set result = nothing
 end function
 
 
 '**
-'* Create a valid xHTML javascript random-image slideshow that can 
+'* Create a valid xHTML javascript random-image slideshow that can
 '* stream and animate the presentation of images from the specified
-'* folder. For non-javascript-enabled web browsers, the slideshow 
-'* degrades cleanly to a randomly-selected image from the specified 
+'* folder. For non-javascript-enabled web browsers, the slideshow
+'* degrades cleanly to a randomly-selected image from the specified
 '* folder.
 '*
 '* The Slideshow 2.0 supports the following features:
@@ -589,57 +623,57 @@ end function
 '* - Slideshow captions
 '*
 '* See http://www.electricprism.com/aeron/slideshow/ for details.
-'* 
+'*
 '* Note1:  slideshow currenly only supports jpg file extensions!
 '*
 '* Note: slideshow depends on presence of the following javascripts:
 '*       - scripts/slideshow/mootools.js
 '*       - scripts/slideshow/slideshow.js
 '*
-'* @param strFileName the path to the media file/folder 
-'* @param strTitle a string description of the media file/folder used to populate title/alt attributes. 
-'* @param strClass a custom class attribute to apply to the media file tag. 
+'* @param strFileName the path to the media file/folder
+'* @param strTitle a string description of the media file/folder used to populate title/alt attributes.
+'* @param strClass a custom class attribute to apply to the media file tag.
 '* @param strWidth (required) the height that the flash file should ocupy in the document.
 '* @param strWidth (required) the width that the flash file should ocupy in the document.
 '* @return an xHTML markup and supporting javascripts for displaying the slideshow
 '*
 function slideshow(byval strFolderName, byval strTitle, byval strClass, byval strWidth, byval strHeight)
 	dim result : set result = new FastString
-	if strTitle = "" or isNull(strTitle) then 
-		strTitle = "A "& globals("SHORTNAME") &" Slideshow."
+	if strTitle = "" or isNull(strTitle) then
+		strTitle = "A " & globals("SHORTNAME") Request Slideshow."
 	end if
-	strClass = "slideshow "& strClass
-	debug("slideshow: inserting slideshow file '"& strFileName &"'")
-	result.add "<script src="""& globals("SITEURL") &"/core/assets/scripts/slideshow/mootools.js"" type=""text/javascript""></script>" & vbCrLf
-	result.add "<script src="""& globals("SITEURL") &"/core/assets/scripts/slideshow/slideshow.js"" type=""text/javascript""></script>" & vbCrLf
-	'Slideshow expects an HTML image <img> wrapped by a block element, such as a <div>. 
-	'Following is an example of how this might appear in your HTML document: 
+	strClass = "slideshow " & strClass
+	debug("slideshow: inserting slideshow file '" & strFileName & "'")
+	result.add "<script src=""" & globals("SITEURL") & "/core/assets/scripts/slideshow/mootools.js"" type=""text/javascript""></script>" & vbCrLf
+	result.add "<script src=""" & globals("SITEURL") & "/core/assets/scripts/slideshow/slideshow.js"" type=""text/javascript""></script>" & vbCrLf
+	'Slideshow expects an HTML image <img> wrapped by a block element, such as a <div>.
+	'Following is an example of how this might appear in your HTML document:
 	result.add "<div id=""js_slideshow"" class=""slideshow"">" & vbCrLf
 
 	dim myFileList : set myFileList = getFilesInFolder(strFolderName, ".jpg")
-	if myFileList.count = 0 then 
-		debugError("html.slideshow:  there are no images in folder '"&strFolderName&"'")
-		result.add "<!--  Slideshow disabled! '"& strFolderName &"' contains no images! "& vbCrLf
-	else 
+	if myFileList.count = 0 then
+		debugError("html.slideshow:  there are no images in folder '" &strFolderName & "'")
+		result.add "<!--  Slideshow disabled! '" & strFolderName & "' contains no images! " & vbCrLf
+	else
 		randomize
 		dim random : random = int(rnd * myFileList.count)
-		result.add "<img src="""& strFolderName & myFileList.keys()(random) &".jpg"""
-		if strWidth <> "" and not isNull(strWidth) then result.add " width="""& strWidth &""""
-		if strHeight <> "" and not isNull(strHeight) then result.add " height="""& strHeight &""""
-		if strTitle <> "" and not isNull(strTitle) then result.add " alt="""& strTitle &""""
-		if strClass <> "" and not isNull(strClass) then result.add " class=""slideshow "& strClass &""""
+		result.add "<img src=""" & strFolderName & myFileList.keys()(random) & ".jpg"""
+		if strWidth <> "" and not isNull(strWidth) then result.add " width=""" & strWidth & """"
+		if strHeight <> "" and not isNull(strHeight) then result.add " height=""" & strHeight & """"
+		if strTitle <> "" and not isNull(strTitle) then result.add " alt=""" & strTitle & """"
+		if strClass <> "" and not isNull(strClass) then result.add " class=""slideshow " & strClass & """"
 		result.add "/>" & vbCrLf
 	end if
 	result.add "</div>" & vbCrLf
 	result.add "<script type=""text/javascript"">" & vbCrLf
 	strFolderName = replace(strFolderName, globals("SITEURL") & "/", "")
-  result.add "myShow = new Slideshow('js_slideshow', {hu: '"& globals("SITEROOT") & "/" & strFolderName &"', duration: [700,5000], images: ["
+  result.add "myShow = new Slideshow('js_slideshow', {hu: '" & globals("SITEROOT") & "/" & strFolderName & "', duration: [700,5000], images: ["
 	separator = ""
 	dim imageFile
 	for each imageFile in myFileList
-		result.add separator &"'"& imageFile &".jpg'"
+		result.add separator & "'" & imageFile & ".jpg'"
 		separator = ","
-		trace("html.slideshow:  added image '"& imageFile &"' to slideshow")
+		trace("html.slideshow:  added image '" & imageFile & "' to slideshow")
 	next
 	result.add "]});" & vbCrLf
 	result.add "</script>" & vbCrLf
@@ -650,7 +684,7 @@ end function
 
 '**
 '* Retrieve the original value of a url-encoded string.
-'* 
+'*
 '* @param text the url string to decode
 '* @return the decoded string
 '*
@@ -660,10 +694,10 @@ function URLDecode(byval text)
        URLDecode = ""
        exit function
     end if
-	
+
 	' Convert plus characters (+) into space characters.
     result = replace(text, "+", " ")
-	
+
 	' Convert hex-encoded ascii (%NN) into their associated character. This is
 	' done by tokenizing the string at every percent sign (%) and converting
 	' the first two digits (NN) of each token into a character.
@@ -683,7 +717,7 @@ end function
 '**
 '* Retrieve the original value of an HTML-encoded string.
 '* Special characters and HTML codes are returned to their original values.
-'* 
+'*
 '* @param sText the string to decode
 '* @return the decoded text string
 '*
@@ -701,14 +735,14 @@ function HTMLDecode(byval sText)
     sText = replace(sText, "&nbsp;", chr(32))
 	' Convert %hexdigits to the character
     for i = 1 to 255
-        sText = replace(sText, "&#"& i &";", chr(i))
+        sText = replace(sText, "&#" & i & ";", chr(i))
     next
     HTMLDecode = sText
 end function
 
 '**
-'* Encode the specified text string as HTML paragraph text. 
-'* Convert the common non-alpha-numeric characters to html-encoded strings. 
+'* Encode the specified text string as HTML paragraph text.
+'* Convert the common non-alpha-numeric characters to html-encoded strings.
 '*
 '* @param the text string to convert to html
 '* @return the html-encoded version of the string
@@ -735,8 +769,8 @@ end function
 
 '**
 '* Convert a plaintext string into the same string of HTML escaped Ascii codes
-'* that will render as text by the client browser. Each character in the string is 
-'* encoded in either Decimal (eg, &#123; )  or Hex (eg, &#xA8; ) format which 
+'* that will render as text by the client browser. Each character in the string is
+'* encoded in either Decimal (eg, &#123; )  or Hex (eg, &#xA8; ) format which
 '* is chosen randomly at execution time.
 '*
 function Obfuscate(str)
@@ -768,7 +802,7 @@ end function
 
 '**
 '* Convert a plaintext string into HTML Ascii codes in Hex format.
-'*   
+'*
 function AsciiHexEncode(str)
 	dim result, ascii
 	for i = 1 to len(str)
@@ -786,47 +820,46 @@ function toXHTML(str)
 	toXHTML = str
 	dim html, tag, attr, emptyAttr
 	dim h, t, a
-	
+
 	'any html
 	set html = new RegExp
 	html.pattern = "<(.|\n)+?>"
 	html.IgnoreCase = false
 	html.global = true
-	
+
 	'submatches(0) returns the tagname
 	set tag = new RegExp
 	tag.pattern = "^</?([^!]\w*)"
 	tag.IgnoreCase = false
 	tag.global = true
-	
+
 	'an html attribute
 	'submatches(0) gives the attribute name
-	set attr = new RegExp	
+	set attr = new RegExp
 	attr.pattern = "(\w*)\s*?=\s*?((""([^""]*)"")|('([^']*)'))"
 	attr.IgnoreCase = false
 	attr.global = true
-	
-		
-	dim result 
+
+
+	dim result
 	for each h in html.execute(str)
-		'response.write("<blockqoute>")
-		'response.write(p("'"& server.htmlencode(h.value) &"' is an html tag"))
+		'Response.Write("<blockqoute>")
+		'Response.Write(p("'" & Server.HtmlEncode(h.value) & "' is an html tag"))
 		result = h.value
 		for each t in tag.execute(h.value)
-			'response.write("<blockquote>'"& server.htmlencode(t.value) &"' matches html tag profile</blockquote>")
-			'response.write("<blockquote>'"& server.htmlencode(t.submatches(0))  "' is the tag name</blockquote>")
+			'Response.Write("<blockquote>'" & Server.HtmlEncode(t.value) & "' matches html tag profile</blockquote>")
+			'Response.Write("<blockquote>'" & Server.HtmlEncode(t.submatches(0)) & "' is the tag name</blockquote>")
 		  result = replace(result, t.value, lcase(t.value))
 		next
 		for each a in attr.execute(h.value)
-			'response.write("<blockquote>'"& server.htmlencode(a.value) & "'  matches html tag attribute profile</blockquote>")
-			'response.write("<blockquote>'"& server.htmlencode(a.submatches(0)) & "' is the attribute name</blockquote>")
+			'Response.Write("<blockquote>'" & Server.HtmlEncode(a.value) & "'  matches html tag attribute profile</blockquote>")
+			'Response.Write("<blockquote>'" & Server.HtmlEncode(a.submatches(0)) & "' is the attribute name</blockquote>")
 			result = replace(result, a.value, replace(a.value, a.submatches(0), lcase(a.submatches(0))))
-		next		
-		'response.write("<blockquote>Resulting XHTML '"& server.htmlencode(result) &"'</blockquote>")		
-		'response.write("</blockquote>")	
+		next
+		'Response.Write("<blockquote>Resulting XHTML '" & Server.HtmlEncode(result) & "'</blockquote>")
+		'Response.Write("</blockquote>")
 		str = replace(str, h.value, result)
 	next
 	toXHTML = str
 end function
-
 %>

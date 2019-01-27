@@ -8,7 +8,7 @@ end function
 function UDate(oldDate)
 	UDate = DateDiff("s", "01/01/1970 00:00:00", oldDate)
 end function
-' return a formatted date given a Unix Timestamp or regular date 
+' return a formatted date given a Unix Timestamp or regular date
 function formatDate(format, intTimeStamp)
 ' %A - AM or PM
 ' %a - am or pm
@@ -34,37 +34,37 @@ function formatDate(format, intTimeStamp)
 ' %Y - Four digit year (2003)
 ' %y - Two digit year (03)
 	dim unUDate, A
-	
+
 	' Test to see if intTimeStamp looks valid. If not, they have passed a normal date
 	if not (isnumeric(intTimeStamp)) then
 		if isdate(intTimeStamp) then
 			intTimeStamp = DateDiff("S", "01/01/1970 00:00:00", intTimeStamp)
 		else
-			debugError("Date.formatDate(): '"&intTimeStamp&"' is an invalid date format!")
+			debugError("Date.formatDate(): '" & intTimeStamp & "' is an invalid date format!")
 		exit function
 		end if
 	end if
-	
-	if (intTimeStamp=0) then
+
+	if (intTimeStamp = 0) then
 		unUDate = now()
 	else
 		unUDate = DateAdd("s", intTimeStamp, "01/01/1970 00:00:00")
 	end if
-	
+
 	unUDate = trim(unUDate)
-	
+
 	dim startM : startM = InStr(1, unUDate, "/", vbTextCompare) + 1
 	dim startY : startY = InStr(startM, unUDate, "/", vbTextCompare) + 1
 	dim startHour : startHour = InStr(startY, unUDate, " ", vbTextCompare) + 1
 	dim startMin : startMin = InStr(startHour, unUDate, ":", vbTextCompare) + 1
-	
+
 	dim dateDay : dateDay = mid(unUDate, 1, 2)
 	dim dateMonth : dateMonth = mid(unUDate, startM, 2)
 	dim dateYear : dateYear = mid(unUDate, startY, 4)
 	dim dateHour : dateHour = replace(mid(unUDate, startHour, 2), ":", "")
 	dim dateMinute : dateMinute = mid(unUDate, startMin, 2)
 	dim dateSecond : dateSecond = mid(unUDate, InStr(startMin, unUDate, ":", vbTextCompare) + 1, 2)
-	
+
 	format = replace(format, "%Y", right(dateYear, 4))
 	format = replace(format, "%y", right(dateYear, 2))
 	format = replace(format, "%m", dateMonth)
@@ -102,7 +102,7 @@ function formatDate(format, intTimeStamp)
 	format = replace(format, "13%O", "13th")
 	format = replace(format, "3%O", "3rd")
 	format = replace(format, "%O", "th")
-	
+
 	formatDate = format
 
 end function

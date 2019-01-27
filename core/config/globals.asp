@@ -29,7 +29,7 @@ function initializeGlobals()
 	initDbSiteSettings()
 	set user = new ClientUser
 	set page = new AspPage
-	debugInfo("config.initGlobals:  initialization completed in "& timer - start &" seconds.")
+	debugInfo("config.initGlobals:  initialization completed in " & timer - start & " seconds.")
 end function
 
 '**
@@ -47,7 +47,7 @@ function initDomainGlobals()
 		'LOCALHOST settings where site lives in subfolder
 		addGlobal "SITEROOT", "/{PROJECT_NAME}", null
 
-	elseif Instr(request.ServerVariables("URL"), PROJECT_NAME) > 0 then
+	elseif Instr(Request.ServerVariables("URL"), PROJECT_NAME) > 0 then
 		'TEST DOMAIN settings where site lives in subfolder
 		addGlobal "SITEROOT", "/{PROJECT_NAME}", null
 
@@ -55,13 +55,13 @@ function initDomainGlobals()
 		'NORMAL Live Site settings for public domain
 		addGlobal "SITEROOT", "", null
 	end if
-	addGlobal "SITE_PATH", Server.mappath(token_replace("{SITEROOT}/")), null
-	if cint(request.ServerVariables("SERVER_PORT")) <> 80 then
-		addGlobal "DOMAINNAME", request.ServerVariables("SERVER_NAME") & ":" & request.ServerVariables("SERVER_PORT") & "{SITEROOT}", null
+	addGlobal "SITE_PATH", Server.MapPath(token_replace("{SITEROOT}/")), null
+	if cint(Request.ServerVariables("SERVER_PORT")) <> 80 then
+		addGlobal "DOMAINNAME", Request.ServerVariables("SERVER_NAME") & ":" & Request.ServerVariables("SERVER_PORT") & "{SITEROOT}", null
 	else
-		addGlobal "DOMAINNAME", request.ServerVariables("SERVER_NAME") & "{SITEROOT}", null
+		addGlobal "DOMAINNAME", Request.ServerVariables("SERVER_NAME") & "{SITEROOT}", null
 	end if
-	if request.ServerVariables("HTTPS") = "on" then
+	if Request.ServerVariables("HTTPS") = "on" then
 		addGlobal "SITEURL", "https://{DOMAINNAME}", null
 	else
 		addGlobal "SITEURL", "http://{DOMAINNAME}", null
@@ -171,7 +171,7 @@ function initDbSiteSettings()
 end function
 
 function isLocalServer()
-	isLocalServer =  ((request.ServerVariables("SERVER_NAME") = "localhost") _
-	               or (request.ServerVariables("SERVER_NAME") = "127.0.0.1"))
+	isLocalServer =  ((Request.ServerVariables("SERVER_NAME") = "localhost") _
+	               or (Request.ServerVariables("SERVER_NAME") = "127.0.0.1"))
 end function
 %>

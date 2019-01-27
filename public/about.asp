@@ -1,1 +1,1 @@
-<%server.Execute("../core/include/application.asp")%>
+<% Server.Execute("../core/include/application.asp") %>

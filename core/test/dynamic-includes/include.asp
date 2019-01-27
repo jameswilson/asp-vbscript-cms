@@ -1,6 +1,6 @@
 <%
-dim myVar : myVar = "ASP" 
-dim serverName : serverName = request.ServerVariables("SERVER_NAME")
-response.write "<h1>Hello, "&myVar&"</h1>" & vbCrLf
-response.write "<p>your server is '"&serverName&"'</p>"& vbCrLf
+dim myVar : myVar = "ASP"
+dim serverName : serverName = Request.ServerVariables("SERVER_NAME")
+Response.Write "<h1>Hello, " & myVar & "</h1>" & vbCrLf
+Response.Write "<p>your server is '" & serverName & "'</p>" & vbCrLf
 %>

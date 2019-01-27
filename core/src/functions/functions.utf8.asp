@@ -1,5 +1,5 @@
 <%
-' Simple functions to convert the first 256 characters 
+' Simple functions to convert the first 256 characters
 ' of the Windows character set from and to UTF-8.
 
 ' Written by Hans Kalle for Fisz
@@ -19,7 +19,7 @@ function IsValidUTF8(s)
   IsValidUTF8 = false
   i = 1
   do while i <= len(s)
-    c = asc(mid(s,i,1))
+    c = asc(mid(s, i, 1))
     if c and &H80 then
       n = 1
       do while i + n < len(s)
@@ -51,7 +51,7 @@ function IsValidUTF8(s)
       i = i + 1
     end if
   loop
-  IsValidUTF8 = true 
+  IsValidUTF8 = true
 end function
 
 'DecodeUTF8
@@ -67,25 +67,25 @@ function DecodeUTF8(s)
 
   i = 1
   do while i <= len(s)
-    c = asc(mid(s,i,1))
+    c = asc(mid(s, i, 1))
     if c and &H80 then
       n = 1
       do while i + n < len(s)
-        if (asc(mid(s,i+n,1)) and &HC0) <> &H80 then
+        if (asc(mid(s, i + n, 1)) and &HC0) <> &H80 then
           exit do
         end if
         n = n + 1
       loop
       if n = 2 and ((c and &HE0) = &HC0) then
-        c = asc(mid(s,i+1,1)) + &H40 * (c and &H01)
+        c = asc(mid(s, i + 1, 1)) + &H40 * (c and &H01)
       else
-        c = 191 
+        c = 191
       end if
-      s = left(s,i-1) + chr(c) + mid(s,i+n)
+      s = left(s, i - 1) + chr(c) + mid(s, i + n)
     end if
     i = i + 1
   loop
-  DecodeUTF8 = s 
+  DecodeUTF8 = s
 end function
 
 'EncodeUTF8
@@ -98,14 +98,14 @@ function EncodeUTF8(s)
 
   i = 1
   do while i <= len(s)
-    c = asc(mid(s,i,1))
+    c = asc(mid(s, i, 1))
     if c >= &H80 then
-      s = left(s,i-1) + chr(&HC2 + ((c and &H40) / &H40)) + chr(c and &HBF) + mid(s,i+1)
+      s = left(s, i - 1) + chr(&HC2 + ((c and &H40) / &H40)) + chr(c and &HBF) + mid(s, i + 1)
       i = i + 1
     end if
     i = i + 1
   loop
-  EncodeUTF8 = s 
+  EncodeUTF8 = s
 end function
 
 
@@ -117,26 +117,26 @@ function EncodeURI(s)
   dim i, c
   i = 1
   do while i <= len(s)
-    c = asc(mid(s,i,1))
+    c = asc(mid(s, i, 1))
     if c >= &H80 then
-      s = left(s,i-1) & server.urlencode(chr(&HC2 + ((c and &H40) / &H40)) + chr(c and &HBF)) & mid(s,i+1)
+      s = left(s, i - 1) & Server.UrlEncode(chr(&HC2 + ((c and &H40) / &H40)) + chr(c and &HBF)) & mid(s, i + 1)
       i = i + 1
     end if
     i = i + 1
   loop
-  EncodeURI = s 
+  EncodeURI = s
 end function
 
 
 'http://www.15seconds.com/howto/pg001122.htm
-'Submitted by Jason Beaudoin. Adapted from VisualBasicForum  
+'Submitted by Jason Beaudoin. Adapted from VisualBasicForum
 Function Encode_UTF8(astr)
 	'rohtext - astr
-	'rohtext = rohtext.replace(/\r\n/g,"\n" );
-	Dim c 
-	Dim utftext 
+	'rohtext = rohtext.replace(/\r\n/g, "\n");
+	Dim c
+	Dim utftext
 	utftext = ""
-	
+
 	For n = 1 To Len(astr)
 		c = AscW(Mid(astr, n, 1))
 		If c < 128 Then

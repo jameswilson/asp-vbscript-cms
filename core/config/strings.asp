@@ -1,5 +1,5 @@
 <%
-'** 
+'**
 '* Site Global Strings
 '*
 
@@ -18,14 +18,14 @@ const PRODUCT_DESCRIPTION = "Powered by <a href=""{PRODUCT_URL}"" title=""{PRODU
 
 '**
 '* Fallback settings.
-'* In general, there is NO REASON TO CHANGE THESE DEFAULTS because all of 
+'* In general, there is NO REASON TO CHANGE THESE DEFAULTS because all of
 '* the following have a complimentary setting stored in the DB settings.
-'* The DB settings always over-ride these defaults and they exist here 
-'* only as a fall-back when the DB values are undefined.  PLEASE log 
+'* The DB settings always over-ride these defaults and they exist here
+'* only as a fall-back when the DB values are undefined.  PLEASE log
 '* into the CMS Admin Panel to modify site specific settings.
 const DEFAULT_SMTPHOST = "smtp.gmail.com"
 const DEFAULT_BCC = "NO"  'Send blind carbon copies of all website email interaction?
-const DEFAULT_BCC_EMAIL = "" 'email where to send blind carbon copies, if YES above 
+const DEFAULT_BCC_EMAIL = "" 'email where to send blind carbon copies, if YES above
 const DEFAULT_LOGO = "{SITEURL}/images/logo.gif"
 const DEFAULT_BANNER =  "{SITEURL}/images/banner.gif"
 const DEFAULT_SITENAME = "Site Name"
@@ -44,7 +44,7 @@ const ADMIN_UNAVAILABLE_URL = "{ADMINURL}/unavailable.asp"
 
 '**
 '* Flash settings
-const FLASH_CLASSID = "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"	
+const FLASH_CLASSID = "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 const FLASH_CODEBASE = "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0"
 
 '**
@@ -55,12 +55,12 @@ const REQUESTED_PAGE = "RequestedPage"
 '**
 '* Login interaction  messages.
 '* Note, for security, we should leave error messages sufficiently general
-'* in order to not give away information to would-be hackers. 
+'* in order to not give away information to would-be hackers.
 const LOGIN_EXPIRED = "Your Account is expired please contact the <a href='mailto:{ADMINEMAIL}'>administrator</a>."
 const LOGOUT_SUCCESS = "You have been successfully logged out. <br/><br/> <a class=""button"" href=""{SITEURL}"">View Site &raquo;</a>"
 const GENERIC_ERROR = "An error occurred, please try again."
-const INVALID_USER = "The username or password provided was incorrect." 
-const BAD_PASSWORD = "The username or password provided was incorrect." 
+const INVALID_USER = "The username or password provided was incorrect."
+const BAD_PASSWORD = "The username or password provided was incorrect."
 
 '**
 '* Email message tokens.
@@ -87,7 +87,6 @@ const TXT_ERROR = "Oops"
 const TXT_LOGIN_SUCCESS = "Your login credentials passed!"
 const TXT_DEBUG_MODE = "Debug mode is enabled"
 const TXT_DEBUG_INFO = "Debug mode often contains highly sensitive data about the internal functioning of your website. If you believe debug mode has been inadvertently left enabled, please contact {DEVELOPER_SUPPORT_LINK} as soon as possible."
-
 
 '**
 '* Boilerplate strings. Before a site gets built out, you may have a need to

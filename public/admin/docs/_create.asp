@@ -6,6 +6,6 @@ function contentCreate()
 	myForm.Action = "?add"
 	myForm.Method = "POST"
 	pageContent.add p(instructions)
-	pageContent.add buildFormContents(request("create"))	
+	pageContent.add buildFormContents(Request("create"))
 end function
 %>

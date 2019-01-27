@@ -1,2 +1,2 @@
 <%@ Language=VBScript %>
-<% server.transfer("products.asp") %>
+<% Server.Transfer("products.asp") %>

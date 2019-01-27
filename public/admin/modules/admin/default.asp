@@ -1,3 +1,3 @@
-<%@Language="VBScript"%>
-<%response.redirect("../admin.asp")%>
+<%@ Language=VBScript %>
+<% Response.Redirect("../admin.asp") %>
 

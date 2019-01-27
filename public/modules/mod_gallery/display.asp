@@ -11,78 +11,78 @@ function getContent()
 	CreateDictionary settings,session("ModuleCustomSettings"),CUSTOMSETTINGS_RECORD_DELIMITER,CUSTOMSETTINGS_FIELD_DELIMITER,adDictOverwrite
 	debug("mod_gallery.display: starting mod_gallery module....")
 	set content = new FastString
-	if not settings.exists("gallery_folder") then 
+	if not settings.exists("gallery_folder") then
 		content.add ErrorMessage(h1("Gallery Error")&p("Please specify a valid folder in the module settings."))
-	else 
+	else
 		dim gallery_folder : gallery_folder = settings("gallery_folder")
-		dim thumb_width : thumb_width = cint(iif(len(settings("thumbnail_width"))>0,settings("thumbnail_width"),0))
-		dim thumb_height : thumb_height = cint(iif(len(settings("thumbnail_height"))>0,settings("thumbnail_height"),0))
-		dim max_images_per_page : max_images_per_page = cint(iif(len(settings("max_images_per_page"))>0,settings("max_images_per_page"),15))
-		dim current_page :  current_page = iif(len(request.QueryString("page"))>0,request.QueryString("page"),1)
+		dim thumb_width : thumb_width = cint(iif(len(settings("thumbnail_width")) > 0, settings("thumbnail_width"), 0))
+		dim thumb_height : thumb_height = cint(iif(len(settings("thumbnail_height")) > 0, settings("thumbnail_height"), 0))
+		dim max_images_per_page : max_images_per_page = cint(iif(len(settings("max_images_per_page")) > 0, settings("max_images_per_page"), 15))
+		dim current_page :  current_page = iif(len(Request.QueryString("page")) > 0, Request.QueryString("page"), 1)
 		dim slideshow : slideshow = iif(settings("slideshow")="1","lyteshow","lytebox")
-		
-		debug("mod_gallery.display: content to display: "&server.htmlencode(gallery_folder) )
+
+		debug("mod_gallery.display: content to display: " & Server.HtmlEncode(gallery_folder) )
 		dim fileDict : set fileDict = getFilesInFolder(gallery_folder,".jpg,.gif,.jpeg,.png")
-		
+
 		dim thumb_size
-		if thumb_width>0 or thumb_height>0 then 
-			thumb_size = iif(thumb_width>thumb_height," width="""&thumb_width&""""," height="""&thumb_height&"""")
+		if thumb_width > 0 or thumb_height > 0 then
+			thumb_size = iif(thumb_width > thumb_height, " width=""" & thumb_width & """", " height=""" & thumb_height & """")
 		else
 			thumbs_size = ""
 		end if
-		if not isObject(fileDict) or fileDict is nothing then	
-			content.add ErrorMessage(h1("Gallery Error")&p("No files could be found in folder "&gallery_folder))
+		if not isObject(fileDict) or fileDict is nothing then
+			content.add ErrorMessage(h1("Gallery Error") & p("No files could be found in folder " & gallery_folder))
 		else
-			debugInfo("mod_gallery.display: number of images "&fileDict.count)
-			if fileDict.count > 0 then  
+			debugInfo("mod_gallery.display: number of images " & fileDict.count)
+			if fileDict.count > 0 then
 				dim filename, path, name, ext, url, thmb, lnk, page, num_pages
 				content.add "<div class=""photo-gallery"">" & vbCrLf
 				dim i : i = 0
 				num_pages = 0
-				debugInfo("mod_gallery.display: the current page is '"&current_page&"'.")
+				debugInfo("mod_gallery.display: the current page is '" & current_page & "'.")
 				for each fileName in fileDict
-					i = i+1
+					i = i + 1
 					page = (i \ max_images_per_page) + 1
 					path = fileDict(fileName)
-					ext = mid(path,instrrev(path,"."),len(path))
-					name = PCase(PrettyText(replace(replace(replace(fileName,ext,""),"."," "),"-"," ")))
-					url = globals("SITEURL")&gallery_folder&"/"&fileName
-					thmb = gallery_folder&"/_thumbs/"&fileName
-					thmb_url = globals("SITEURL")&thmb
-					if int(current_page) = int(page) then 
-						thmb = iif( fileExists(thmb), thmb_url, url)
-						thmb = "<img src="""&thmb&""" alt="""&name&""" class=""lightbox"""&thumb_size&"/>"
+					ext = mid(path, instrrev(path, "."), len(path))
+					name = PCase(PrettyText(replace(replace(replace(fileName, ext, ""), ".", " "), "-", " ")))
+					url = globals("SITEURL") & gallery_folder & "/" & fileName
+					thmb = gallery_folder & "/_thumbs/" & fileName
+					thmb_url = globals("SITEURL") & thmb
+					if int(current_page) = int(page) then
+						thmb = iif(fileExists(thmb), thmb_url, url)
+						thmb = "<img src=""" & thmb & """ alt=""" & name & """ class=""lightbox""" & thumb_size & "/>"
 					else
 						thmb = ""
 					end if
-					lnk = "<a href="""&url&""" rel="""&slideshow&"[gallery]"" title="""&name&""""
-					lnk = lnk & iif( (thmb<>"") , ">"&thmb&"</a>" , " style=""display:none""></a>")
-					
-					debugInfo("mod_gallery.display: found file '"&name&"' url string '"&url&"' thumb is '"&thmb&"' and page is '"&page&"'")
+					lnk = "<a href=""" & url & """ rel=""" & slideshow & "[gallery]"" title=""" & name & """"
+					lnk = lnk & iif((thmb <> ""), ">" & thmb & "</a>", " style=""display:none""></a>")
+
+					debugInfo("mod_gallery.display: found file '" & name & "' url string '" & url & "' thumb is '" & thmb & "' and page is '" & page & "'")
 
 					content.add lnk& vbCrLf
 					'finally increment the number of pages if this file is a multiple of the max_images_per_page
 					if i mod max_images_per_page = 1 then num_pages = num_pages + 1
-					
+
 				next
 				if num_pages > 1 then
 					content.add "<div id=""gallery-page-links"" style=""text-align:right;margin:1em;"">" & vbCrLf
-					content.add "<script type=""text/javascript"">" & vbCrLf &"<!--"& vbCrLf
-					content.add "document.write('<p style=""text-align:center;margin:1em;"">Click any image to start the slideshow.</p>');"& vbCrLf
-					content.add "// -->"& vbCrLf &"</script>"
-					content.add "<p>Pages "& vbCrLf
+					content.add "<script type=""text/javascript"">" & vbCrLf & "<!--" & vbCrLf
+					content.add "document.write('<p style=""text-align:center;margin:1em;"">Click any image to start the slideshow.</p>');" & vbCrLf
+					content.add "// -->" & vbCrLf & "</script>"
+					content.add "<p>Pages " & vbCrLf
 					for i = 1 to num_pages
-						content.add iif((int(i)=int(current_page)),i,a("?page="&i,i,"Open page"&i&" of this gallery","")) & vbCrLf
+						content.add iif((int(i) = int(current_page)),i,a("?page=" & i, i, "Open page" & i & " of this gallery", "")) & vbCrLf
 					next
 					content.add "</p></div>" & vbCrLf
 				end if
-				content.add link(globals("SITEURL")&"/scripts/lytebox/lytebox.css","stylesheet","text/css") & vbCrLf
-				content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/scripts/lytebox/lytebox.shrinksafe.packered.base64.shrunk-var.js""></script>"& vbCrLf
-				'content.add link(globals("SITEURL")&"/test/lightbox/css/lightbox.css","stylesheet","text/css") & vbCrLf
-				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/test/lightbox/js/prototype.js""></script >"& vbCrLf
-				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/test/lightbox/js/scriptaculous.js?load=effects""/></script >"& vbCrLf
-				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL")&"/test/lightbox/js/lightbox.js""/>"& vbCrLf
-				content.add "</div>"& vbCrLf
+				content.add link(globals("SITEURL") & "/scripts/lytebox/lytebox.css","stylesheet", "text/css") & vbCrLf
+				content.add "<script type=""text/javascript"" src=""" & globals("SITEURL") & "/scripts/lytebox/lytebox.shrinksafe.packered.base64.shrunk-var.js""></script>" &  vbCrLf
+				'content.add link(globals("SITEURL") & "/test/lightbox/css/lightbox.css", "stylesheet", "text/css") & vbCrLf
+				'content.add "<script type=""text/javascript"" src=""" & globals("SITEURL") & "/test/lightbox/js/prototype.js""></script >" & vbCrLf
+				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL") & "/test/lightbox/js/scriptaculous.js?load=effects""/></script >" & vbCrLf
+				'content.add "<script type=""text/javascript"" src="""&globals("SITEURL") & "/test/lightbox/js/lightbox.js""/>" & vbCrLf
+				content.add "</div>" & vbCrLf
 			end if
 		end if
 	end if

@@ -1,10 +1,10 @@
-<%		
+<%
 function contentEdit()
 	myForm.setAction("?update")
 	if (myForm.wasSubmitted()) then
 		contentEdit = buildFormContents(myForm.getValue(strKey))
 		strHeader = ("Edit "& Pcase(strContent))
-	elseif Request.QueryString("edit") <> "" then 
+	elseif Request.QueryString("edit") <> "" then
 		contentEdit = buildFormContents(Request.QueryString("edit"))
 	else
 		strError = "No "& strContent &" was selected for editing. <br/>Would you like to "& vbCrLf & _

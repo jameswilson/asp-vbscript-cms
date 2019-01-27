@@ -5,25 +5,25 @@
 	dim uid, pass, remember, target
 	'clear session info stored from previous login attempts
 	target = session(REQUESTED_PAGE)
-	debug("login.asp:  user arrived to this page from "& request.ServerVariables("HTTP_REFERER"))
+	debug("login.asp:  user arrived to this page from " & Request.ServerVariables("HTTP_REFERER"))
 	'
 	' Form Submission:  Login Attempt
 	'
-	if request.form("action") = "login" then
-	
+	if Request.Form("action") = "login" then
+
 		'
 		' 1 - you should only arrive to this page from the admin login page!
 		'
-		
-		if instr(request.ServerVariables("HTTP_REFERER"), globals("ADMINURL")) <> 1 then
+
+		if instr(Request.ServerVariables("HTTP_REFERER"), globals("ADMINURL")) <> 1 then
 			session("CustomMessage") = "Please use the login form to access the ADMIN area."
 		else
 			'
 			' 2 - get user submitted login credentials from form
 			'
-			uid=request.form("UserID")
-			pass=request.form("Password")
-			remember=(request.form("RememberMe") <> "")
+			uid = Request.Form("UserID")
+			pass = Request.Form("Password")
+			remember = (Request.Form("RememberMe") <> "")
 			'
 			' 3 - verify login attempt
 			'
@@ -31,33 +31,33 @@
 				'store cookies if user requested 'remember me'
 				user.rememberMe(remember)
 				user.persist(Now()+60)
-				if not len(target)>0 then 
+				if not len(target)>0 then
 					target = globals("ADMINURL") & "/"
 				end if
 				if isDebugMode() then
-					debug("login.asp: user '"& uid &"'Successfully logged in!")
+					debug("login.asp: user '" & uid & "'Successfully logged in!")
 					debugCookies()
-					session("CustomMessage") =  SuccessMessage(h3(TXT_NOTE&": "& TXT_DEBUG_MODE) &p(TXT_LOGIN_SUCCESS&" "& TXT_DEBUG_INFO))
+					session("CustomMessage") =  SuccessMessage(h3(TXT_NOTE & ": " & TXT_DEBUG_MODE) & p(TXT_LOGIN_SUCCESS & " " & TXT_DEBUG_INFO))
 					session(REQUESTED_PAGE) = ""
 				end if
-				if not db.isWritable() then 
-					session("CustomMessage") = session("CustomMessage") & WarningMessage(h3(TXT_WARNING) &p(DB_NOT_WRITABLE))
+				if not db.isWritable() then
+					session("CustomMessage") = session("CustomMessage") & WarningMessage(h3(TXT_WARNING) & p(DB_NOT_WRITABLE))
 				end if
-				if not isDebugMode() then 
+				if not isDebugMode() then
 					session(REQUESTED_PAGE) = ""
-					response.redirect(target)
+					Response.Redirect(target)
 				end if
 			else
-				debug("login.asp: failed to login user with id '"& uid &"' and password '"& pass &"'")
-				session.timeout
-				debug("login.asp: setting session custom message to '" &user.getLastError() &"'")
+				debug("login.asp: failed to login user with id '" & uid & "' and password '" & pass & "'")
+				Session.Timeout
+				debug("login.asp: setting session custom message to '" & user.getLastError() & "'")
 				session("CustomMessage") = ErrorMessage(user.getLastError())
 			end if
 		end if
-	elseif len(target)>0 then 
-		trace("login.asp:  the user requested the page: "& target)
+	elseif len(target) > 0 then
+		trace("login.asp:  the user requested the page: " & target)
 	else
-		session.timeout 
+		Session.Timeout
 	end if
 %>
 
@@ -84,7 +84,7 @@ if (document.forms.length > 0) {
 	}
 }
 return true;
-}  
+}
 // ]]>
 --></script>
 <head>
@@ -94,17 +94,17 @@ return true;
 <link rel="shortcut icon" href="<%=token_replace("{PRODUCT_FAVICON}")%>"/>
 </head>
 <body onload="placeFocus()">
-<div id="page"> 
-  <div id="header" class="clearfix"> 
+<div id="page">
+  <div id="header" class="clearfix">
     <!--#include file="./include/header.asp"-->
   </div>
-  <div id="content" class="clearfix"> 
-    <div id="main" class="clearfix"> 
-      <div class="login"> 
+  <div id="content" class="clearfix">
+    <div id="main" class="clearfix">
+      <div class="login">
         <h1><%=globals("PRODUCT_BRANDING")%>: Site Administrator</h1>
-				
+
 				<% if len(session(CUSTOM_MESSAGE))>0 then %>
-				<div class="CustomMessage">&nbsp;<%=session("CustomMessage")%>&nbsp; 
+				<div class="CustomMessage">&nbsp;<%=session("CustomMessage")%>&nbsp;
 					<small class="options">
 					<% if user.isloggedIn() then %>
 					<a class="button" href="<%=globals("ADMINURL")%>/logout.asp">Logout</a>
@@ -120,25 +120,25 @@ return true;
           <fieldset>
           <legend>Please Login</legend>
           <input name="action" value="login" type="hidden"/>
-          <div class="required"> 
-            <label for="UserName" title="Please enter your username in the following textbox."> 
+          <div class="required">
+            <label for="UserName" title="Please enter your username in the following textbox.">
             User Name</label>
             <input class="inputText" name="UserID" id="UserID" type="text" value="<%=user.getId()%>"/>
           </div>
-          <div class="required"> 
-            <label for="Password" title="Please enter your password in the following textbox."> 
+          <div class="required">
+            <label for="Password" title="Please enter your password in the following textbox.">
             Password</label>
             <input class="inputText" name="Password" id="Password" type="password" value=""/>
           </div>
-          <div class="optional"> 
-            <label for="RememberMe" class="labelCheckbox" title="Remember my login information on this computer"> 
-            <input  name="RememberMe" id="RememberMe" class="inputCheckbox" type="checkbox" value="ON"<% 
-if user.exists() then response.write " checked=""checked""" %>/>
+          <div class="optional">
+            <label for="RememberMe" class="labelCheckbox" title="Remember my login information on this computer">
+            <input  name="RememberMe" id="RememberMe" class="inputCheckbox" type="checkbox" value="ON"<%
+if user.exists() then Response.Write " checked=""checked""" %>/>
             Remember me on this computer.</label>
 						<small class="options"><a href="#quick-loans" onclick="window.open('help/cookies.asp','help','scrollbars=no,menubar=no,height=400,width=200,resizable=yes,toolbar=no,location=no,status=no');" title="Find out more about a faster login.">what's this?</a></small>
           </div>
 					<div class="submit">
-						<div> 
+						<div>
 							<input class="button inputSubmit" type="submit" title="submit" value="Enter &raquo;"/>
 						</div>
 					</div>
@@ -148,7 +148,7 @@ if user.exists() then response.write " checked=""checked""" %>/>
       </div>
     </div>
   </div>
-  <div id="footer" class="clearfix"> 
+  <div id="footer" class="clearfix">
     <!--#include file="./include/footer.asp"-->
   </div>
 </div>
@@ -156,6 +156,6 @@ if user.exists() then response.write " checked=""checked""" %>/>
 </html>
 <%
 session("CustomMessage") = ""
-session.contents.remove("CustomMessage")
-if not user.isLoggedIn() and len(target)<1 then Session.Abandon
+Session.Contents.remove("CustomMessage")
+if not user.isLoggedIn() and len(target) < 1 then Session.Abandon
 %>

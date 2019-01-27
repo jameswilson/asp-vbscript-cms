@@ -3,13 +3,13 @@
 '* @file
 '*   Application-level message logging and debugging.
 '*
-'* Due to the non-existence of system logging in ASP, this script is used 
+'* Due to the non-existence of system logging in ASP, this script is used
 '* througout the application for debugging and logging purposes.  It should
-'* always be included in any file you write.  There are various log levels, and 
+'* always be included in any file you write.  There are various log levels, and
 
 '**
 '* Application log levels.
-'* 
+'*
 const TRACE_LEVEL = 1
 const DEBUG_LEVEL = 2
 const INFO_LEVEL = 3
@@ -21,7 +21,6 @@ const ERROR_LEVEL = 5
 '*
 const DISABLED = 0
 const ENABLED = 1
-
 
 function logMessage(message, severity)
 	if not isObject(logger) then
@@ -50,7 +49,7 @@ function debugError(strErrorMessage)
 	logger.log "<p class='error'>ERROR: " & strErrorMessage & "</p>", ERROR_LEVEL
 end function
 
-public function debugMode() 
+public function debugMode()
 	debugMode = (globals("DEBUG") = "1")
 end function
 
@@ -60,32 +59,32 @@ end function
 
 '**
 '* Log Cookie information at the debug level.
-'* 
+'*
 function debugCookies()
-	if request.cookies().count > 0 then 
+	if Request.Cookies().count > 0 then
 		debug("debugCookies() { ")
 		dim key
-		for each key in request.Cookies()
-			debug("&nbsp;&nbsp;['"&key&"' -&gt; '"&Server.URLEncode(""&request.cookies(key))&"']")
+		for each key in Request.Cookies()
+			debug("&nbsp;&nbsp;['" & key & "' -&gt; '" & Server.UrlEncode("" & Request.Cookies(key)) & "']")
 		next
 		debug("} //end debugCookies")
-	else 
+	else
 		debug("debugCookies() {} //no contents")
 	end if
 end function
 
 '**
 '* Log Session information at the debug level.
-'* 
+'*
 function debugSessionContents()
-	if session.contents().count > 0 then 
+	if Session.Contents().count > 0 then
 		debug("debugSessionContents() { ")
 		dim key
-		for each key in session.contents()
-			debug("&nbsp;&nbsp;['"&key&"' -&gt; '"&Server.URLEncode(""&session.contents(key))&"']")
+		for each key in Session.Contents()
+			debug("&nbsp;&nbsp;['" & key & "' -&gt; '" & Server.UrlEncode("" & Session.Contents(key)) & "']")
 		next
 		debug("} //end debugSessionContents ")
-	else 
+	else
 		debug("debugSessionContents() {} //no contents")
 	end if
 end function
@@ -99,7 +98,7 @@ dim startProgram : startProgram = timer
 '* Returns the current amount of time that has passed since the program started.
 '*
 function getProgramTime()
-	dim t, unit 	
+	dim t, unit
 	t = timer - startProgram
 	if t < 1 then
 		t = t * 1000
@@ -111,7 +110,7 @@ function getProgramTime()
 end function
 
 '**
-'* Drop-in replacement for ASP Execute() function. Will execute the provided 
+'* Drop-in replacement for ASP Execute() function. Will execute the provided
 '* expression, and log the time it took to perform.
 '*
 '* @param string expression

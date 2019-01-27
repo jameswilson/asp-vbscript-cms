@@ -3,8 +3,8 @@
 <%
 	dim strSQL, strActive, strMainMenu, strFormAction, strStatus, strError, strWarn, strSuccess
 	dim variableList, strEven
-	dim formContents, formErrors 
-	
+	dim formContents, formErrors
+
 	const strContent = "setting" 'word that identifies the content we are administrating
 	const strContentPL = "settings"	'text string for plural content
 	const strTableName = "tblGlobalSettings" 'name of the principle database table to modify
@@ -14,7 +14,7 @@
 	myForm.Name = Pcase(strContent) &"Creator"
 	myForm.Action = "?update"
 	page.setName("Site Settings")
-	
+
 	strSuccess = ""
 	strStatus = ""
 	strError = ""
@@ -23,7 +23,7 @@
 	'UPDATE
 	if instr(Request.QueryString(),"update")=1 then
 		formContents = settingUpdate()
-		set formErrors = myForm.getFormErrors() 
+		set formErrors = myForm.getFormErrors()
 	'VIEW LIST (by default)
 	else
 		formContents =  buildFormContents()
@@ -35,8 +35,8 @@
 
 '========================================================
 '       FUNCTIONS
-'========================================================	
-	
+'========================================================
+
 function checkPageForErrors()
 	' Error processing and debug
 	if bolErrors then	processErrors

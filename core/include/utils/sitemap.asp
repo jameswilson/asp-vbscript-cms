@@ -6,7 +6,7 @@ page.setFile("default.asp")
 dim sMap : set sMap = new SiteMap
 
 ' xml format
-if request.QueryString() = "sitemap.xml" then sMap.XML
+if Request.QueryString() = "sitemap.xml" then sMap.XML
 
 ' html format (shown inside main content of page)
 function customContent(byval area)

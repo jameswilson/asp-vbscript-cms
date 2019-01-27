@@ -6,14 +6,14 @@
 function getMachineName()
 	on error resume next
 	dim objSystem,ComputerName,IntMachinName
-	set objSystem = server.CreateObject("ActiveDs.WinNTSystemInfo")
-	if err.number = 0 then 
+	set objSystem = Server.CreateObject("ActiveDs.WinNTSystemInfo")
+	if err.number = 0 then
 		getMachineName = objSystem.ComputerName
 	else
-		set objSystem = server.CreateObject("WScript.Network") 
-		if err.number > 0 then 
+		set objSystem = Server.CreateObject("WScript.Network")
+		if err.number > 0 then
 			trapError
-		else 
+		else
 			getMachineName = objSystem.ComputerName
 		end if
 	end if

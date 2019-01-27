@@ -1,20 +1,20 @@
 <%
-	const DAY_FIRST = 1
-	const MONTH_FIRST = 2
-	const UNKNOWN_FORMAT = 3
-	dim my_SHORT_DATE_FORMAT
+const DAY_FIRST = 1
+const MONTH_FIRST = 2
+const UNKNOWN_FORMAT = 3
+dim my_SHORT_DATE_FORMAT
 
 '**
 '* get the server's date format
 '*
 function ShortDateFormat()
-	if my_SHORT_DATE_FORMAT = 0 then 
+	if my_SHORT_DATE_FORMAT = 0 then
 		dim testDate : testDate = "01/02/1970 03:04:05"
-		if cint(Day(testDate)) = 1 then 
+		if cint(Day(testDate)) = 1 then
 			my_SHORT_DATE_FORMAT = DAY_FIRST
-			debugInfo("ShortDateFormat: day comes before month (dd/mm), eg "&Day(testDate)&" "&Monthname(Month(testDate)))
+			debugInfo("ShortDateFormat: day comes before month (dd/mm), eg " & Day(testDate) & " " & Monthname(Month(testDate)))
 		elseif cint(Month(testDate)) = 1 then
-			debugInfo("ShortDateFormat: month comes before day (mm/dd), eg "&Monthname(Month(testDate))&" "&Day(testDate))
+			debugInfo("ShortDateFormat: month comes before day (mm/dd), eg " & Monthname(Month(testDate)) & " " & Day(testDate))
 			my_SHORT_DATE_FORMAT = MONTH_FIRST
 		end if
 	end if
@@ -37,7 +37,7 @@ function UDate(oldDate)
 end function
 
 '**
-'* Return a formatted date given a Unix Timestamp or regular date 
+'* Return a formatted date given a Unix Timestamp or regular date
 '*
 '*    %A - AM or PM
 '*    %a - am or pm
@@ -71,40 +71,33 @@ function formatDate(byval format,byval intTimeStamp)
 		if isdate(intTimeStamp) then
 			intTimeStamp = DateDiff("S", "01/01/1970 00:00:00", intTimeStamp)
 		else
-			debugError("Date.formatDate(): '"&intTimeStamp&"' is an invalid date format!")
+			debugError("Date.formatDate(): '" & intTimeStamp & "' is an invalid date format!")
 		exit function
 		end if
 	end if
-	
+
 	if (intTimeStamp=0) then
 		unUDate = now()
 	else
 		unUDate = DateAdd("s", intTimeStamp, "01/01/1970 00:00:00")
 	end if
-	
+
 	unUDate = trim(unUDate)
-	
+
 	dim startM : startM = InStr(1, unUDate, "/", vbTextCompare) + 1
 	dim startY : startY = InStr(startM, unUDate, "/", vbTextCompare) + 1
 	dim startHour : startHour = InStr(startY, unUDate, " ", vbTextCompare) + 1
 	dim startMin : startMin = InStr(startHour, unUDate, ":", vbTextCompare) + 1
-	
-	
-	
-	
+
 	dim dateDay : dateDay = leftPad(Day(unUDate),2,"0") 'mid(unUDate, 1, startM-2)  'had to fix this from 2 to startM-2
 	dim dateMonth : dateMonth = leftPad(Month(unUDate),2,"0") 'mid(unUDate, startM, 2)
 	dim dateYear : dateYear = Year(unUDate)'mid(unUDate, startY, 4)
 	dim dateHour : dateHour = leftPad(Hour(unUDate),2,"0")'replace(mid(unUDate, startHour, 2), ":", "")
 	dim dateMinute : dateMinute = leftPad(Minute(unUDate),2,"0") 'mid(unUDate, startMin, 2)
 	dim dateSecond : dateSecond = leftPad(Second(unUDate),2,"0")'mid(unUDate, InStr(startMin, unUDate, ":", vbTextCompare) + 1, 2)
-	
-	
-	
-	trace( "date("&unUDate&"): Month:"&dateMonth&"("&monthname(dateMonth)&") Day:"&dateDay&"")
-	
-	
-	
+
+	trace( "date(" & unUDate & "): Month:" & dateMonth & "(" & monthname(dateMonth) & ") Day:" & dateDay & "")
+
 	on error resume next
 	format = replace(format, "%Y", right(dateYear, 4))
 	format = replace(format, "%y", right(dateYear, 2))
@@ -119,7 +112,7 @@ function formatDate(byval format,byval intTimeStamp)
 	format = replace(format, "%g", cint(replace(mid(unUDate, startHour, 2), ":", "")))
 	format = replace(format, "%G", iif(dateHour>12, cint(dateHour-12),cint(dateHour)))
 	trapError
-	on error goto 0 
+	on error goto 0
 
 	if (cint(dateHour) > 12) then
 		A = "PM"
@@ -128,7 +121,7 @@ function formatDate(byval format,byval intTimeStamp)
 	end if
 	format = replace(format, "%A", A)
 	format = replace(format, "%a", lcase(A))
-	
+
 	format = replace(format, "%i", dateMinute)
 	format = replace(format, "%I", cint(dateMinute))
 	format = replace(format, "%s", dateSecond)
@@ -144,7 +137,7 @@ function formatDate(byval format,byval intTimeStamp)
 	format = replace(format, "13%O", "13th")
 	format = replace(format, "3%O", "3rd")
 	format = replace(format, "%O", "th")
-	
+
 	formatDate = format
 
 end function
@@ -153,35 +146,37 @@ end function
 '* fill out the specified to the specified number of characters
 '* by left padding the number with the specified character
 '* @param str the string to add padding
-'* @param expected length of the string, if its infact shorter 
+'* @param expected length of the string, if its infact shorter
 '* @return a string of the specified lenth, filled with the specified char
 '*
 private function leftPad(byval str,byval length,byval char)
 	leftPad = str
-	if len(cstr(str)) < cint(length) then leftPad = String(cint(length)-len(cstr(str)), char) & str
+	if len(cstr(str)) < cint(length) then
+		leftPad = String(cint(length) - len(cstr(str)), char) & str
+	end if
 end function
 
 function getRelativeDate(sDate)
 	dim desc, amount, units, seconds, minutes, hours, days, months, years, nowDate
-	
+
 	if cDate(sDate) then
 		nowDate = Now()
 		sDate = cDate(sDate)
-		if ShortDateFormat() = MONTH_FIRST then 
+		if ShortDateFormat() = MONTH_FIRST then
 			'American Variant
-			desc = Pcase(formatDate("%M %j%O",sDate))
+			desc = Pcase(formatDate("%M %j%O", sDate))
 		else
 			'International Version
-			desc = Pcase(formatDate("%j %M",sDate))
+			desc = Pcase(formatDate("%j %M", sDate))
 		end if
-		seconds = DateDiff("s",""&sDate,""&nowDate)
-		minutes = DateDiff("n",""&sDate,""&nowDate)
-		hours = DateDiff("h",""&sDate,""&nowDate)
-		days = DateDiff("d",""&sDate,""&nowDate)
-		months = DateDiff("m",""&sDate,""&nowDate)
-		years = DateDiff("yyyy",""&sDate,""&nowDate)
+		seconds = DateDiff("s", "" & sDate, "" & nowDate)
+		minutes = DateDiff("n", "" & sDate, "" & nowDate)
+		hours = DateDiff("h", "" & sDate, "" & nowDate)
+		days = DateDiff("d", "" & sDate, "" & nowDate)
+		months = DateDiff("m", "" & sDate, "" & nowDate)
+		years = DateDiff("yyyy", "" & sDate, "" & nowDate)
 		if minutes < 1 then
-			amount = 0 
+			amount = 0
 			units = "moments"
 			desc = "Today"
 		elseif hours < 1 then
@@ -191,9 +186,9 @@ function getRelativeDate(sDate)
 		elseif days < 2 then
 			amount = hours
 			units = "hour"
-			if days < 1 then 
+			if days < 1 then
 				desc = "Today"
-			else 
+			else
 				desc = "Yesterday"
 			end if
 		elseif months < 1  then
@@ -203,22 +198,22 @@ function getRelativeDate(sDate)
 			elseif days < 15 then
 				amount = -1
 				units = "last week"
-			elseif days < 22 then 
+			elseif days < 22 then
 				amount = 3
 				units = "week"
 			elseif days < 31 then
 				amount = 4
 				units = "week"
 			end if
-		elseif years < 1 then 
+		elseif years < 1 then
 			amount = months
 			units = "month"
 		else
 			desc = desc & ", " & year(sDate)
-			amount = years 
+			amount = years
 			units = "year"
 		end if
-		getRelativeDate = desc & " ("& iif(amount<1,"",amount&"&nbsp;") & units & iif(amount>1,"s","") & iif(amount=-1,"","&nbsp;ago") &")" 
+		getRelativeDate = desc & " (" & iif(amount < 1, "",amount & " &nbsp;") & units & iif(amount > 1, "s", "") & iif(amount = -1,""," &nbsp;ago") & ")"
 	else
 		getRelativeDate = sDate
 	end if

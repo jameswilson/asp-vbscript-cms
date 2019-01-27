@@ -76,16 +76,16 @@ class SiteSettings
 				key = cstr(rs("SettingName"))
 				val = cstr(rs("SettingValue"))
 				if isEmpty(val) or val = "" then
-					trace(" [ "&key&" -> UNDEFINED ]")
+					trace(" [ " & key & " -> UNDEFINED ]")
 				else
-					trace(" [ "&key&" -> "&Server.HTMLEncode(val)&" ]")
+					trace(" [ " & key & " -> " & Server.HtmlEncode(val) & " ]")
 				end if
 				if not sdNamedSettings.exists(key) then
 					sdNamedSettings.add key, val
 					sdIndexedSettings.add sid, val
-					'trace("class.settings.init: key="&key&" sid="&sid&" val="&val)
+					'trace("class.settings.init: key=" & key & " sid=" & sid & " val=" & val)
 				else
-					debugError("class.settings.init: expected '"& key &"' to be a unique setting but encountered a second.")
+					debugError("class.settings.init: expected '" & key & "' to be a unique setting but encountered a second.")
 				end if
 				trapError
 				rs.movenext
@@ -128,8 +128,8 @@ end sub
 '* @return a string with all global variables replaced.
 function token_replace(byval str)
 	if (str <> "") and (not isNull(str)) then
-	  str = replace(str, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
-	  str = replace(str, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
+	  str = replace(str, Server.UrlEncode(TOKEN_PREFIX), TOKEN_PREFIX)
+	  str = replace(str, Server.UrlEncode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 		if instr(str, TOKEN_PREFIX) > 0 then
 			dim expr, matched, variableName
 			set matched = TOKEN_REGEX.execute(str)
@@ -143,8 +143,8 @@ function token_replace(byval str)
 							if settings.exists(PrettyText(variableName)) = true then
 								str = replace(str, expr.value, settings.getItem(PrettyText(variableName)))
 							'else
-							'	if Execute(eval(""&variableName)) then
-							'	str = eval(""&variableName)
+							'	if Execute(eval("" & variableName)) then
+							'	str = eval("" & variableName)
 							'	end if
 							end if
 					end if
@@ -166,7 +166,7 @@ end function
 '*   The plain-text string to decode.
 '* @param variables (String)
 '*   A comma-separated list of variables to decode.
-'* @return 
+'* @return
 '*   The token-encoded string.
 function token_decode(byval plaintext, byval variables)
 	on error resume next
@@ -174,15 +174,15 @@ function token_decode(byval plaintext, byval variables)
 		token_decode = ""
 		exit function
 	end if
-	trace("class.settings.token_decode: '"& variables &"'")
+	trace("class.settings.token_decode: '" & variables & "'")
 	variables = split(variables, ",")
-	trace("class.settings.token_decode: list has "& ubound(variables) &"  items")
-	plaintext = replace(plaintext, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
-	plaintext = replace(plaintext, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
+	trace("class.settings.token_decode: list has " & ubound(variables) & "  items")
+	plaintext = replace(plaintext, Server.UrlEncode(TOKEN_PREFIX), TOKEN_PREFIX)
+	plaintext = replace(plaintext, Server.UrlEncode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 	dim i : i = 0
 	do
-		trace("class.settings.token_decode: decoding '"& variables(i) &"'")
-		trace("class.settings.token_decode: replaceing '"& variables(i) &"' with '"& globals(cstr(variables(i))) & "'")
+		trace("class.settings.token_decode: decoding '" & variables(i) & "'")
+		trace("class.settings.token_decode: replaceing '" & variables(i) & "' with '" & globals(cstr(variables(i))) & "'")
 		plaintext = replace(plaintext, TOKEN_PREFIX & variables(i) & TOKEN_SUFFIX, globals(cstr(variables(i))))
 	loop until i = ubound(variables)
 	trapError
@@ -191,31 +191,29 @@ end function
 
 '**
 '* Convert a plain-text string into a tokenized string. Encoding is done by
-'* wrapping token identifiers (TOKEN_PREFIX and TOKEN_SUFFIX) around each 
+'* wrapping token identifiers (TOKEN_PREFIX and TOKEN_SUFFIX) around each
 '* instance of each variable found in the string.
 '*
 '* @param plaintext (String)
 '*   The plain-text string to encode.
 '* @param variables (String)
 '*   A comma-separated list of variables to encode.
-'* @return 
+'* @return
 '*   The token-encoded string.
 function token_encode(byval plaintext, byval variables)
 	if (plaintext = "") or isNull(plaintext) or (variables = "") or isNull(variables) then
 		token_encode = ""
 		exit function
 	end if
-	trace("class.settings.token_encode: '"& variables &"'")
+	trace("class.settings.token_encode: '" & variables & "'")
 	variables = split(variables, ",")
-	trace("class.settings.token_encode: list has "& ubound(variables) &"  items")
-	plaintext = replace(plaintext, server.urlencode(TOKEN_PREFIX), TOKEN_PREFIX)
-	plaintext = replace(plaintext, server.urlencode(TOKEN_SUFFIX), TOKEN_SUFFIX)
+	trace("class.settings.token_encode: list has " & ubound(variables) & "  items")
+	plaintext = replace(plaintext, Server.UrlEncode(TOKEN_PREFIX), TOKEN_PREFIX)
+	plaintext = replace(plaintext, Server.UrlEncode(TOKEN_SUFFIX), TOKEN_SUFFIX)
 	dim i
 	for i = 0 to ubound(variables)
 		plaintext = replace(plaintext, globals(cstr(variables(i))), TOKEN_PREFIX & variables(i) & TOKEN_SUFFIX)
 	next
 	token_encode = plaintext
 end function
-
 %>
-

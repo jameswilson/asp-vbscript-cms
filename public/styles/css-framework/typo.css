@@ -1,184 +1,209 @@
 /* A CSS Framework by Mike Stenhouse of Content with Style */
 
 /* TYPOGRAPHY */
-	body {
-		text-align: left;
-		font-family: Arial, Helvetica, sans-serif;  
-		/* Microsoft sans-serif web-fonts: "Trebuchet MS", "Lucida Sans Unicode", Tahoma, Verdana, Arial, "Arial Black", Impact */
-		/* Macintosh sans-serif web-fonts: "Gill Sans", "New Gothic Std", Futura, Geneva, Myriad, Helvetica,*/
-		font-size: 75%; /*or: xx-small*/
-		line-height: 1em;
-		color: #333;
-	}
-	/* clear browser discrepencies*/
-	* {	
-		font-size:1em; 
-		padding:0; 
-		margin:0;
-	}
-	img {
-		border: 0;
-	}
-	
+body {
+  text-align: left;
+  font-family: Arial, Helvetica, sans-serif;
+  /* Microsoft sans-serif web-fonts: "Trebuchet MS", "Lucida Sans Unicode", Tahoma, Verdana, Arial, "Arial Black", Impact */
+  /* Macintosh sans-serif web-fonts: "Gill Sans", "New Gothic Std", Futura, Geneva, Myriad, Helvetica,*/
+  font-size: 75%;
+  /*or: xx-small*/
+  line-height: 1em;
+  color: #333;
+}
+
+/* clear browser discrepencies*/
+* {
+  font-size: 1em;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  border: 0;
+}
+
 /* LINKS */
-	a,
-	a:link 
-	a:active {
-		color: #3599FF;
-		background-color: transparent;
-		text-decoration: none;
-	}
-	a:visited {
-		color: #3599FF;
-		background-color: transparent;
-	}
-	a:hover {
-		color: #FFFF35;
-		background-color: transparent;
-		text-decoration: underline;
-	}
+a,
+a:link a:active {
+  color: #3599FF;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #3599FF;
+  background-color: transparent;
+}
+
+a:hover {
+  color: #FFFF35;
+  background-color: transparent;
+  text-decoration: underline;
+}
 /* END LINKS */
-	
+
 /* HEADINGS */
-	h1 {
-		font-size: 1.5em;
-		line-height: 1.5em;
-		margin: 0 0 0.5em 0;
-		padding: 0;
-		color: black;
-	}
-	h2 {
-		font-size: 1.4em;
-		line-height: 1.5em;
-		margin: 0 0 0.5em 0;
-		padding: 0;
-		color: black;
-	}
-	h3 {
-		font-size: 1.3em;
-		line-height: 1.3em;
-		margin: 0 0 0.5em 0;
-		padding:0;
-		color: black;
-	}
-	h4 {
-		font-size: 1.2em;
-		line-height: 1.3em;
-		margin: 0 0 0.25em 0;
-		padding: 0;
-		color: black;
-	}
-	h5 {
-		font-size: 1.1em;
-		line-height: 1.3em;
-		margin: 0 0 0.25em 0;
-		padding: 0;
-		color: black;
-	}
-	h6 {
-		font-size: 1em;
-		line-height: 1.3em;
-		margin: 0 0 0.25em 0;
-		padding: 0;
-		color: black;
-	}
+h1 {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  margin: 0 0 .5em;
+  padding: 0;
+  color: black;
+}
+
+h2 {
+  font-size: 1.4em;
+  line-height: 1.5em;
+  margin: 0 0 .5em;
+  padding: 0;
+  color: black;
+}
+
+h3 {
+  font-size: 1.3em;
+  line-height: 1.3em;
+  margin: 0 0 .5em;
+  padding: 0;
+  color: black;
+}
+
+h4 {
+  font-size: 1.2em;
+  line-height: 1.3em;
+  margin: 0 0 .25em;
+  padding: 0;
+  color: black;
+}
+
+h5 {
+  font-size: 1.1em;
+  line-height: 1.3em;
+  margin: 0 0 .25em;
+  padding: 0;
+  color: black;
+}
+
+h6 {
+  font-size: 1em;
+  line-height: 1.3em;
+  margin: 0 0 .25em;
+  padding: 0;
+  color: black;
+}
 /* END HEADINGS */
 
 /* TEXT */
-	p {
-		font-size: 1em;
-		margin: 0 0 2.2em 0;
-		padding: 0;
-		line-height:1.4em;
-	}
-	blockquote {
-		border-left:10px solid #ddd;
-		margin-left:10px;
-	}
-	pre {
-		font-family: monospace;
-		font-size: 1.0em;
-	}
-	strong, b {
-		font-weight: bold;
-	}
-	em, i {
-		font-style:italic;
-	}
-	code {
-		font-family: "Lucida Console", "Andale Mono", "Courier New", Courier, monospace;
-		font-size: 1em;
-		white-space: pre;
-	}
+p {
+  font-size: 1em;
+  margin: 0 0 2.2em 0;
+  padding: 0;
+  line-height: 1.4em;
+}
+
+blockquote {
+  border-left: 10px solid #ddd;
+  margin-left: 10px;
+}
+
+pre {
+  font-family: monospace;
+  font-size: 1.0em;
+}
+
+strong,
+b {
+  font-weight: bold;
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+code {
+  font-family: "Lucida Console", "Andale Mono", "Courier New", Courier, monospace;
+  font-size: 1em;
+  white-space: pre;
+}
 /* END TEXT */
-	
+
 /* LISTS */
-	ul {
-		line-height:1.4em;
-		margin: 0 0 1.5em 0;
-		padding: 0;
-	}
-	ul li {
-		margin: 0 0 0.25em 30px;
-		padding: 0;
-		list-style-image:  url(../../images/bullet01.gif);
-		list-style-type: disc;
-	}
-	ol {
-		font-size: 1.0em;
-		line-height: 1.4em;
-		margin: 0 0 1.5em 0;
-		padding: 0;
-	}
-	ol li {
-		font-size: 1.0em;
-		margin: 0 0 0.25em 30px;
-		padding: 0;
-	}
-	dl {
-		margin: 0 0 1.5em 0;
-		padding: 0;
-		line-height: 1.4em;
-	}
-	dl dt {
-		font-weight: bold;
-		margin: 0.25em 0 0.25em 0;
-		padding: 0;
-	}
-	dl dd {
-		margin: 0 0 0 30px;
-		padding: 0;
-	}
+ul {
+  line-height: 1.4em;
+  margin: 0 0 1.5em 0;
+  padding: 0;
+}
+
+ul li {
+  margin: 0 0 0.25em 30px;
+  padding: 0;
+  list-style-image: url(../../images/bullet01.gif);
+  list-style-type: disc;
+}
+
+ol {
+  font-size: 1.0em;
+  line-height: 1.4em;
+  margin: 0 0 1.5em;
+  padding: 0;
+}
+
+ol li {
+  font-size: 1.0em;
+  margin: 0 0 0.25em 30px;
+  padding: 0;
+}
+
+dl {
+  margin: 0 0 1.5em;
+  padding: 0;
+  line-height: 1.4em;
+}
+
+dl dt {
+  font-weight: bold;
+  margin: .25em 0;
+  padding: 0;
+}
+
+dl dd {
+  margin: 0 0 0 30px;
+  padding: 0;
+}
 /* END LISTS */
-	
-	
+
+
 /* TABLE */
-	table {
-		font-size: 1em;
-		margin: 0 0 1.5em 0;
-		padding: 0;
-	}
-	table caption {
-		font-weight: bold;
-		margin: 0 0 0 0;
-		padding: 0 0 1.5em 0;
-	}
-	th {
-		font-weight: bold;
-		text-align: left;
-	}
-	td {
-		font-size: 1em;
-	}
-/* END TABLE */	
-	
-	hr {
-		display: none;
-	}
-	div.hr {
-		height: 1px;
-		margin: 1.5em 10px;
-		border-bottom: 1px dotted black;
-	}
-	
-/* END TYPOGRAPHY */	
+table {
+  font-size: 1em;
+  margin: 0 0 1.5em;
+  padding: 0;
+}
+
+table caption {
+  font-weight: bold;
+  margin: 0 0 0 0;
+  padding: 0 0 1.5em;
+}
+
+th {
+  font-weight: bold;
+  text-align: left;
+}
+
+td {
+  font-size: 1em;
+}
+/* END TABLE */
+
+hr {
+  display: none;
+}
+
+div.hr {
+  height: 1px;
+  margin: 1.5em 10px;
+  border-bottom: 1px dotted black;
+}
+/* END TYPOGRAPHY */

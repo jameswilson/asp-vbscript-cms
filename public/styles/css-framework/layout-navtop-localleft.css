@@ -3,28 +3,33 @@
 @import url("nav-horizontal.css");
 
 /* NAV BAR AT THE TOP, LOCAL NAVIGATION ON THE LEFT AND ONE COLUMN OF CONTENT */
-div#content {
- position:relative;
- width:766px;
+#content {
+  position: relative;
+  width: 766px;
 }
-div#main {
-	float:right;
-	width:556px;
-	display:inline;
+
+#main {
+  float: right;
+  width: 556px;
+  display: inline;
 }
-div#local {
-	position:absolute;
-	left:0;
-	float:left;
-	width:210px;
-	display:inline;
+
+#local {
+  position: absolute;
+  left: 0;
+  float: left;
+  width: 210px;
+  display: inline;
 }
-div#sub {
-	float:right;
-	width:556px;
-	display:inline;
+
+#sub {
+  float: right;
+  width: 556px;
+  display: inline;
 }
-div#nav {
-	width:100%;
-	text-align:right;/*center; left;*/
+
+#nav {
+  width: 100%;
+  text-align: right;
+  /*center; left;*/
 }

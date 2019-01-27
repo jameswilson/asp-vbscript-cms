@@ -3,28 +3,32 @@
 @import url("nav-vertical.css");
 
 /* NAV BAR ON THE LEFT AND TWO COLUMNS OF CONTENT */
-div#content {
- position:relative;
- width:766px;
+#content {
+  position: relative;
+  width: 766px;
 }
-div#main {
- width:366px;
- display:inline;
- float:right;
- margin-left:-160px;
- margin-right:200px;
+
+#main {
+  width: 366px;
+  display: inline;
+  float: right;
+  margin-left: -160px;
+  margin-right: 200px;
 }
-div#local {
- display: none;
+
+#local {
+  display: none;
 }
-div#sub {
- display:inline;
- float:right;
- margin-right:-426px;
- width:180px;
+
+#sub {
+  display: inline;
+  float: right;
+  margin-right: -426px;
+  width: 180px;
 }
-div#nav {
- float:left;
- width:180px;
- display:inline;
+
+#nav {
+  float: left;
+  width: 180px;
+  display: inline;
 }

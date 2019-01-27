@@ -3,23 +3,27 @@
 @import url("nav-vertical.css");
 
 /* NAV BAR ON THE LEFT AND ONE COLUMN OF CONTENT */
-div#content {
- position:relative;
- width:766px;
+#content {
+  position: relative;
+  width: 766px;
 }
-div#main {
- float:right;
- width:566px;
- display:inline;
+
+#main {
+  float: right;
+  width: 566px;
+  display: inline;
 }
-div#local {
- display:none;
+
+#local {
+  display: none;
 }
-div#sub {
- display:none;
+
+#sub {
+  display: none;
 }
-div#nav {
- float:left;
- width:180px;
- display:inline;
+
+#nav {
+  float: left;
+  width: 180px;
+  display: inline;
 }

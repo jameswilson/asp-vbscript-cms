@@ -1,85 +1,99 @@
 /* A CSS Framework by Mike Stenhouse of Content with Style */
 
 /* clearing */
-	.stretch,
-	.clear {
-		clear:both; 
-		height:1px; 
-		margin:0; 
-		padding:0; 
-		font-size: 15px;
-		line-height: 1px;
-	}
-	.clearfix:after {
-		content: "."; 
-		display: block; 
-		height: 0; 
-		clear: both; 
-		visibility: hidden;
-	}
-	.clearfix {
-		display: inline-block; 
-	}
-	/* Hides from IE-mac \*/
-	.clearfix {display:block;}
-  * html .clearfix {height: 1%;}
-	/* End hide from IE-mac */
+.stretch,
+.clear {
+  clear: both;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1px;
+}
+
+.clearfix::after {
+  content: '.';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+/* Hides from IE-mac \*/
+.clearfix {
+  display: block;
+}
+
+* html .clearfix {
+  height: 1%;
+}
+
+/* End hide from IE-mac */
 
 /* end clearing */
 
 
 /* replace */
-	.replace {
-		display:block;
-		
-		background-repeat: no-repeat;
-		background-position: left top;
-		background-color:transparent;
-	}
-	/* tidy these up */
-	.replace * {
-		text-indent: -10000px;
-		display:block;
-		
-		background-repeat: no-repeat;
-		background-position: left top;
-		background-color:transparent;
-	}
-	.replace a {
-		text-indent:0;
-	}
-	.replace a span {
-		text-indent:-10000px;
-	}
+.replace {
+  display: block;
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-color: transparent;
+}
+
+/* tidy these up */
+.replace * {
+  text-indent: -10000px;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-color: transparent;
+}
+
+.replace a {
+  text-indent: 0;
+}
+
+.replace a span {
+  text-indent: -10000px;
+}
 /* end replace */
 
 
 /* accessibility */
-	span.accesskey {
-		text-decoration:none;
-	}
-	.accessibility {
-		position: absolute;
-		top: -999em;
-		left: -999em;
-	}
+span.accesskey {
+  text-decoration: none;
+}
+
+.accessibility {
+  position: absolute;
+  top: -999em;
+  left: -999em;
+}
 /* end accessibility */
 
 /* floating elements */
-	.floatleft {
-		float:left;
-	}
-	.floatright {
-		float:right;
-	}
-	img.floatleft {
-		margin-right: .6em;
-		margin-top: .6em;
-		margin-bottom: .3em;
-	}
-	img.floatright {
-		margin-left: .6em;
-		margin-top: .6em;
-		margin-bottom: .3em;
-	}
+.floatleft {
+  float: left;
+}
+
+.floatright {
+  float: right;
+}
+
+img.floatleft {
+  margin-right: .6em;
+  margin-top: .6em;
+  margin-bottom: .3em;
+}
+
+img.floatright {
+  margin-left: .6em;
+  margin-top: .6em;
+  margin-bottom: .3em;
+}
 /* end floating elements */
